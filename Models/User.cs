@@ -7,5 +7,6 @@ namespace Models
 {
     public class User : IdentityUser<Guid>
     {
+
     }
 }

@@ -17,6 +17,8 @@ namespace DocumentManager
         }
 
         DbSet<User> Clients { get; set; }
+        DbSet<Document> Documents { get; set; }
+        DbSet<Division> Divisions { get; set; }
 
 
     }
