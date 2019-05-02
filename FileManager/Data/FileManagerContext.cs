@@ -16,8 +16,8 @@ namespace FileManager.Models
 
         public DbSet<User> User { get; set; }
 
-        public DbSet<FileManager.Models.ViewModels.SignUpViewModel> SignUpViewModel { get; set; }
+        public DbSet<Right> Right { get; set; }
 
-        public DbSet<FileManager.Models.ViewModels.SignInViewModel> SignInViewModel { get; set; }
+        public DbSet<UserRight> UserRight { get; set; }
     }
 }
