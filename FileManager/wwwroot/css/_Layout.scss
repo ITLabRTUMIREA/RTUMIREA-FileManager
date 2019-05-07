@@ -1,0 +1,129 @@
+﻿.full-page {
+    display: grid;
+}
+
+.user-bar {
+    grid-row: 1;
+    display: inline;
+    border: 1px solid blue;
+}
+
+.user {
+    float: right;
+    display: grid;
+    width: fit-content;
+    border: 1px solid yellow;
+}
+
+.user-data {
+    grid-row: 1;
+    display: inline;
+    text-align: center;
+}
+
+.documents-status {
+    grid-row: 2;
+    display: grid;
+    grid-template-columns: repeat(3,25px);
+    grid-column-gap: 5px;
+    justify-items: center;
+}
+
+.router-bar {
+    grid-row: 2;
+    display: inline;
+    border: 1px solid green;
+}
+
+.select-bar {
+    margin: 0px;
+    padding: 0px;
+    font: 14px 'Verdana';
+    background: #9e9e9e;
+    display: grid;
+    grid-template-columns: auto;
+}
+
+.challenge {
+    grid-column: 1;
+}
+
+ul {
+    list-style: none;
+    display: block;
+    margin: 0px;
+    padding: 0px;
+}
+
+ul:after {
+    display: block;
+    float: none;
+    content: ' ';
+    clear: both;
+}
+
+ul.challenge > li {
+    float: left;
+    position: relative;
+}
+
+ul.challenge > li > a {
+    display: block;
+    color: #fff;
+    padding: 10px;
+    text-decoration: none;
+    background-color: #777777;
+}
+
+ul.challenge > li > a:hover {
+    background-color: #4e4e4e;
+    color: rgb(255, 255, 255);
+}
+
+ul.submenu {
+    position: absolute;
+    width: 240px;
+    top: 37px;
+    left: 0px;
+    display: none;
+    background-color: white;
+    border-radius: 10%;
+}
+
+ul.submenu > li {
+    display: block;
+}
+
+ul.submenu > li > a {
+    display: block;
+    text-decoration: none;
+    padding: 10px;
+    color: #ffffff;
+    background-color: #777777;
+}
+
+ul.submenu > li > a:hover {
+    background-color: #1684eb;
+}
+
+ul.challenge > li:hover > ul.submenu {
+    display: block;
+}
+
+.router-content {
+    grid-row-start: 3;
+    border: 1px solid red;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(80px,1fr));
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+}
+
+.content {
+    display: grid;
+    border: 1px solid brown;
+    align-content: center;
+    justify-content: center;
+    height: 80px;
+}

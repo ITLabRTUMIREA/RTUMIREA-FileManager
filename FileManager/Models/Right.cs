@@ -9,5 +9,7 @@ namespace FileManager.Models
     {
         public Guid ID { get; set; }
         public string Name { get; set; }
+        public ICollection<UserRight> UserRight { get; set; }
+        
     }
 }

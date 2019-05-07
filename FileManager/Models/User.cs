@@ -12,5 +12,6 @@ namespace FileManager.Models
         public string FistName { get; set; }
         public string LastName { get; set; }
         public string Password { get; set; }
+        public ICollection<UserRight> UserRight { get; set; }
     }
 }

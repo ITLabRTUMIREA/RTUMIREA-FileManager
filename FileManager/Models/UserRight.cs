@@ -7,7 +7,7 @@ namespace FileManager.Models
 {
     public class UserRight
     {
-        public ICollection<User> UserID { get; set; }
-        public ICollection<Right> RightID { get; set; }
+        public User UserID { get; set; }
+        public Right RightID { get; set; }
     }
 }
