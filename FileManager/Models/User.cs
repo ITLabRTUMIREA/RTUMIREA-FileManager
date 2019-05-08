@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace FileManager.Models
 {
-    public class User
+    public class User : IdentityUser<Guid>
     {
-        public Guid ID { get; set; }
-        public string Email { get; set; }
         public string FistName { get; set; }
         public string LastName { get; set; }
-        public string Password { get; set; }
-        public ICollection<UserRight> UserRight { get; set; }
     }
 }

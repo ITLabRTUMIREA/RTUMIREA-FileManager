@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace FileManager.Models
 {
-    public class UserRight
+    public class Role : IdentityRole<Guid>
     {
-        public User UserID { get; set; }
-        public Right RightID { get; set; }
     }
 }

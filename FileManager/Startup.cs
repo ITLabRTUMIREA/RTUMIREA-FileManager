@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using FileManager.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace FileManager
 {
@@ -36,6 +37,13 @@ namespace FileManager
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            services.AddIdentity<User, Role>(config => {
+                    config.SignIn.RequireConfirmedEmail = false;
+                    config.User.RequireUniqueEmail = true;
+                })
+                .AddEntityFrameworkStores<FileManagerContext>()
+                .AddDefaultTokenProviders();
+
             services.AddDbContext<FileManagerContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("FileManagerContext")));
         }
@@ -56,6 +64,8 @@ namespace FileManager
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+            app.UseAuthentication();
 
             app.UseMvc();
         }

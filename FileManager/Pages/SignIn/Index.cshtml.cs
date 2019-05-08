@@ -9,16 +9,21 @@ using FileManager.Models;
 using FileManager.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using AutoMapper;
 
 namespace FileManager.Pages.SignIn
 {
     public class IndexModel : PageModel
     {
-        private readonly FileManager.Models.FileManagerContext _context;
+        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
 
-        public IndexModel(FileManager.Models.FileManagerContext context)
+
+        public IndexModel(UserManager<User> userManager, SignInManager<User> signInManager)
         {
-            _context = context;
+            _signInManager = signInManager;
+            _userManager = userManager;
+
         }
 
         public IActionResult OnGet()
@@ -31,30 +36,36 @@ namespace FileManager.Pages.SignIn
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return Page();
+                if (ModelState.IsValid)
+                {
+                    if (await _userManager.FindByEmailAsync(SignInViewModel.Email) != null)
+                    {
+                        User user = await _userManager.FindByEmailAsync(SignInViewModel.Email);
+                        var result = await _signInManager.CheckPasswordSignInAsync(user, SignInViewModel.Password, false);
+                        if (result.Succeeded)
+                        {
+                            await _signInManager.SignInAsync(user, false);
+                            return RedirectToPage("../Index");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Неверный Email или пароль");
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Неверный Email или пароль");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
 
-            if (await _context.User.AnyAsync(u => u.Email == SignInViewModel.Email))
-            { 
-                User DbUser = await _context.User.FirstOrDefaultAsync(u => u.Email == SignInViewModel.Email);
-                var hasher = new PasswordHasher<User>();
-                var VerifyPassword = hasher.VerifyHashedPassword(DbUser, DbUser.Password, SignInViewModel.Password);
-                if (VerifyPassword == PasswordVerificationResult.Success)
-                {
-                    return RedirectToPage("/Index");
-                }
-                else
-                {
-                    return RedirectToPage("/SignIn/Index");
-                }
-            }
-            else
-            {
-                return RedirectToPage("/SignIn/Index");
-            }
-
+            return Page();
         }
     }
 }

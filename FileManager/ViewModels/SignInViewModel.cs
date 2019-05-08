@@ -9,13 +9,13 @@ namespace FileManager.Models.ViewModels
 {
     public class SignInViewModel
     {
-        public Guid ID { get; set; }
-
-        [Required(ErrorMessage = "Required.")]
-        [EmailAddress(ErrorMessage = "Invalid email address.")]
+        [Display(Name = "Email")]
+        [Required(ErrorMessage = "Обязательное поле.")]
+        [EmailAddress(ErrorMessage = "Неверный Email адрес.")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Required.")]
+        [Display(Name = "Пароль")]
+        [Required(ErrorMessage = "Обязательное поле.")]
         public string Password { get; set; }
 
     }

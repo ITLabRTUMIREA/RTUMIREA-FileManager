@@ -319,7 +319,7 @@ th {
 .glyphicon-star-empty:before {
   content: "\e007";
 }
-.glyphicon-user:before {
+.glyphicon-SignUpViewModel:before {
   content: "\e008";
 }
 .glyphicon-film:before {
@@ -3117,10 +3117,10 @@ select[multiple].input-lg {
   font-size: 14px;
   line-height: 1.42857143;
   border-radius: 4px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  -webkit-SignUpViewModel-select: none;
+  -moz-SignUpViewModel-select: none;
+  -ms-SignUpViewModel-select: none;
+  SignUpViewModel-select: none;
 }
 .btn:focus,
 .btn:active:focus,

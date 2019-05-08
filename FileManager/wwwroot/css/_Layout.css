@@ -2,20 +2,20 @@
     display: grid;
 }
 
-.user-bar {
+.SignUpViewModel-bar {
     grid-row: 1;
     display: inline;
     border: 1px solid blue;
 }
 
-.user {
+.SignUpViewModel {
     float: right;
     display: grid;
     width: fit-content;
     border: 1px solid yellow;
 }
 
-.user-data {
+.SignUpViewModel-data {
     grid-row: 1;
     display: inline;
     text-align: center;

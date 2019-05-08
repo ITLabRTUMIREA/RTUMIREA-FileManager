@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using FileManager.Models.ViewModels;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace FileManager.Models
 {
-    public class FileManagerContext : DbContext
+    public class FileManagerContext : IdentityDbContext<User, Role, Guid>
     {
         public FileManagerContext (DbContextOptions<FileManagerContext> options)
             : base(options)
@@ -15,9 +17,5 @@ namespace FileManager.Models
         }
 
         public DbSet<User> User { get; set; }
-
-        public DbSet<Right> Right { get; set; }
-
-        public DbSet<UserRight> UserRight { get; set; }
     }
 }
