@@ -2,20 +2,24 @@
     display: grid;
 }
 
-.SignUpViewModel-bar {
+.user-bar {
     grid-row: 1;
     display: inline;
     border: 1px solid blue;
 }
-
-.SignUpViewModel {
+.user-group-btn {
+    float: right;
+    width: fit-content;
+    margin-right:50px;
+}
+.user {
     float: right;
     display: grid;
     width: fit-content;
     border: 1px solid yellow;
 }
 
-.SignUpViewModel-data {
+.user-data {
     grid-row: 1;
     display: inline;
     text-align: center;
@@ -44,7 +48,7 @@
     grid-template-columns: auto;
 }
 
-.challenge {
+.departament {
     grid-column: 1;
 }
 
@@ -55,60 +59,30 @@ ul {
     padding: 0px;
 }
 
-ul:after {
-    display: block;
-    float: none;
-    content: ' ';
-    clear: both;
-}
+    ul:after {
+        display: block;
+        float: none;
+        content: ' ';
+        clear: both;
+    }
 
-ul.challenge > li {
-    float: left;
-    position: relative;
-}
+    ul.departament > li {
+        float: left;
+        position: relative;
+    }
 
-ul.challenge > li > a {
-    display: block;
-    color: #fff;
-    padding: 10px;
-    text-decoration: none;
-    background-color: #777777;
-}
+        ul.departament > li > a {
+            display: block;
+            color: #fff;
+            padding: 10px;
+            text-decoration: none;
+            background-color: #777777;
+        }
 
-ul.challenge > li > a:hover {
-    background-color: #4e4e4e;
-    color: rgb(255, 255, 255);
-}
-
-ul.submenu {
-    position: absolute;
-    width: 240px;
-    top: 37px;
-    left: 0px;
-    display: none;
-    background-color: white;
-    border-radius: 10%;
-}
-
-ul.submenu > li {
-    display: block;
-}
-
-ul.submenu > li > a {
-    display: block;
-    text-decoration: none;
-    padding: 10px;
-    color: #ffffff;
-    background-color: #777777;
-}
-
-ul.submenu > li > a:hover {
-    background-color: #1684eb;
-}
-
-ul.challenge > li:hover > ul.submenu {
-    display: block;
-}
+            ul.departament > li > a:hover {
+                background-color: #4e4e4e;
+                color: rgb(255, 255, 255);
+            }
 
 .router-content {
     grid-row-start: 3;
