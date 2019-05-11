@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FileManager.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -9,9 +11,24 @@ namespace FileManager.Pages
 {
     public class IndexModel : PageModel
     {
-        public void OnGet()
+        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
+        public IndexModel(UserManager<User> userManager, SignInManager<User> signInManager)
         {
+            _signInManager = signInManager;
+            _userManager = userManager;
 
+        }
+        public IActionResult OnGet()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToPage("/Account/SignIn/Index");
+            }
+            else
+            { 
+                return Page();
+            }
         }
     }
 }
