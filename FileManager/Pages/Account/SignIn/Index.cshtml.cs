@@ -37,7 +37,7 @@ namespace FileManager.Pages.SignIn
         public async Task<IActionResult> OnPostAsync()
         {
             try
-            {
+            { 
                 if (ModelState.IsValid)
                 {
                     if (await _userManager.FindByEmailAsync(SignInViewModel.Email) != null)
@@ -47,7 +47,7 @@ namespace FileManager.Pages.SignIn
                         if (result.Succeeded)
                         {
                             await _signInManager.SignInAsync(user, false);
-                            return RedirectToPage("../Index");
+                            return RedirectToPage("/Index");
                         }
                         else
                         {

@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Вход в систему";
+    Layout = "_Layout";
 }
 
 <h2>Вход в систему</h2>
@@ -30,7 +31,7 @@
 </div>
 
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a asp-page="/Account/SignUp/Index">Зарегистрироваться</a>
 </div>
 
 @section Scripts {

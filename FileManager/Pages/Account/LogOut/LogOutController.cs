@@ -5,22 +5,23 @@ using System.Threading.Tasks;
 using FileManager.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace FileManager.Pages.LogOut
+namespace FileManager.Pages.Account.LogOut
 {
-    public class IndexModel : PageModel
+    [Route("Account/[controller]")]
+    [ApiController]
+    public class LogOutController : Controller
     {
         private readonly SignInManager<User> _signInManager;
-        public IndexModel( SignInManager<User> signInManager)
+        public LogOutController(SignInManager<User> signInManager)
         {
             _signInManager = signInManager;
         }
-
-        public async Task<IActionResult> OnPostAsync()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToPage("../Index");
+            return RedirectToPage("/Index");
         }
 
     }
