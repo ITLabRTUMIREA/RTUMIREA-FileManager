@@ -46,7 +46,7 @@ namespace FileManager.Pages.SignIn
                         var result = await _signInManager.CheckPasswordSignInAsync(user, SignInViewModel.Password, false);
                         if (result.Succeeded)
                         {
-                            await _signInManager.SignInAsync(user, false);
+                            await _signInManager.SignInAsync(user, true);
                             return RedirectToPage("/Index");
                         }
                         else

@@ -33,7 +33,9 @@
                 <ul class="dropdown-menu">
                     <li><a href="#">Аккаунт</a></li>
                     <li role="separator" class="divider"></li>
-                    <li><a href="/Account/Logout">Выйти</a></li>
+                    <li><a asp-page="/Account/Roles/Index">Изменение ролей</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a asp-controller="LogOut">Выйти</a></li>
                 </ul>
             </div>
         </div>
@@ -41,18 +43,25 @@
             <div class="select-bar">
                 <ul class="departament">
                     <li>
-                        <a>Кафедра</a>
+                        <label for="year">Год</label>
+                        <a id="year">Выбранный год</a>
                     </li>
                     <li>
-                        <a>Тип документа</a>
+                        <label for="departament">Кафедра</label>
+                        <a id="departament">Выбранная кафедра</a>
                     </li>
                     <li>
-                        <a>Документ</a>
+                        <label for="DocumentType">Тип документа</label>
+                        <a id="DocumentType">Выбранный тип документа</a>
+                    </li>
+                    <li>
+                        <label for="Document">Документ</label>
+                        <a id="Document">Выбранный документ</a>
                     </li>
                 </ul>
             </div>
         </div>
-        <div class="router-content">
+        <div>
                 @RenderBody()
         </div>
         <hr/>
