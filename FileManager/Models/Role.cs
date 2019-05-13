@@ -6,7 +6,10 @@ using Microsoft.AspNetCore.Identity;
 
 namespace FileManager.Models
 {
-    public class Role : IdentityRole<Guid>
+    public class Role:IdentityRole<Guid>
     {
+        public Role(string name):base(name)
+        {
+        }
     }
 }
