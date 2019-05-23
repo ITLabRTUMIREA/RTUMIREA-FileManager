@@ -6,7 +6,7 @@ using FileManager.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FileManager.Pages.Account.LogOut
+namespace FileManager.Controllers.Account.LogOut
 {
     [Route("Account/[controller]")]
     [ApiController]
