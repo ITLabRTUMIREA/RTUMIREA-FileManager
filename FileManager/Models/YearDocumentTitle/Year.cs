@@ -8,6 +8,6 @@ namespace FileManager.Models
     public class Year
     {
         public Guid ID { get; set; }
-        public string Year { get; set; }
+        public string Name { get; set; }
     }
 }
