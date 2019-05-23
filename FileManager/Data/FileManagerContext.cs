@@ -16,6 +16,24 @@ namespace FileManager.Models
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+        }
+
         public DbSet<User> User { get; set; }
+        public DbSet<Departament> Departament { get; set; }
+        public DbSet<DepartamentsDocument> DepartamentsDocument { get; set; }
+        public DbSet<DepartamentsDocumentsVersion> DepartamentsDocumentsVersion { get; set; }
+        public DbSet<Role> Role { get; set; }
+        public DbSet<UserRole> UserRole { get; set; }
+        public DbSet<DocumentTitle> DocumentTitle { get; set; }
+        public DbSet<DocumentType> DocumentType { get; set; }
+        public DbSet<Year> Year { get; set; }
+        public DbSet<YearDocumentTitle> YearDocumentTitle { get; set; }
+        public DbSet<RoleStatus> RoleStatus { get; set; }
+        public DbSet<DocumentStatusHistory> DocumentStatusHistory { get; set; }
+        public DbSet<DocumentStatus> DocumentStatus { get; set; }
     }
 }
