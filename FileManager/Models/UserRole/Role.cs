@@ -8,6 +8,8 @@ namespace FileManager.Models
 {
     public class Role:IdentityRole<Guid>
     {
+        public List<RoleStatus> RoleStatuses { get; set; }
+
         public Role(string name):base(name)
         {
         }

@@ -7,7 +7,12 @@ namespace FileManager.Models
 {
     public class RoleStatus
     {
-        public Guid StatusID { get; set; }
+        public Guid ID { get; set; }
+
+        public Guid DocumentStatusID { get; set; }
+        public DocumentStatus DocumentStatus { get; set; }
+
         public Guid RoleID { get; set; }
+        public Role Role { get; set; }
     }
 }

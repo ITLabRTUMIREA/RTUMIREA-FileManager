@@ -9,5 +9,6 @@ namespace FileManager.Models
     public class UserRole : IdentityUserRole<Guid>
     {
         public Guid DepartamentID { get; set; }
+        public Departament Departament { get; set; }
     }
 }

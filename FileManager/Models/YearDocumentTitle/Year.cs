@@ -9,5 +9,7 @@ namespace FileManager.Models
     {
         public Guid ID { get; set; }
         public string Name { get; set; }
+
+        public List<YearDocumentTitle> YearDocumentTitles { get; set; }
     }
 }

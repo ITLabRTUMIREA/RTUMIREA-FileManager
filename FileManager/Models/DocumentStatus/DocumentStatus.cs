@@ -11,6 +11,7 @@ namespace FileManager.Models
         public string Status { get; set; }
 
         public List<DocumentStatusHistory> DocumentStatusHistories { get; set; }
+
         public List<RoleStatus> RoleStatuses { get; set; }
 
     }

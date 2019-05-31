@@ -9,5 +9,8 @@ namespace FileManager.Models
     {
         public Guid ID { get; set; }
         public Int16 Version { get; set; }
+
+        public Guid DepartamentDocumentID { get; set; }
+        public DepartamentsDocument DepartamentsDocument { get; set; }
     }
 }
