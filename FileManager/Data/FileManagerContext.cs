@@ -11,6 +11,19 @@ namespace FileManager.Models
 {
     public class FileManagerContext : IdentityDbContext<User, Role, Guid>
     {
+        public DbSet<User> User { get; set; }
+        public DbSet<Departament> Departament { get; set; }
+        public DbSet<DepartamentsDocument> DepartamentsDocument { get; set; }
+        public DbSet<DepartamentsDocumentsVersion> DepartamentsDocumentsVersion { get; set; }
+        public DbSet<Role> Role { get; set; }
+        public DbSet<UserRole> UserRole { get; set; }
+        public DbSet<DocumentTitle> DocumentTitle { get; set; }
+        public DbSet<DocumentType> DocumentType { get; set; }
+        public DbSet<Year> Year { get; set; }
+        public DbSet<YearDocumentTitle> YearDocumentTitle { get; set; }
+        public DbSet<RoleStatus> RoleStatus { get; set; }
+        public DbSet<DocumentStatusHistory> DocumentStatusHistory { get; set; }
+        public DbSet<DocumentStatus> DocumentStatus { get; set; }
         public FileManagerContext (DbContextOptions<FileManagerContext> options)
             : base(options)
         {
@@ -35,7 +48,9 @@ namespace FileManager.Models
 
             builder.Entity<DepartamentsDocument>(b => {
 
-                b.HasKey(dd => dd.ID);
+                b.HasKey(dd=>dd.ID);
+
+                b.HasAlternateKey(dd => new {dd.DepartamentID,dd.YearDocumentTitleID });
 
                 b.HasOne(dd => dd.YearDocumentTitle)
                     .WithMany(ydt => ydt.DepartamentsDocuments)
@@ -64,7 +79,7 @@ namespace FileManager.Models
 
             builder.Entity<RoleStatus>(b => {
 
-                b.HasKey(rs => rs.ID);
+                b.HasKey(rs => new { rs.RoleID,rs.DocumentStatusID });
 
                 b.HasOne(rs => rs.Role)
                    .WithMany(r => r.RoleStatuses)
@@ -77,7 +92,7 @@ namespace FileManager.Models
 
             builder.Entity<DocumentStatusHistory>(b => {
 
-                b.HasKey(dsh => dsh.ID);
+                b.HasKey(dsh =>new {dsh.DocumentStatusID,dsh.DepartamentsDocumentID });
 
                 b.HasOne(dsh => dsh.DocumentStatus)
                    .WithMany(ds => ds.DocumentStatusHistories)
@@ -110,6 +125,10 @@ namespace FileManager.Models
 
             builder.Entity<YearDocumentTitle>(b => {
 
+                b.HasKey(ydt=>ydt.ID);
+
+                b.HasAlternateKey(ydt => new { ydt.DocumentTitleID, ydt.YearID });
+
                 b.HasOne(ydt => ydt.DocumentTitle)
                     .WithMany(dt => dt.YearDocumentTitles)
                     .HasForeignKey(ydt => ydt.DocumentTitleID);
@@ -123,6 +142,8 @@ namespace FileManager.Models
         private static void ConfigureUserRole(ModelBuilder builder)
         {
             builder.Entity<UserRole>(b=> {
+              //  b.HasKey(ur=>new { ur.DepartamentID,ur.RoleId,ur.UserId });
+
                 b.HasOne(ur => ur.Departament)
                     .WithMany(d => d.UserRoles)
                     .HasForeignKey(ur => ur.DepartamentID);
@@ -138,18 +159,5 @@ namespace FileManager.Models
             });
         }
 
-        public DbSet<User> User { get; set; }
-        public DbSet<Departament> Departament { get; set; }
-        public DbSet<DepartamentsDocument> DepartamentsDocument { get; set; }
-        public DbSet<DepartamentsDocumentsVersion> DepartamentsDocumentsVersion { get; set; }
-        public DbSet<Role> Role { get; set; }
-        public DbSet<UserRole> UserRole { get; set; }
-        public DbSet<DocumentTitle> DocumentTitle { get; set; }
-        public DbSet<DocumentType> DocumentType { get; set; }
-        public DbSet<Year> Year { get; set; }
-        public DbSet<YearDocumentTitle> YearDocumentTitle { get; set; }
-        public DbSet<RoleStatus> RoleStatus { get; set; }
-        public DbSet<DocumentStatusHistory> DocumentStatusHistory { get; set; }
-        public DbSet<DocumentStatus> DocumentStatus { get; set; }
     }
 }

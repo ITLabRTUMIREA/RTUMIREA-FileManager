@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FileManager.Migrations
 {
-    public partial class initialcreate : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -221,7 +221,7 @@ namespace FileManager.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RoleStatus", x => x.ID);
+                    table.PrimaryKey("PK_RoleStatus", x => new { x.RoleID, x.DocumentStatusID });
                     table.ForeignKey(
                         name: "FK_RoleStatus_DocumentStatus_DocumentStatusID",
                         column: x => x.DocumentStatusID,
@@ -266,6 +266,7 @@ namespace FileManager.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_YearDocumentTitle", x => x.ID);
+                    table.UniqueConstraint("AK_YearDocumentTitle_DocumentTitleID_YearID", x => new { x.DocumentTitleID, x.YearID });
                     table.ForeignKey(
                         name: "FK_YearDocumentTitle_DocumentTitle_DocumentTitleID",
                         column: x => x.DocumentTitleID,
@@ -291,6 +292,7 @@ namespace FileManager.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DepartamentsDocument", x => x.ID);
+                    table.UniqueConstraint("AK_DepartamentsDocument_DepartamentID_YearDocumentTitleID", x => new { x.DepartamentID, x.YearDocumentTitleID });
                     table.ForeignKey(
                         name: "FK_DepartamentsDocument_Departament_DepartamentID",
                         column: x => x.DepartamentID,
@@ -335,7 +337,7 @@ namespace FileManager.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DocumentStatusHistory", x => x.ID);
+                    table.PrimaryKey("PK_DocumentStatusHistory", x => new { x.DocumentStatusID, x.DepartamentsDocumentID });
                     table.ForeignKey(
                         name: "FK_DocumentStatusHistory_DepartamentsDocument_DepartamentsDocumentID",
                         column: x => x.DepartamentsDocumentID,
@@ -395,11 +397,6 @@ namespace FileManager.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DepartamentsDocument_DepartamentID",
-                table: "DepartamentsDocument",
-                column: "DepartamentID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_DepartamentsDocument_YearDocumentTitleID",
                 table: "DepartamentsDocument",
                 column: "YearDocumentTitleID");
@@ -415,11 +412,6 @@ namespace FileManager.Migrations
                 column: "DepartamentsDocumentID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DocumentStatusHistory_DocumentStatusID",
-                table: "DocumentStatusHistory",
-                column: "DocumentStatusID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_DocumentTitle_DocumentTypeID",
                 table: "DocumentTitle",
                 column: "DocumentTypeID");
@@ -428,16 +420,6 @@ namespace FileManager.Migrations
                 name: "IX_RoleStatus_DocumentStatusID",
                 table: "RoleStatus",
                 column: "DocumentStatusID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RoleStatus_RoleID",
-                table: "RoleStatus",
-                column: "RoleID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_YearDocumentTitle_DocumentTitleID",
-                table: "YearDocumentTitle",
-                column: "DocumentTitleID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_YearDocumentTitle_YearID",
