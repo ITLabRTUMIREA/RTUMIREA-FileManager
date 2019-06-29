@@ -9,19 +9,24 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using FileManager.Models;
 using FileManager.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
+using System.Text.Encodings.Web;
+using FileManager.Models.EmailSendingOptions;
+using FileManager.Services.EmailConfirmationService;
+using Microsoft.Extensions.Options;
+
 
 namespace FileManager.Pages.SignUp
 {
     public class IndexModel : PageModel
     {
         private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly IEmailConfirmationService _emailConfirmationService;
 
-        public IndexModel (UserManager<User> userManager, SignInManager<User> signInManager)
+
+        public IndexModel(UserManager<User> userManager, IEmailConfirmationService emailConfirmationService)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
+            _emailConfirmationService = emailConfirmationService;
         }
 
         public IActionResult OnGet()
@@ -29,8 +34,7 @@ namespace FileManager.Pages.SignUp
             return Page();
         }
 
-        [BindProperty]
-        public SignUpViewModel SignUpViewModel { get; set; }
+        [BindProperty] public SignUpViewModel SignUpViewModel { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -47,11 +51,20 @@ namespace FileManager.Pages.SignUp
                         Mapper.Initialize(cfg => cfg.CreateMap<SignUpViewModel, User>()
                             .ForMember("UserName", opt => opt.MapFrom(src => src.Email)));
                         User user = Mapper.Map<SignUpViewModel, User>(SignUpViewModel);
+
                         var result = await _userManager.CreateAsync(user, SignUpViewModel.Password);
+
+                        string confirmationToken = _userManager.GenerateEmailConfirmationTokenAsync(user).Result;
+                        string confirmationLink = Url.Action("ConfirmEmail",
+                            "EmailConfirmation",
+                            new { userid = user.Id, token = confirmationToken },
+                            protocol: HttpContext.Request.Scheme);
+
+                        await _emailConfirmationService.SendEmailConfirmationAsync(user,confirmationLink);
+
                         if (result.Succeeded)
                         {
-                            await _signInManager.SignInAsync(user, false);
-                            return RedirectToPage("../Index");
+                            return Content("Confirm email please. Your email: "+ user.Email);
                         }
                         else
                         {
@@ -70,5 +83,7 @@ namespace FileManager.Pages.SignUp
 
             return Page();
         }
+
+
     }
 }

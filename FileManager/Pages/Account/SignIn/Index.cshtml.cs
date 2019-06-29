@@ -34,6 +34,7 @@ namespace FileManager.Pages.SignIn
         [BindProperty]
         public SignInViewModel SignInViewModel { get; set; }
 
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> OnPostAsync()
         {
             try
@@ -43,7 +44,7 @@ namespace FileManager.Pages.SignIn
                     if (await _userManager.FindByEmailAsync(SignInViewModel.Email) != null)
                     {
                         User user = await _userManager.FindByEmailAsync(SignInViewModel.Email);
-                        var result = await _signInManager.CheckPasswordSignInAsync(user, SignInViewModel.Password, false);
+                        var result = await _signInManager.PasswordSignInAsync(user, SignInViewModel.Password, true,false);
                         if (result.Succeeded)
                         {
                             await _signInManager.SignInAsync(user, true);
@@ -51,7 +52,14 @@ namespace FileManager.Pages.SignIn
                         }
                         else
                         {
-                            ModelState.AddModelError(string.Empty, "Неверный Email или пароль");
+                            if (!await _userManager.IsEmailConfirmedAsync(user))
+                            {
+                                ModelState.AddModelError(string.Empty, "Почта не подтверждена");
+                            }
+                            else
+                            {
+                                ModelState.AddModelError(string.Empty, "Неверный Email или пароль");
+                            }
                         }
                     }
                     else
