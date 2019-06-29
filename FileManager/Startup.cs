@@ -11,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using FileManager.Models;
+using FileManager.Models.EmailSendingOptions;
+using FileManager.Services.EmailConfirmationService;
 using Microsoft.AspNetCore.Identity;
 
 namespace FileManager
@@ -27,6 +29,9 @@ namespace FileManager
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IEmailConfirmationService, EmailConfirmationService>();
+            services.Configure<EmailSendingOptions>(Configuration.GetSection(nameof(EmailSendingOptions)));
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -38,11 +43,12 @@ namespace FileManager
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddIdentity<User, Role>(config => {
-                    config.SignIn.RequireConfirmedEmail = false;
+                    config.SignIn.RequireConfirmedEmail = true;
                     config.User.RequireUniqueEmail = true;
                 })
                 .AddEntityFrameworkStores<FileManagerContext>()
                 .AddDefaultTokenProviders();
+
 
             services.AddDbContext<FileManagerContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("FileManagerContext")));
