@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FileManager.Models.ViewModels
+namespace FileManager.Models.ViewModels.Account
 {
     public class SignUpViewModel
     {

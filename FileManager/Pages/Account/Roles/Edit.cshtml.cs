@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using FileManager.ViewModels;
+using FileManager.ViewModels.Account;
 
 namespace FileManager.Pages.Account.Roles
 {

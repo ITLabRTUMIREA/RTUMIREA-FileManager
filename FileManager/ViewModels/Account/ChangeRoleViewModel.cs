@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using FileManager.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace FileManager.ViewModels
+namespace FileManager.ViewModels.Account
 {
     public class ChangeRoleViewModel
     {

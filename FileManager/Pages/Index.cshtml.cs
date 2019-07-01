@@ -23,7 +23,7 @@ namespace FileManager.Pages
         {
             if (!User.Identity.IsAuthenticated)
             {
-                return RedirectToPage("/Account/SignIn/Index");
+                return RedirectToPage("/Account/SignIn");
             }
             else
             { 

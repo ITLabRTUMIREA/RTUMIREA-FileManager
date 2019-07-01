@@ -10,6 +10,7 @@ using FileManager.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
+using FileManager.Models.ViewModels.Account;
 
 namespace FileManager.Pages.SignIn
 {
