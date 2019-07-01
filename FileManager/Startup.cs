@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using FileManager.Models;
 using FileManager.Models.EmailSendingOptions;
 using FileManager.Services.EmailConfirmationService;
+using FileManager.Services.ResetPasswordService;
 using Microsoft.AspNetCore.Identity;
 
 namespace FileManager
@@ -31,6 +32,8 @@ namespace FileManager
         {
             services.AddTransient<IEmailConfirmationService, EmailConfirmationService>();
             services.Configure<EmailSendingOptions>(Configuration.GetSection(nameof(EmailSendingOptions)));
+
+            services.AddTransient<IResetPasswordService, ResetPasswordService>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
