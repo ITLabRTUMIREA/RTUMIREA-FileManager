@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using FileManager.AutoMapping;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -51,6 +53,9 @@ namespace FileManager
                 })
                 .AddEntityFrameworkStores<FileManagerContext>()
                 .AddDefaultTokenProviders();
+
+            // TODO To Finish AutoMapper Profiling
+            services.AddAutoMapper(cfg=>cfg.AddProfile(AutoMapperProfile));
 
 
             services.AddDbContext<FileManagerContext>(options =>

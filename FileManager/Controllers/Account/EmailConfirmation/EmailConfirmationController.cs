@@ -28,8 +28,10 @@ namespace FileManager.Controllers.Account.EmailConfirmation
             if (emailConfirmationResult.Succeeded)
             {
                 return Content("Email Verified");
+                // TODO Make success Email verification Page info
             }
 
+            // TODO Make invalid Email verification Page info
             return Content("Invalid Email Verification Token");
 
         }

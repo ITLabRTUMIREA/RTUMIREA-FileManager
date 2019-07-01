@@ -22,6 +22,7 @@ namespace FileManager.Controllers.Account.LogOut
         {
             await _signInManager.SignOutAsync();
             return RedirectToPage("/Index");
+            // TODO Make LogOut Page info
         }
 
     }

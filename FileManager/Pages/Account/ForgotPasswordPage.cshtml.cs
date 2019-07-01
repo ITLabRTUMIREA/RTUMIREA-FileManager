@@ -45,7 +45,8 @@ namespace FileManager.Pages.Account.ForgotPasswordPage
                             protocol: HttpContext.Request.Scheme);
 
                         await _resetPasswordService.SendResetPasswordConfirmationLinkToEmailAsync(user, resetPasswordCallbackLink);
-
+                        // TODO To Finish Forgot password page
+                        // TODO To Finish Reseting password completely
 
 
                     }

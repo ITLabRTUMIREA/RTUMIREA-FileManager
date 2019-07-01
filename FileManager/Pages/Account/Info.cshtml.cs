@@ -11,7 +11,7 @@ namespace FileManager.Pages.Account
     {
         public void OnGet()
         {
-
+            // TODO To Finish Info page
         }
     }
 }
