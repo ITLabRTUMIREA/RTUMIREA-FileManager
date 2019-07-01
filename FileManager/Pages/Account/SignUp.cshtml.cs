@@ -13,7 +13,7 @@ using System.Text.Encodings.Web;
 using FileManager.Models.EmailSendingOptions;
 using FileManager.Services.EmailConfirmationService;
 using Microsoft.Extensions.Options;
-
+using FileManager.Models.ViewModels.Account;
 
 namespace FileManager.Pages.SignUp
 {
@@ -21,7 +21,6 @@ namespace FileManager.Pages.SignUp
     {
         private readonly UserManager<User> _userManager;
         private readonly IEmailConfirmationService _emailConfirmationService;
-
 
         public IndexModel(UserManager<User> userManager, IEmailConfirmationService emailConfirmationService)
         {
@@ -31,6 +30,9 @@ namespace FileManager.Pages.SignUp
 
         public IActionResult OnGet()
         {
+            Mapper.Initialize(cfg => cfg.CreateMap<SignUpViewModel, User>()
+                .ForMember("UserName", opt => opt.MapFrom(src => src.Email)));
+
             return Page();
         }
 
@@ -48,8 +50,7 @@ namespace FileManager.Pages.SignUp
                     }
                     else
                     {
-                        Mapper.Initialize(cfg => cfg.CreateMap<SignUpViewModel, User>()
-                            .ForMember("UserName", opt => opt.MapFrom(src => src.Email)));
+
                         User user = Mapper.Map<SignUpViewModel, User>(SignUpViewModel);
 
                         var result = await _userManager.CreateAsync(user, SignUpViewModel.Password);
