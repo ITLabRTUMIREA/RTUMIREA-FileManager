@@ -33,7 +33,6 @@ namespace FileManager.Services.EmailConfirmationService
 
             using (var client = new SmtpClient())
             {
-               // client.ServerCertificateValidationCallback = (s, c, h, e) => true;
 
                 client.Connect(_emailSendingOptions.Host, _emailSendingOptions.Port, _emailSendingOptions.UseSSL);
 
