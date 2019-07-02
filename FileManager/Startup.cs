@@ -54,8 +54,7 @@ namespace FileManager
                 .AddEntityFrameworkStores<FileManagerContext>()
                 .AddDefaultTokenProviders();
 
-            // TODO To Finish AutoMapper Profiling
-            services.AddAutoMapper(cfg=>cfg.AddProfile(AutoMapperProfile));
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
             services.AddDbContext<FileManagerContext>(options =>
