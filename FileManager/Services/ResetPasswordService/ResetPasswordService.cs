@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using FileManager.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FileManager.Services.ResetPasswordService
 {
@@ -24,7 +25,7 @@ namespace FileManager.Services.ResetPasswordService
             MimeMessage message = new MimeMessage();
             message.From.Add(new MailboxAddress(_emailSendingOptions.Email));
             message.To.Add(new MailboxAddress(user.UserName, user.Email));
-            message.Subject = "Email confirmation";
+            message.Subject = "Password reset";
             message.Body = new TextPart("html")
             {
                 Text = Markdown.ToHtml("# Hello\n#### To confirm reset password click this link - [click here](" + HtmlEncoder.Default.Encode(resetPasswordCallbackLink) + ")")
@@ -41,6 +42,7 @@ namespace FileManager.Services.ResetPasswordService
 
                 client.Disconnect(true);
             }
+
         }
     }
 }
