@@ -39,12 +39,14 @@ namespace FileManager.Pages.Account.ForgotPasswordPage
                     if (user != null && (await _userManager.IsEmailConfirmedAsync(user)))
                     {
                         string resetPasswordToken = await _userManager.GeneratePasswordResetTokenAsync(user);
-                        string resetPasswordCallbackLink = Url.Action("ResetPasswordConfirmation",
-                            "Account",
-                            new {userId = user.Id, token = resetPasswordToken},
+                        string resetPasswordCallbackLink = Url.Page("/Account/ResetPasswordConfirmation",
+                            pageHandler: "ResetPassword",
+                            new {UserId = user.Id, Token = resetPasswordToken },
                             protocol: HttpContext.Request.Scheme);
 
-                        await _resetPasswordService.SendResetPasswordConfirmationLinkToEmailAsync(user, resetPasswordCallbackLink);
+                            await _resetPasswordService.SendResetPasswordConfirmationLinkToEmailAsync(user, resetPasswordCallbackLink);
+
+                            return Content("Check your Email");
                         // TODO To Finish Forgot password page
                         // TODO To Finish Reseting password completely
 
