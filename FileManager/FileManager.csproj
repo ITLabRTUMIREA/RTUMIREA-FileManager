@@ -5,16 +5,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="8.1.0" />
+    <PackageReference Include="AutoMapper" Version="8.1.1" />
     <PackageReference Include="MailKit" Version="2.2.0" />
     <PackageReference Include="Markdig" Version="0.17.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Pages\Departament\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="appsettings.Secret.json" />
+  </ItemGroup>
 </Project>

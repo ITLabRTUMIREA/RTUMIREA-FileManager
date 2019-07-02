@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using FileManager.Models;
+using FileManager.Models.ViewModels.Account;
 
 namespace FileManager.AutoMapping
 {
     public class AutoMapperProfile : Profile
     {
-        public static void Initiallize()
+        public AutoMapperProfile()
         {
-           // TODO To Finish AutoMapper Profiling
+            CreateMap<SignUpViewModel, User>()
+                 .ForMember("UserName", opt => opt.MapFrom(src => src.Email));
+    
         }
     }
 }

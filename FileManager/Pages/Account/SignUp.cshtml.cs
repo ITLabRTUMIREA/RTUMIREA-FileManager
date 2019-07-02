@@ -21,17 +21,19 @@ namespace FileManager.Pages.SignUp
     {
         private readonly UserManager<User> _userManager;
         private readonly IEmailConfirmationService _emailConfirmationService;
+        private readonly IMapper _mapper;
 
-        public IndexModel(UserManager<User> userManager, IEmailConfirmationService emailConfirmationService)
+        public IndexModel(UserManager<User> userManager,
+            IEmailConfirmationService emailConfirmationService,
+            IMapper mapper)
         {
             _userManager = userManager;
             _emailConfirmationService = emailConfirmationService;
+            _mapper = mapper;
         }
 
         public IActionResult OnGet()
         {
-            Mapper.Initialize(cfg => cfg.CreateMap<SignUpViewModel, User>()
-                .ForMember("UserName", opt => opt.MapFrom(src => src.Email)));
 
             return Page();
         }
@@ -51,7 +53,7 @@ namespace FileManager.Pages.SignUp
                     else
                     {
 
-                        User user = Mapper.Map<SignUpViewModel, User>(SignUpViewModel);
+                        User user = _mapper.Map<SignUpViewModel, User>(SignUpViewModel);
 
                         var result = await _userManager.CreateAsync(user, SignUpViewModel.Password);
 
