@@ -1,0 +1,73 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using FileManager.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using FileManager.ViewModels;
+using FileManager.ViewModels.Account;
+
+namespace FileManager.Pages.Account.Departments
+{
+    public class EditUserDepartmentsModel : PageModel
+        // TODO Make departaments managing 
+    {
+        private readonly RoleManager<Role> _roleManager;
+        private readonly UserManager<User> _userManager;
+        public EditUserDepartmentsModel(RoleManager<Role> roleManager, UserManager<User> userManager)
+        {
+            _roleManager = roleManager;
+            _userManager = userManager;
+        }
+
+        public ChangeRoleViewModel ChangeRoleViewModel = null;
+        public async Task<IActionResult> OnGetAsync(string userid)
+        {
+            // получаем пользователя
+            User user = await _userManager.FindByIdAsync(userid);
+            if (user != null)
+            {
+                // получем список ролей пользователя
+                var userRoles = await _userManager.GetRolesAsync(user);
+                var allRoles = _roleManager.Roles.ToList();
+                ChangeRoleViewModel = new ChangeRoleViewModel
+                {
+                    UserId = user.Id.ToString(),
+                    UserEmail = user.Email,
+                    UserRoles = userRoles,
+                    AllRoles = allRoles
+                };
+                return Page();
+            }
+
+            return NotFound();
+        }
+        [HttpPost]
+        public async Task<IActionResult> OnPostAsync(string userId, List<string> roles)
+        {
+            // получаем пользователя
+            User user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                // получем список ролей пользователя
+                var userRoles = await _userManager.GetRolesAsync(user);
+                // получаем все роли
+                var allRoles = _roleManager.Roles.ToList();
+                // получаем список ролей, которые были добавлены
+                var addedRoles = roles.Except(userRoles);
+                // получаем роли, которые были удалены
+                var removedRoles = userRoles.Except(roles);
+
+                await _userManager.AddToRolesAsync(user, addedRoles);
+
+                await _userManager.RemoveFromRolesAsync(user, removedRoles);
+
+                return RedirectToPage("UserDepartmentList");
+            }
+
+            return NotFound();
+        }
+    }
+}

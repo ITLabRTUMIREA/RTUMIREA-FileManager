@@ -1,0 +1,20 @@
+﻿@page
+@model FileManager.Pages.Account.Departments.UserDepartmentListModel
+@{
+    ViewData["Title"] = "UserList";
+}
+
+<h2>Список пользователей</h2>
+<table class="table">
+    @foreach (var user in @Model.Users)
+    {
+        <tr>
+            <td>@user.Email</td>
+            <td>
+                <a class="btn btn-sm btn-primary" asp-page="EditUserDepartments" asp-route-userid="@user.Id">Кафедры</a>
+            </td>
+        </tr>
+    }
+</table>
+<a asp-page="./DepartmentsList">Вернуться назад</a>
+
