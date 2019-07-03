@@ -17,13 +17,13 @@ using FileManager.Models.ViewModels.Account;
 
 namespace FileManager.Pages.SignUp
 {
-    public class IndexModel : PageModel
+    public class SignUpModel : PageModel
     {
         private readonly UserManager<User> _userManager;
         private readonly IEmailConfirmationService _emailConfirmationService;
         private readonly IMapper _mapper;
 
-        public IndexModel(UserManager<User> userManager,
+        public SignUpModel(UserManager<User> userManager,
             IEmailConfirmationService emailConfirmationService,
             IMapper mapper)
         {

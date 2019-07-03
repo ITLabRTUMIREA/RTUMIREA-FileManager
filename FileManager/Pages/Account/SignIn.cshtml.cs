@@ -14,13 +14,13 @@ using FileManager.Models.ViewModels.Account;
 
 namespace FileManager.Pages.SignIn
 {
-    public class IndexModel : PageModel
+    public class SignInModel : PageModel
     {
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
 
 
-        public IndexModel(UserManager<User> userManager, SignInManager<User> signInManager)
+        public SignInModel(UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
