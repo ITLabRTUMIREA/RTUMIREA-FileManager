@@ -9,9 +9,11 @@ namespace FileManager.Pages.Account
 {
     public class InfoModel : PageModel
     {
-        public void OnGet()
+        [TempData] public string Message { get; set; }
+
+        public void OnGetGetInfoMessage(string message)
         {
-            // TODO To Finish Info page
+            Message = message;
         }
     }
 }

@@ -63,11 +63,13 @@ namespace FileManager.Pages.SignUp
                             new { userid = user.Id, token = confirmationToken },
                             protocol: HttpContext.Request.Scheme);
 
-                        await _emailConfirmationService.SendEmailConfirmationAsync(user,confirmationLink);
+                        await _emailConfirmationService.SendEmailConfirmationAsync(user, confirmationLink);
 
                         if (result.Succeeded)
                         {
-                            return Content("Confirm email please. Your email: "+ user.Email);
+                            return RedirectToPagePermanent("Info",
+                                "GetInfoMessage",
+                                new { message = "Ссылка для подтверждения почты выслана вам на вашу почту: " + user.Email });
                         }
                         else
                         {

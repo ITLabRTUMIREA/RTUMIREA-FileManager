@@ -9,6 +9,7 @@ using FileManager.ViewModels.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 
 namespace FileManager.Pages.Account.ForgotPasswordPage
 {
@@ -16,7 +17,7 @@ namespace FileManager.Pages.Account.ForgotPasswordPage
     {
         private readonly UserManager<User> _userManager;
         private readonly IResetPasswordService _resetPasswordService;
-        public ForgotPasswordPageModel(UserManager<User> userManager,IResetPasswordService resetPasswordService)
+        public ForgotPasswordPageModel(UserManager<User> userManager, IResetPasswordService resetPasswordService)
         {
             _userManager = userManager;
             _resetPasswordService = resetPasswordService;
@@ -44,12 +45,11 @@ namespace FileManager.Pages.Account.ForgotPasswordPage
                             new { UserId = user.Id, Token = resetPasswordToken },
                             protocol: HttpContext.Request.Scheme);
 
-                            await _resetPasswordService.SendResetPasswordConfirmationLinkToEmailAsync(user, resetPasswordCallbackLink);
+                        await _resetPasswordService.SendResetPasswordConfirmationLinkToEmailAsync(user, resetPasswordCallbackLink);
 
-                            return Content("Check your Email");
-                        // TODO To Finish Forgot password page
-                        // TODO To Finish Reseting password completely
-
+                        return RedirectToPagePermanent("Info",
+                            "GetInfoMessage",
+                            new {message = "Ссылка на восстановление пароля выслана на вашу почту: "+user.Email });
 
                     }
                     else

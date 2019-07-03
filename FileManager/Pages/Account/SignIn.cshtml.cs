@@ -39,13 +39,13 @@ namespace FileManager.Pages.SignIn
         public async Task<IActionResult> OnPostAsync()
         {
             try
-            { 
+            {
                 if (ModelState.IsValid)
                 {
                     if (await _userManager.FindByEmailAsync(SignInViewModel.Email) != null)
                     {
                         User user = await _userManager.FindByEmailAsync(SignInViewModel.Email);
-                        var result = await _signInManager.PasswordSignInAsync(user, SignInViewModel.Password, true,false);
+                        var result = await _signInManager.PasswordSignInAsync(user, SignInViewModel.Password, true, false);
                         if (result.Succeeded)
                         {
                             await _signInManager.SignInAsync(user, true);

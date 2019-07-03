@@ -28,8 +28,10 @@ namespace FileManager.Pages.Account
         [BindProperty]
         public ResetPasswordConfirmationViewModel ResetPasswordConfirmationViewModel { get; set; }
 
+        [TempData]
         public Guid userId { get; set; }
 
+        [TempData]
         public string resetPasswordConfirmationToken { get; set; }
 
         public IActionResult OnGetResetPassword(Guid userId, string token)
@@ -55,7 +57,9 @@ namespace FileManager.Pages.Account
 
                         if (result.Succeeded)
                         {
-                            return Content("ResetPasswordConfirmation is succeeded");
+                            return RedirectToPagePermanent("Info",
+                                "GetInfoMessage",
+                                new { message = "Пароль успешно изменён" });
                         }
 
                         foreach (var error in result.Errors)

@@ -21,8 +21,11 @@ namespace FileManager.Controllers.Account.LogOut
         public async Task<IActionResult> Index()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToPage("/Index");
-            // TODO Make LogOut Page info
+
+            return RedirectToPagePermanent("/Account/Info",
+                "GetInfoMessage",
+                new { message = "Вы успешно вышли из аккаунта"},
+                null);
         }
 
     }

@@ -26,7 +26,7 @@ namespace FileManager.Pages
                 return RedirectToPage("/Account/SignIn");
             }
             else
-            { 
+            {
                 return Page();
             }
         }

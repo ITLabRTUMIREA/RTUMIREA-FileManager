@@ -27,12 +27,18 @@ namespace FileManager.Controllers.Account.EmailConfirmation
 
             if (emailConfirmationResult.Succeeded)
             {
-                return Content("Email Verified");
-                // TODO Make success Email verification Page info
+                return RedirectToPagePermanent("/Account/Info",
+                    "GetInfoMessage",
+                    new { message = "Почта успешно подтверждена" },
+                    null);
             }
-
-            // TODO Make invalid Email verification Page info
-            return Content("Invalid Email Verification Token");
+            else
+            {
+                return RedirectToPagePermanent("/Account/Info",
+                    "GetInfoMessage",
+                    new { message = "Неверная ссылка для подтверждения почты"},
+                    null);
+            }
 
         }
     }
