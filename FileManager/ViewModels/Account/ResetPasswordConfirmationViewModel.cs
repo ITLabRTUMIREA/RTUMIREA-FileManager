@@ -8,19 +8,11 @@ namespace FileManager.ViewModels.Account
 {
     public class ResetPasswordConfirmationViewModel
     {
-        public ResetPasswordConfirmationViewModel(Guid userId, string token)
-        {
-            this.UserId = userId;
-            this.Token = token;
-        }
+        [Required(ErrorMessage = "Обязательное поле.")]
         public Guid UserId { get; set; }
-        public string Token { get; set; }
 
         [Required(ErrorMessage = "Обязательное поле.")]
-
-        [EmailAddress(ErrorMessage = "Неверный Email адрес.")]
-        [Display(Name = "Email")]
-        public string Email { get; set; }
+        public string ResetPasswordConfirmationToken { get; set; }
 
         [Required(ErrorMessage = "Обязательное поле.")]
         [DataType(DataType.Password)]

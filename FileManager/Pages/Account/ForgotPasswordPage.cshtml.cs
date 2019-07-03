@@ -41,7 +41,7 @@ namespace FileManager.Pages.Account.ForgotPasswordPage
                         string resetPasswordToken = await _userManager.GeneratePasswordResetTokenAsync(user);
                         string resetPasswordCallbackLink = Url.Page("/Account/ResetPasswordConfirmation",
                             pageHandler: "ResetPassword",
-                            new {UserId = user.Id, Token = resetPasswordToken },
+                            new { UserId = user.Id, Token = resetPasswordToken },
                             protocol: HttpContext.Request.Scheme);
 
                             await _resetPasswordService.SendResetPasswordConfirmationLinkToEmailAsync(user, resetPasswordCallbackLink);

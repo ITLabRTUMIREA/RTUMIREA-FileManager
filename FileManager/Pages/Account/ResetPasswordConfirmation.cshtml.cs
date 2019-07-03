@@ -14,6 +14,7 @@ namespace FileManager.Pages.Account
     {
         private readonly UserManager<User> _userManager;
 
+
         public ResetPasswordConfirmationModel(UserManager<User> userManager)
         {
             _userManager = userManager;
@@ -21,35 +22,37 @@ namespace FileManager.Pages.Account
 
         public IActionResult OnGet()
         {
-            return RedirectToRoute("/");
-        }
-
-        [BindProperty] public ResetPasswordConfirmationViewModel ResetPasswordConfirmationViewModel { get; set; }
-
-        public IActionResult OnGetResetPassword(Guid userId, string token)
-        {
-            new ResetPasswordConfirmationViewModel(userId, token);
             return Page();
         }
 
-        public async Task<IActionResult> OnPostResetPassword()
+        [BindProperty]
+        public ResetPasswordConfirmationViewModel ResetPasswordConfirmationViewModel { get; set; }
+
+        public Guid userId { get; set; }
+
+        public string resetPasswordConfirmationToken { get; set; }
+
+        public IActionResult OnGetResetPassword(Guid userId, string token)
+        {
+            this.userId = userId;
+            resetPasswordConfirmationToken = token;
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    User user = await _userManager.FindByEmailAsync(ResetPasswordConfirmationViewModel.Email);
+                    User user = await _userManager.FindByIdAsync(ResetPasswordConfirmationViewModel.UserId.ToString());
 
-                    if (user.Id != ResetPasswordConfirmationViewModel.UserId)
-                    {
-                        ModelState.AddModelError("ResetPasswordConfirmationViewModel.Email",
-                            "Email не соответствует вашему аккаунту");
-                    }
-                    else
+                    if (user != null)
                     {
                         IdentityResult result = await _userManager.ResetPasswordAsync(user,
-                            ResetPasswordConfirmationViewModel.Token,
+                            ResetPasswordConfirmationViewModel.ResetPasswordConfirmationToken,
                             ResetPasswordConfirmationViewModel.Password);
+
                         if (result.Succeeded)
                         {
                             return Content("ResetPasswordConfirmation is succeeded");
