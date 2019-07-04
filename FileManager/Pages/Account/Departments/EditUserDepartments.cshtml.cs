@@ -14,55 +14,77 @@ namespace FileManager.Pages.Account.Departments
     public class EditUserDepartmentsModel : PageModel
         // TODO Make departaments managing 
     {
-        private readonly RoleManager<Role> _roleManager;
+        private readonly FileManagerContext db;
         private readonly UserManager<User> _userManager;
-        public EditUserDepartmentsModel(RoleManager<Role> roleManager, UserManager<User> userManager)
+
+        public EditUserDepartmentsModel(FileManagerContext context, UserManager<User> userManager)
         {
-            _roleManager = roleManager;
+            db = context;
             _userManager = userManager;
         }
 
-        public ChangeRoleViewModel ChangeRoleViewModel = null;
+        public ChangeDepartmentViewModel ChangeDepartmentViewModel = null;
+
         public async Task<IActionResult> OnGetAsync(string userid)
         {
             // получаем пользователя
             User user = await _userManager.FindByIdAsync(userid);
+
             if (user != null)
             {
-                // получем список ролей пользователя
-                var userRoles = await _userManager.GetRolesAsync(user);
-                var allRoles = _roleManager.Roles.ToList();
-                ChangeRoleViewModel = new ChangeRoleViewModel
+                // получем список кафедр пользователя
+                var userDepartments = db.UserRole.Where(urd => urd.UserId.Equals(user.Id)).ToList();
+                var allDepartmemnts = db.Departament.ToList<Departament>();
+
+                ChangeDepartmentViewModel = new ChangeDepartmentViewModel
                 {
                     UserId = user.Id.ToString(),
                     UserEmail = user.Email,
-                    UserRoles = userRoles,
-                    AllRoles = allRoles
+                    UserDepartments = userDepartments,
+                    AllDepartments = allDepartmemnts
                 };
                 return Page();
+                
             }
 
             return NotFound();
         }
         [HttpPost]
-        public async Task<IActionResult> OnPostAsync(string userId, List<string> roles)
+        public async Task<IActionResult> OnPostAsync(string userId, List<string> departaments)
         {
             // получаем пользователя
             User user = await _userManager.FindByIdAsync(userId);
             if (user != null)
+               
             {
-                // получем список ролей пользователя
-                var userRoles = await _userManager.GetRolesAsync(user);
-                // получаем все роли
-                var allRoles = _roleManager.Roles.ToList();
-                // получаем список ролей, которые были добавлены
-                var addedRoles = roles.Except(userRoles);
-                // получаем роли, которые были удалены
-                var removedRoles = userRoles.Except(roles);
+                // получем список кафедр пользователя
+                List<string> userDepartmentsIds = db.UserRole
+                    .Where(urd => urd.UserId.Equals(user.Id))
+                    .Select(urd => urd.Departament.ID.ToString())
+                    .ToList();
+                // получаем список кафедр, которые были добавлены
+                IEnumerable<string> addedDepartmentsIds = departaments.Except(userDepartmentsIds);
+                // получаем кафедры, которые были удалены
+                var removedDepartments = userDepartmentsIds.Except(departaments);
 
-                await _userManager.AddToRolesAsync(user, addedRoles);
+                foreach(string newDepartmentId in addedDepartmentsIds)
+                {
+                    db.UserRole.Add(new UserRole()
+                    {
+                        UserId = Guid.Parse(userId),
+                        DepartamentID = Guid.Parse(newDepartmentId),
+                        Departament = db.Departament.FirstOrDefault(d => d.ID.ToString() == newDepartmentId)
+                    }) ;
+                }
 
-                await _userManager.RemoveFromRolesAsync(user, removedRoles);
+                foreach (string oldDepartmentId in removedDepartments)
+                {
+                    db.UserRole.Remove(db.UserRole.FirstOrDefault(
+                        urd => urd.DepartamentID.ToString() == oldDepartmentId
+                        && urd.UserId.ToString() == userId));
+
+                }
+                await db.SaveChangesAsync();
 
                 return RedirectToPage("UserDepartmentList");
             }

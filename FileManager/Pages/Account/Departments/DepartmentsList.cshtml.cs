@@ -11,26 +11,38 @@ using Microsoft.EntityFrameworkCore;
 namespace FileManager.Pages.Account.Departments
 {
     public class DepartmentsListModel : PageModel
-        // TODO Make departaments managing 
+        // TODO Make departaments managing
+        // TODO Change all names Departament to Department
     {
-        private readonly RoleManager<Role> _roleManager;
-        public DepartmentsListModel(RoleManager<Role> roleManager)
+        private readonly FileManagerContext db;
+
+        public DepartmentsListModel(FileManagerContext context)
         {
-            _roleManager = roleManager;
+            db = context;
         }
 
-        public List<Role> Roles = null;
+        public List<Departament> Departaments;
+
         public async Task<IActionResult> OnGet()
         {
-            Roles = await _roleManager.Roles.ToListAsync();
+            Departaments = await db.Departament.ToListAsync<Departament>();
+
             return Page();
         }
-        public async Task<IActionResult> OnPostAsync(string id)
+
+        public async Task<IActionResult> OnPostDeleteAsync(String id)
         {
-            Role role = await _roleManager.FindByIdAsync(id);
-            if (role != null)
+            if (id.Equals(null))
             {
-                IdentityResult result = await _roleManager.DeleteAsync(role);
+                return Page();
+            }
+
+            Departament departament = await db.Departament.FirstOrDefaultAsync<Departament>(d => d.ID.ToString() == id);
+
+            if (departament != null)
+            {
+                db.Departament.Remove(departament);
+                await db.SaveChangesAsync();
             }
             return RedirectToPage("/Account/Departments/DepartmentsList");
         }

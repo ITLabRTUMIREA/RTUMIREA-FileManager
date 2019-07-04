@@ -12,10 +12,10 @@ namespace FileManager.Pages.Account.Departments
     public class CreateDepartmentModel : PageModel
         // TODO Make departaments managing 
     {
-        private readonly RoleManager<Role> _roleManager;
-        public CreateDepartmentModel(RoleManager<Role> roleManager)
+        private readonly FileManagerContext db;
+        public CreateDepartmentModel(FileManagerContext context)
         {
-            _roleManager = roleManager;
+            db = context;
         }
         public IActionResult OnGet()
         {
@@ -26,18 +26,15 @@ namespace FileManager.Pages.Account.Departments
         {
             if (!string.IsNullOrEmpty(name))
             {
-                IdentityResult result = await _roleManager.CreateAsync(new Role(name));
-                if (result.Succeeded)
-                {
-                    return RedirectToPage("DepartmentsList");
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                }
+                Departament newDepartment = new Departament();
+                newDepartment.Name = name;
+
+                await db.Departament.AddAsync(newDepartment);
+                await db.SaveChangesAsync();
+
+                return RedirectToPage("DepartmentsList");
+                 
+                
             }
             return Page();
         }

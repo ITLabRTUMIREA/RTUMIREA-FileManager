@@ -6,16 +6,19 @@
 }
 
 
-<h2>Изменение принадлежности пользователя к кафедрам @Model.ChangeRoleViewModel.UserEmail</h2>
+<h2>Изменение принадлежности пользователя к кафедрам @Model.ChangeDepartmentViewModel.UserEmail</h2>
 
 <form method="post">
-    <input type="hidden" name="userId" value="@Model.ChangeRoleViewModel.UserId" />
+    <input type="hidden" name="userId" value="@Model.ChangeDepartmentViewModel.UserId" />
     <div class="form-group">
-        @foreach (Role role in Model.ChangeRoleViewModel.AllRoles)
-        {
-            <input type="checkbox" name="roles" value="@role.Name"
-                   @(Model.ChangeRoleViewModel.UserRoles.Contains(role.Name) ? "checked=\"checked\"" : "") />@role.Name <br />
-            }
+        @foreach (Departament departament in Model.ChangeDepartmentViewModel.AllDepartments)
+    {
+        <input type="checkbox" name="departments" value="@departament.ID.ToString()"
+        @((Model.ChangeDepartmentViewModel.
+        UserDepartments.Where(ud => ud.DepartamentID.Equals(departament.ID)) == null) ? "checked=\"checked\"" : "") />
+        @departament.Name 
+        <br />
+    }
     </div>
     <button type="submit" class="btn btn-primary">Сохранить</button>
 </form>
