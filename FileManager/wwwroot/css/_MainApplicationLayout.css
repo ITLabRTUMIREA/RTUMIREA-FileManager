@@ -48,7 +48,7 @@
     grid-template-columns: auto;
 }
 
-.departament {
+.Department {
     grid-column: 1;
 }
 
@@ -66,12 +66,12 @@ ul {
         clear: both;
     }
 
-    ul.departament > li {
+    ul.Department > li {
         float: left;
         position: relative;
     }
 
-        ul.departament > li > a {
+        ul.Department > li > a {
             display: block;
             color: #fff;
             padding: 10px;
@@ -79,7 +79,7 @@ ul {
             background-color: #777777;
         }
 
-            ul.departament > li > a:hover {
+            ul.Department > li > a:hover {
                 background-color: #4e4e4e;
                 color: rgb(255, 255, 255);
             }

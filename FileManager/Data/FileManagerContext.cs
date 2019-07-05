@@ -22,7 +22,7 @@ namespace FileManager.Models
         public DbSet<DepartmentsDocument> DepartmentsDocument { get; set; }
         public DbSet<DepartmentsDocumentsVersion> DepartmentsDocumentsVersion { get; set; }
         public DbSet<Role> Role { get; set; }
-        public DbSet<UserRole> UserRole { get; set; }
+        public DbSet<UserRoleDepartment> UserRoleDepartment { get; set; }
         public DbSet<DocumentTitle> DocumentTitle { get; set; }
         public DbSet<DocumentType> DocumentType { get; set; }
         public DbSet<Year> Year { get; set; }

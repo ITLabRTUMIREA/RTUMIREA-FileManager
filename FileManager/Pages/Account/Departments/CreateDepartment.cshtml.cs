@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace FileManager.Pages.Account.Departments
 {
     public class CreateDepartmentModel : PageModel
-        // TODO Make departaments managing 
+        // TODO Make Departments managing 
     {
         private readonly FileManagerContext db;
         public CreateDepartmentModel(FileManagerContext context)

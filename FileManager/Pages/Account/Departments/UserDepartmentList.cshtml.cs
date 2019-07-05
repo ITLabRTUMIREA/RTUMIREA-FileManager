@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 namespace FileManager.Pages.Account.Departments
 {
     public class UserDepartmentListModel : PageModel
-        // TODO Make departaments managing 
+        // TODO Make Departments managing 
     {
         private readonly UserManager<User> _userManager;
         public UserDepartmentListModel (UserManager<User> userManager)

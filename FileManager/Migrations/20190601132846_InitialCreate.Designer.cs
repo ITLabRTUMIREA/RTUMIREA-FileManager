@@ -21,7 +21,7 @@ namespace FileManager.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("FileManager.Models.Departament", b =>
+            modelBuilder.Entity("FileManager.Models.Department", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
@@ -30,41 +30,41 @@ namespace FileManager.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Departament");
+                    b.ToTable("Department");
                 });
 
-            modelBuilder.Entity("FileManager.Models.DepartamentsDocument", b =>
+            modelBuilder.Entity("FileManager.Models.DepartmentsDocument", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid>("DepartamentID");
+                    b.Property<Guid>("DepartmentID");
 
                     b.Property<Guid>("YearDocumentTitleID");
 
                     b.HasKey("ID");
 
-                    b.HasAlternateKey("DepartamentID", "YearDocumentTitleID");
+                    b.HasAlternateKey("DepartmentID", "YearDocumentTitleID");
 
                     b.HasIndex("YearDocumentTitleID");
 
-                    b.ToTable("DepartamentsDocument");
+                    b.ToTable("DepartmentsDocument");
                 });
 
-            modelBuilder.Entity("FileManager.Models.DepartamentsDocumentsVersion", b =>
+            modelBuilder.Entity("FileManager.Models.DepartmentsDocumentsVersion", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid>("DepartamentDocumentID");
+                    b.Property<Guid>("DepartmentDocumentID");
 
                     b.Property<short>("Version");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("DepartamentDocumentID");
+                    b.HasIndex("DepartmentDocumentID");
 
-                    b.ToTable("DepartamentsDocumentsVersion");
+                    b.ToTable("DepartmentsDocumentsVersion");
                 });
 
             modelBuilder.Entity("FileManager.Models.DocumentStatus", b =>
@@ -83,15 +83,15 @@ namespace FileManager.Migrations
                 {
                     b.Property<Guid>("DocumentStatusID");
 
-                    b.Property<Guid>("DepartamentsDocumentID");
+                    b.Property<Guid>("DepartmentsDocumentID");
 
                     b.Property<string>("CommentEdits");
 
                     b.Property<Guid>("ID");
 
-                    b.HasKey("DocumentStatusID", "DepartamentsDocumentID");
+                    b.HasKey("DocumentStatusID", "DepartmentsDocumentID");
 
-                    b.HasIndex("DepartamentsDocumentID");
+                    b.HasIndex("DepartmentsDocumentID");
 
                     b.ToTable("DocumentStatusHistory");
                 });
@@ -336,45 +336,45 @@ namespace FileManager.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("FileManager.Models.UserRole", b =>
+            modelBuilder.Entity("FileManager.Models.UserRoleDepartment", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>");
 
-                    b.Property<Guid>("DepartamentID");
+                    b.Property<Guid>("DepartmentID");
 
-                    b.HasIndex("DepartamentID");
+                    b.HasIndex("DepartmentID");
 
                     b.ToTable("AspNetUserRoles");
 
-                    b.HasDiscriminator().HasValue("UserRole");
+                    b.HasDiscriminator().HasValue("UserRoleDepartment");
                 });
 
-            modelBuilder.Entity("FileManager.Models.DepartamentsDocument", b =>
+            modelBuilder.Entity("FileManager.Models.DepartmentsDocument", b =>
                 {
-                    b.HasOne("FileManager.Models.Departament", "Departament")
-                        .WithMany("DepartamentsDocuments")
-                        .HasForeignKey("DepartamentID")
+                    b.HasOne("FileManager.Models.Department", "Department")
+                        .WithMany("DepartmentsDocuments")
+                        .HasForeignKey("DepartmentID")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("FileManager.Models.YearDocumentTitle", "YearDocumentTitle")
-                        .WithMany("DepartamentsDocuments")
+                        .WithMany("DepartmentsDocuments")
                         .HasForeignKey("YearDocumentTitleID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("FileManager.Models.DepartamentsDocumentsVersion", b =>
+            modelBuilder.Entity("FileManager.Models.DepartmentsDocumentsVersion", b =>
                 {
-                    b.HasOne("FileManager.Models.DepartamentsDocument", "DepartamentsDocument")
-                        .WithMany("DepartamentsDocumentsVersions")
-                        .HasForeignKey("DepartamentDocumentID")
+                    b.HasOne("FileManager.Models.DepartmentsDocument", "DepartmentsDocument")
+                        .WithMany("DepartmentsDocumentsVersions")
+                        .HasForeignKey("DepartmentDocumentID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("FileManager.Models.DocumentStatusHistory", b =>
                 {
-                    b.HasOne("FileManager.Models.DepartamentsDocument", "DepartamentsDocument")
+                    b.HasOne("FileManager.Models.DepartmentsDocument", "DepartmentsDocument")
                         .WithMany("DocumentStatusHistories")
-                        .HasForeignKey("DepartamentsDocumentID")
+                        .HasForeignKey("DepartmentsDocumentID")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("FileManager.Models.DocumentStatus", "DocumentStatus")
@@ -462,11 +462,11 @@ namespace FileManager.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("FileManager.Models.UserRole", b =>
+            modelBuilder.Entity("FileManager.Models.UserRoleDepartment", b =>
                 {
-                    b.HasOne("FileManager.Models.Departament", "Departament")
+                    b.HasOne("FileManager.Models.Department", "Department")
                         .WithMany("UserRoles")
-                        .HasForeignKey("DepartamentID")
+                        .HasForeignKey("DepartmentID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

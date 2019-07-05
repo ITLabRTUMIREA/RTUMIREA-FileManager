@@ -50,7 +50,7 @@ namespace FileManager.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Departament",
+                name: "Department",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(nullable: false),
@@ -58,7 +58,7 @@ namespace FileManager.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Departament", x => x.ID);
+                    table.PrimaryKey("PK_Department", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -186,15 +186,15 @@ namespace FileManager.Migrations
                     UserId = table.Column<Guid>(nullable: false),
                     RoleId = table.Column<Guid>(nullable: false),
                     Discriminator = table.Column<string>(nullable: false),
-                    DepartamentID = table.Column<Guid>(nullable: true)
+                    DepartmentID = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
                     table.ForeignKey(
-                        name: "FK_AspNetUserRoles_Departament_DepartamentID",
-                        column: x => x.DepartamentID,
-                        principalTable: "Departament",
+                        name: "FK_AspNetUserRoles_Department_DepartmentID",
+                        column: x => x.DepartmentID,
+                        principalTable: "Department",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -282,25 +282,25 @@ namespace FileManager.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DepartamentsDocument",
+                name: "DepartmentsDocument",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(nullable: false),
                     YearDocumentTitleID = table.Column<Guid>(nullable: false),
-                    DepartamentID = table.Column<Guid>(nullable: false)
+                    DepartmentID = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DepartamentsDocument", x => x.ID);
-                    table.UniqueConstraint("AK_DepartamentsDocument_DepartamentID_YearDocumentTitleID", x => new { x.DepartamentID, x.YearDocumentTitleID });
+                    table.PrimaryKey("PK_DepartmentsDocument", x => x.ID);
+                    table.UniqueConstraint("AK_DepartmentsDocument_DepartmentID_YearDocumentTitleID", x => new { x.DepartmentID, x.YearDocumentTitleID });
                     table.ForeignKey(
-                        name: "FK_DepartamentsDocument_Departament_DepartamentID",
-                        column: x => x.DepartamentID,
-                        principalTable: "Departament",
+                        name: "FK_DepartmentsDocument_Department_DepartmentID",
+                        column: x => x.DepartmentID,
+                        principalTable: "Department",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DepartamentsDocument_YearDocumentTitle_YearDocumentTitleID",
+                        name: "FK_DepartmentsDocument_YearDocumentTitle_YearDocumentTitleID",
                         column: x => x.YearDocumentTitleID,
                         principalTable: "YearDocumentTitle",
                         principalColumn: "ID",
@@ -308,20 +308,20 @@ namespace FileManager.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DepartamentsDocumentsVersion",
+                name: "DepartmentsDocumentsVersion",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(nullable: false),
                     Version = table.Column<short>(nullable: false),
-                    DepartamentDocumentID = table.Column<Guid>(nullable: false)
+                    DepartmentDocumentID = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DepartamentsDocumentsVersion", x => x.ID);
+                    table.PrimaryKey("PK_DepartmentsDocumentsVersion", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_DepartamentsDocumentsVersion_DepartamentsDocument_DepartamentDocumentID",
-                        column: x => x.DepartamentDocumentID,
-                        principalTable: "DepartamentsDocument",
+                        name: "FK_DepartmentsDocumentsVersion_DepartmentsDocument_DepartmentDocumentID",
+                        column: x => x.DepartmentDocumentID,
+                        principalTable: "DepartmentsDocument",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -333,15 +333,15 @@ namespace FileManager.Migrations
                     ID = table.Column<Guid>(nullable: false),
                     CommentEdits = table.Column<string>(nullable: true),
                     DocumentStatusID = table.Column<Guid>(nullable: false),
-                    DepartamentsDocumentID = table.Column<Guid>(nullable: false)
+                    DepartmentsDocumentID = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DocumentStatusHistory", x => new { x.DocumentStatusID, x.DepartamentsDocumentID });
+                    table.PrimaryKey("PK_DocumentStatusHistory", x => new { x.DocumentStatusID, x.DepartmentsDocumentID });
                     table.ForeignKey(
-                        name: "FK_DocumentStatusHistory_DepartamentsDocument_DepartamentsDocumentID",
-                        column: x => x.DepartamentsDocumentID,
-                        principalTable: "DepartamentsDocument",
+                        name: "FK_DocumentStatusHistory_DepartmentsDocument_DepartmentsDocumentID",
+                        column: x => x.DepartmentsDocumentID,
+                        principalTable: "DepartmentsDocument",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -375,9 +375,9 @@ namespace FileManager.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_DepartamentID",
+                name: "IX_AspNetUserRoles_DepartmentID",
                 table: "AspNetUserRoles",
-                column: "DepartamentID");
+                column: "DepartmentID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserRoles_RoleId",
@@ -397,19 +397,19 @@ namespace FileManager.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DepartamentsDocument_YearDocumentTitleID",
-                table: "DepartamentsDocument",
+                name: "IX_DepartmentsDocument_YearDocumentTitleID",
+                table: "DepartmentsDocument",
                 column: "YearDocumentTitleID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DepartamentsDocumentsVersion_DepartamentDocumentID",
-                table: "DepartamentsDocumentsVersion",
-                column: "DepartamentDocumentID");
+                name: "IX_DepartmentsDocumentsVersion_DepartmentDocumentID",
+                table: "DepartmentsDocumentsVersion",
+                column: "DepartmentDocumentID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DocumentStatusHistory_DepartamentsDocumentID",
+                name: "IX_DocumentStatusHistory_DepartmentsDocumentID",
                 table: "DocumentStatusHistory",
-                column: "DepartamentsDocumentID");
+                column: "DepartmentsDocumentID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DocumentTitle_DocumentTypeID",
@@ -445,7 +445,7 @@ namespace FileManager.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "DepartamentsDocumentsVersion");
+                name: "DepartmentsDocumentsVersion");
 
             migrationBuilder.DropTable(
                 name: "DocumentStatusHistory");
@@ -457,7 +457,7 @@ namespace FileManager.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "DepartamentsDocument");
+                name: "DepartmentsDocument");
 
             migrationBuilder.DropTable(
                 name: "DocumentStatus");
@@ -466,7 +466,7 @@ namespace FileManager.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Departament");
+                name: "Department");
 
             migrationBuilder.DropTable(
                 name: "YearDocumentTitle");

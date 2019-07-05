@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 ﻿@page
 @model FileManager.Pages.Account.Departments.EditUserDepartmentsModel
 @using FileManager.Models.Database.DepartmentsDocuments;
@@ -17,6 +18,27 @@
         @((Model.ChangeDepartmentViewModel.
         UserDepartments.Where(ud => ud.DepartmentId.Equals(departament.ID)) == null) ? "checked=\"checked\"" : "") />
         @departament.Name 
+=======
+﻿@page
+@model FileManager.Pages.Account.Departments.EditUserDepartmentsModel
+@using FileManager.Models;
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<h2>Изменение принадлежности пользователя к кафедрам @Model.ChangeDepartmentViewModel.UserEmail</h2>
+
+<form method="post">
+    <input type="hidden" name="userId" value="@Model.ChangeDepartmentViewModel.UserId" />
+    <div class="form-group">
+        @foreach (Department Department in Model.ChangeDepartmentViewModel.AllDepartments)
+    {
+        <input type="checkbox" name="departments" value="@Department.ID.ToString()"
+        @((Model.ChangeDepartmentViewModel.
+        UserDepartments.Where(ud => ud.DepartmentID.Equals(Department.ID)) == null) ? "checked=\"checked\"" : "") />
+        @Department.Name 
+>>>>>>> Stashed changes
         <br />
     }
     </div>
