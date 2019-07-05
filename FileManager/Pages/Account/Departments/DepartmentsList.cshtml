@@ -6,13 +6,13 @@
 
 <h2>Список кафедр</h2>
 <table class="table">
-    @foreach (var departament in @Model.Departaments)
+    @foreach (var department in @Model.Departments)
     {
         <tr>
-            <td>@departament.Name</td>
+            <td>@department.Name</td>
             <td>
                 <form method="post">
-                    <button type="submit" asp-page-handler="Delete" asp-route-id="@departament.ID" class="btn btn-sm btn-danger">
+                    <button type="submit" asp-page-handler="Delete" asp-route-id="@department.ID" class="btn btn-sm btn-danger">
                         Удалить
                     </button>
                 </form>

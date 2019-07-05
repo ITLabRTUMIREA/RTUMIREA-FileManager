@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FileManager.Models;
+using FileManager.Models.Database.UserRole;
 using FileManager.Models.ViewModels.Account;
 
 namespace FileManager.AutoMapping

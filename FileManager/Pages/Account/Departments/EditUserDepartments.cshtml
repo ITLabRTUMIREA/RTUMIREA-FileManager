@@ -1,6 +1,6 @@
 ﻿@page
 @model FileManager.Pages.Account.Departments.EditUserDepartmentsModel
-@using FileManager.Models;
+@using FileManager.Models.Database.DepartmentsDocuments;
 @{
     ViewData["Title"] = "Edit";
 }
@@ -11,11 +11,11 @@
 <form method="post">
     <input type="hidden" name="userId" value="@Model.ChangeDepartmentViewModel.UserId" />
     <div class="form-group">
-        @foreach (Departament departament in Model.ChangeDepartmentViewModel.AllDepartments)
+        @foreach (Department departament in Model.ChangeDepartmentViewModel.AllDepartments)
     {
         <input type="checkbox" name="departments" value="@departament.ID.ToString()"
         @((Model.ChangeDepartmentViewModel.
-        UserDepartments.Where(ud => ud.DepartamentID.Equals(departament.ID)) == null) ? "checked=\"checked\"" : "") />
+        UserDepartments.Where(ud => ud.DepartmentId.Equals(departament.ID)) == null) ? "checked=\"checked\"" : "") />
         @departament.Name 
         <br />
     }

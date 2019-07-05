@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FileManager.Models;
+using FileManager.Models.Database.DepartmentsDocuments;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -26,10 +27,10 @@ namespace FileManager.Pages.Account.Departments
         {
             if (!string.IsNullOrEmpty(name))
             {
-                Departament newDepartment = new Departament();
+                Department newDepartment = new Department();
                 newDepartment.Name = name;
 
-                await db.Departament.AddAsync(newDepartment);
+                await db.Department.AddAsync(newDepartment);
                 await db.SaveChangesAsync();
 
                 return RedirectToPage("DepartmentsList");

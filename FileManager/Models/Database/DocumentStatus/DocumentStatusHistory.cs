@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FileManager.Models.Database.DepartmentsDocuments;
 
-namespace FileManager.Models
+namespace FileManager.Models.Database.DocumentStatus
 {
     public class DocumentStatusHistory
     {
@@ -13,8 +14,8 @@ namespace FileManager.Models
         public Guid DocumentStatusID { get; set; }
         public DocumentStatus DocumentStatus { get; set; }
 
-        public Guid DepartamentsDocumentID { get; set; }
-        public DepartamentsDocument DepartamentsDocument { get; set; }
+        public Guid DepartmentsDocumentID { get; set; }
+        public DepartmentsDocument DepartmentsDocument { get; set; }
 
 
     }

@@ -14,6 +14,7 @@ using FileManager.Models.EmailSendingOptions;
 using FileManager.Services.EmailConfirmationService;
 using Microsoft.Extensions.Options;
 using FileManager.Models.ViewModels.Account;
+using FileManager.Models.Database.UserRole;
 
 namespace FileManager.Pages.SignUp
 {

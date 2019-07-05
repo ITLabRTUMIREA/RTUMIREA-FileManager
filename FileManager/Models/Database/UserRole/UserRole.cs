@@ -4,11 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
-namespace FileManager.Models
+namespace FileManager.Models.Database.UserRole
 {
     public class UserRole : IdentityUserRole<Guid>
     {
-        public Guid DepartamentID { get; set; }
-        public Departament Departament { get; set; }
     }
 }

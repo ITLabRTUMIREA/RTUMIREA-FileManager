@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FileManager.Models;
+using FileManager.Models.Database.UserRole;
 using FileManager.Models.ViewModels.Account;
 using FileManager.Services.ResetPasswordService;
 using FileManager.ViewModels.Account;

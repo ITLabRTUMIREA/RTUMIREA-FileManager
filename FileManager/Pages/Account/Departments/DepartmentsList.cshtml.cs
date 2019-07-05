@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FileManager.Models;
+using FileManager.Models.Database.DepartmentsDocuments;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 namespace FileManager.Pages.Account.Departments
 {
     public class DepartmentsListModel : PageModel
-        // TODO Make departaments managing
+        // TODO Make Departments managing
         // TODO Change all names Departament to Department
     {
         private readonly FileManagerContext db;
@@ -21,11 +22,11 @@ namespace FileManager.Pages.Account.Departments
             db = context;
         }
 
-        public List<Departament> Departaments;
+        public List<Department> Departments;
 
         public async Task<IActionResult> OnGet()
         {
-            Departaments = await db.Departament.ToListAsync<Departament>();
+            Departments = await db.Department.ToListAsync<Department>();
 
             return Page();
         }
@@ -37,11 +38,11 @@ namespace FileManager.Pages.Account.Departments
                 return Page();
             }
 
-            Departament departament = await db.Departament.FirstOrDefaultAsync<Departament>(d => d.ID.ToString() == id);
+            Department departament = await db.Department.FirstOrDefaultAsync<Department>(d => d.ID.ToString() == id);
 
             if (departament != null)
             {
-                db.Departament.Remove(departament);
+                db.Department.Remove(departament);
                 await db.SaveChangesAsync();
             }
             return RedirectToPage("/Account/Departments/DepartmentsList");

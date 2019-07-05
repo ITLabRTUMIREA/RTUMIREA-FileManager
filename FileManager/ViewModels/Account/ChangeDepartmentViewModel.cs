@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using FileManager.Models;
+using FileManager.Models.Database.DepartmentsDocuments;
+using FileManager.Models.Database.UserDepartments;
 
 namespace FileManager.ViewModels.Account
 {
@@ -8,13 +10,13 @@ namespace FileManager.ViewModels.Account
     {
         public ChangeDepartmentViewModel()
         {
-            AllDepartments = new List<Departament>();
-            UserDepartments = new List<UserRole>();
+            AllDepartments = new List<Department>();
+            UserDepartments = new List<UserDepartment>();
         }
 
         public string UserId { get; set; }
         public string UserEmail { get; set; }
-        public List<Departament> AllDepartments { get; set; }
-        public List<UserRole> UserDepartments { get; set; }
+        public List<Department> AllDepartments { get; set; }
+        public List<UserDepartment> UserDepartments { get; set; }
     }
 }

@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
 using FileManager.Models.ViewModels.Account;
+using FileManager.Models.Database.UserRole;
 
 namespace FileManager.Pages.SignIn
 {

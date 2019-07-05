@@ -6,15 +6,21 @@ using Microsoft.EntityFrameworkCore;
 using FileManager.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using FileManager.Models.Database.UserRole;
+using FileManager.Models.Database.DepartmentsDocuments;
+using FileManager.Models.Database.YearDocumentTitles;
+using FileManager.Models.Database.DocumentStatus;
+using FileManager.Models.Database.UserDepartments;
 
 namespace FileManager.Models
 {
     public class FileManagerContext : IdentityDbContext<User, Role, Guid>
     {
         public DbSet<User> User { get; set; }
-        public DbSet<Departament> Departament { get; set; }
-        public DbSet<DepartamentsDocument> DepartamentsDocument { get; set; }
-        public DbSet<DepartamentsDocumentsVersion> DepartamentsDocumentsVersion { get; set; }
+        public DbSet<Department> Department { get; set; }
+        public DbSet<UserDepartment> UserDepartment { get; set; }
+        public DbSet<DepartmentsDocument> DepartmentsDocument { get; set; }
+        public DbSet<DepartmentsDocumentsVersion> DepartmentsDocumentsVersion { get; set; }
         public DbSet<Role> Role { get; set; }
         public DbSet<UserRole> UserRole { get; set; }
         public DbSet<DocumentTitle> DocumentTitle { get; set; }
@@ -33,41 +39,42 @@ namespace FileManager.Models
         {
             base.OnModelCreating(builder);
 
-            ConfigureDepartamentsDocument(builder);
+            ConfigureDepartmentsDocument(builder);
             ConfigureDocumentStatus(builder);
             ConfigureYearDocumentTitle(builder);
             ConfigureUserRole(builder);
+            ConfigureUserDepartments(builder);
 
         }
 
-        private static void ConfigureDepartamentsDocument(ModelBuilder builder)
+        private static void ConfigureDepartmentsDocument(ModelBuilder builder)
         {
-            builder.Entity<Departament>(b => {
+            builder.Entity<Department>(b => {
                 b.HasKey(d => d.ID);
             });
 
-            builder.Entity<DepartamentsDocument>(b => {
+            builder.Entity<DepartmentsDocument>(b => {
 
                 b.HasKey(dd=>dd.ID);
 
-                b.HasAlternateKey(dd => new {dd.DepartamentID,dd.YearDocumentTitleID });
+                b.HasAlternateKey(dd => new {dd.DepartmentID,dd.YearDocumentTitleID });
 
                 b.HasOne(dd => dd.YearDocumentTitle)
-                    .WithMany(ydt => ydt.DepartamentsDocuments)
+                    .WithMany(ydt => ydt.DepartmentsDocuments)
                     .HasForeignKey(dd => dd.YearDocumentTitleID);
 
-                b.HasOne(dd => dd.Departament)
-                    .WithMany(d => d.DepartamentsDocuments)
-                    .HasForeignKey(dd => dd.DepartamentID);
+                b.HasOne(dd => dd.Department)
+                    .WithMany(d => d.DepartmentsDocuments)
+                    .HasForeignKey(dd => dd.DepartmentID);
             });
 
-            builder.Entity<DepartamentsDocumentsVersion>(b => {
+            builder.Entity<DepartmentsDocumentsVersion>(b => {
 
                 b.HasKey(ddv => ddv.ID);
 
-                b.HasOne(ddv => ddv.DepartamentsDocument)
-                    .WithMany(dd => dd.DepartamentsDocumentsVersions)
-                    .HasForeignKey(ddv => ddv.DepartamentDocumentID);
+                b.HasOne(ddv => ddv.DepartmentsDocument)
+                    .WithMany(dd => dd.DepartmentsDocumentsVersions)
+                    .HasForeignKey(ddv => ddv.DepartmentDocumentID);
             });
         }
 
@@ -92,15 +99,15 @@ namespace FileManager.Models
 
             builder.Entity<DocumentStatusHistory>(b => {
 
-                b.HasKey(dsh =>new {dsh.DocumentStatusID,dsh.DepartamentsDocumentID });
+                b.HasKey(dsh =>new {dsh.DocumentStatusID,dsh.DepartmentsDocumentID });
 
                 b.HasOne(dsh => dsh.DocumentStatus)
                    .WithMany(ds => ds.DocumentStatusHistories)
                    .HasForeignKey(dsh => dsh.DocumentStatusID);
 
-                b.HasOne(dsh => dsh.DepartamentsDocument)
+                b.HasOne(dsh => dsh.DepartmentsDocument)
                     .WithMany(ds => ds.DocumentStatusHistories)
-                    .HasForeignKey(dsh => dsh.DepartamentsDocumentID);
+                    .HasForeignKey(dsh => dsh.DepartmentsDocumentID);
             });
         }
 
@@ -141,12 +148,7 @@ namespace FileManager.Models
 
         private static void ConfigureUserRole(ModelBuilder builder)
         {
-            builder.Entity<UserRole>(b=> {
-              //  b.HasKey(ur=>new { ur.DepartamentID,ur.RoleId,ur.UserId });
-
-                b.HasOne(ur => ur.Departament)
-                    .WithMany(d => d.UserRoles)
-                    .HasForeignKey(ur => ur.DepartamentID);
+            builder.Entity<UserRole>(b => {
                 b.ToTable("AspNetUserRoles");
             });
 
@@ -157,6 +159,23 @@ namespace FileManager.Models
             builder.Entity<User>(b => {
                 b.ToTable("AspNetUsers");
             });
+        }
+
+        private static void ConfigureUserDepartments(ModelBuilder builder)
+        {
+            builder.Entity<UserDepartment>(b => {
+
+                b.HasKey(ud => new { ud.DepartmentId, ud.UserId });
+
+                b.HasOne(ud => ud.Department)
+                    .WithMany(d => d.UserDepartments)
+                    .HasForeignKey(ud => ud.DepartmentId);
+
+                b.HasOne(ud => ud.User)
+                    .WithMany(u => u.UserDepartments)
+                    .HasForeignKey(ud => ud.UserId);
+            });
+
         }
 
     }

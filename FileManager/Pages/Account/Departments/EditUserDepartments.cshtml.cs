@@ -8,11 +8,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using FileManager.ViewModels;
 using FileManager.ViewModels.Account;
+using FileManager.Models.Database.UserRole;
+using FileManager.Models.Database.UserDepartments;
 
 namespace FileManager.Pages.Account.Departments
 {
     public class EditUserDepartmentsModel : PageModel
-        // TODO Make departaments managing 
+        // TODO Make Departments managing 
     {
         private readonly FileManagerContext db;
         private readonly UserManager<User> _userManager;
@@ -33,8 +35,8 @@ namespace FileManager.Pages.Account.Departments
             if (user != null)
             {
                 // получем список кафедр пользователя
-                var userDepartments = db.UserRole.Where(urd => urd.UserId.Equals(user.Id)).ToList();
-                var allDepartmemnts = db.Departament.ToList<Departament>();
+                var userDepartments = db.UserDepartment.Where(urd => urd.UserId.Equals(user.Id)).ToList();
+                var allDepartmemnts = db.Department.ToList();
 
                 ChangeDepartmentViewModel = new ChangeDepartmentViewModel
                 {
@@ -50,7 +52,7 @@ namespace FileManager.Pages.Account.Departments
             return NotFound();
         }
         [HttpPost]
-        public async Task<IActionResult> OnPostAsync(string userId, List<string> departaments)
+        public async Task<IActionResult> OnPostAsync(string userId, List<string> departments)
         {
             // получаем пользователя
             User user = await _userManager.FindByIdAsync(userId);
@@ -58,29 +60,29 @@ namespace FileManager.Pages.Account.Departments
                
             {
                 // получем список кафедр пользователя
-                List<string> userDepartmentsIds = db.UserRole
+                List<string> userDepartmentsIds = db.UserDepartment
                     .Where(urd => urd.UserId.Equals(user.Id))
-                    .Select(urd => urd.Departament.ID.ToString())
+                    .Select(urd => urd.Department.ID.ToString())
                     .ToList();
                 // получаем список кафедр, которые были добавлены
-                IEnumerable<string> addedDepartmentsIds = departaments.Except(userDepartmentsIds);
+                IEnumerable<string> addedDepartmentsIds = departments.Except(userDepartmentsIds);
                 // получаем кафедры, которые были удалены
-                var removedDepartments = userDepartmentsIds.Except(departaments);
+                var removedDepartments = userDepartmentsIds.Except(departments);
 
                 foreach(string newDepartmentId in addedDepartmentsIds)
                 {
-                    db.UserRole.Add(new UserRole()
+                    db.UserDepartment.Add(new UserDepartment()
                     {
                         UserId = Guid.Parse(userId),
-                        DepartamentID = Guid.Parse(newDepartmentId),
-                        Departament = db.Departament.FirstOrDefault(d => d.ID.ToString() == newDepartmentId)
+                        DepartmentId = Guid.Parse(newDepartmentId),
+                        Department = db.Department.FirstOrDefault(d => d.ID.ToString() == newDepartmentId)
                     }) ;
                 }
 
                 foreach (string oldDepartmentId in removedDepartments)
                 {
-                    db.UserRole.Remove(db.UserRole.FirstOrDefault(
-                        urd => urd.DepartamentID.ToString() == oldDepartmentId
+                    db.UserDepartment.Remove(db.UserDepartment.FirstOrDefault(
+                        urd => urd.DepartmentId.ToString() == oldDepartmentId
                         && urd.UserId.ToString() == userId));
 
                 }

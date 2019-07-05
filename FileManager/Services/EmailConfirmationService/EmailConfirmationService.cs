@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Text.Encodings.Web;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
+using FileManager.Models.Database.UserRole;
 
 namespace FileManager.Services.EmailConfirmationService
 {
