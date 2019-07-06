@@ -336,7 +336,7 @@ namespace FileManager.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("FileManager.Models.UserRoleDepartment", b =>
+            modelBuilder.Entity("FileManager.Models.UserDepartmentRoles", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>");
 
@@ -346,7 +346,7 @@ namespace FileManager.Migrations
 
                     b.ToTable("AspNetUserRoles");
 
-                    b.HasDiscriminator().HasValue("UserRoleDepartment");
+                    b.HasDiscriminator().HasValue("UserDepartmentRoles");
                 });
 
             modelBuilder.Entity("FileManager.Models.DepartmentsDocument", b =>
@@ -462,7 +462,7 @@ namespace FileManager.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("FileManager.Models.UserRoleDepartment", b =>
+            modelBuilder.Entity("FileManager.Models.UserDepartmentRoles", b =>
                 {
                     b.HasOne("FileManager.Models.Department", "Department")
                         .WithMany("UserRoles")

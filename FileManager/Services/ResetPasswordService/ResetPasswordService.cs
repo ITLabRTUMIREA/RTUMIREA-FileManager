@@ -10,7 +10,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using FileManager.Models;
 using Microsoft.AspNetCore.Mvc;
-using FileManager.Models.Database.UserRole;
+using FileManager.Models.Database.UserDepartmentRoles;
 
 namespace FileManager.Services.ResetPasswordService
 {

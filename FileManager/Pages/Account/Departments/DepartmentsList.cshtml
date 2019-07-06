@@ -6,15 +6,6 @@
 
 <h2>Список кафедр</h2>
 <table class="table">
-<<<<<<< Updated upstream
-    @foreach (var department in @Model.Departments)
-    {
-        <tr>
-            <td>@department.Name</td>
-            <td>
-                <form method="post">
-                    <button type="submit" asp-page-handler="Delete" asp-route-id="@department.ID" class="btn btn-sm btn-danger">
-=======
     @foreach (var Department in @Model.Departments)
     {
         <tr>
@@ -22,7 +13,6 @@
             <td>
                 <form method="post">
                     <button type="submit" asp-page-handler="Delete" asp-route-id="@Department.ID" class="btn btn-sm btn-danger">
->>>>>>> Stashed changes
                         Удалить
                     </button>
                 </form>

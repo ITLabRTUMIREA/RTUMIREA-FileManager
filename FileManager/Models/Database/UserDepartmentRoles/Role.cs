@@ -5,14 +5,16 @@ using System.Threading.Tasks;
 using FileManager.Models.Database.DocumentStatus;
 using Microsoft.AspNetCore.Identity;
 
-namespace FileManager.Models.Database.UserRole
+namespace FileManager.Models.Database.UserDepartmentRoles
 {
     public class Role:IdentityRole<Guid>
     {
-        public List<RoleStatus> RoleStatuses { get; set; }
-
-        public Role(string name):base(name)
+        public Role(string name) : base(name)
         {
         }
+
+        public List<RoleStatus> RoleStatuses { get; set; }
+
+        public List<UserDepartmentRole> UserRoleDepartments { get; set; }
     }
 }

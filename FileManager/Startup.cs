@@ -17,6 +17,7 @@ using FileManager.Models.EmailSendingOptions;
 using FileManager.Services.EmailConfirmationService;
 using FileManager.Services.ResetPasswordService;
 using Microsoft.AspNetCore.Identity;
+using FileManager.Models.Database.UserDepartmentRoles;
 
 namespace FileManager
 {

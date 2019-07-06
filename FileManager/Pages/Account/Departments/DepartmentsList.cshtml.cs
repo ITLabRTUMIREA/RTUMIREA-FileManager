@@ -38,19 +38,11 @@ namespace FileManager.Pages.Account.Departments
                 return Page();
             }
 
-<<<<<<< Updated upstream
-            Department departament = await db.Department.FirstOrDefaultAsync<Department>(d => d.ID.ToString() == id);
-=======
             Department Department = await db.Department.FirstOrDefaultAsync<Department>(d => d.ID.ToString() == id);
->>>>>>> Stashed changes
 
             if (Department != null)
             {
-<<<<<<< Updated upstream
-                db.Department.Remove(departament);
-=======
                 db.Department.Remove(Department);
->>>>>>> Stashed changes
                 await db.SaveChangesAsync();
             }
             return RedirectToPage("/Account/Departments/DepartmentsList");

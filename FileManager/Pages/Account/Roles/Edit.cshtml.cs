@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using FileManager.ViewModels;
 using FileManager.ViewModels.Account;
-using FileManager.Models.Database.UserRole;
+using FileManager.Models.Database.UserDepartmentRoles;
 
 namespace FileManager.Pages.Account.Roles
 {

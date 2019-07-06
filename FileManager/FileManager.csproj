@@ -11,6 +11,12 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Pages\Departament\**" />
+    <Content Remove="Pages\Departament\**" />
+    <EmbeddedResource Remove="Pages\Departament\**" />
+    <None Remove="Pages\Departament\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.1.1" />
     <PackageReference Include="MailKit" Version="2.2.0" />
     <PackageReference Include="Markdig" Version="0.17.0" />
@@ -18,13 +24,5 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.1.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Pages\Departament\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="appsettings.Secret.json" />
   </ItemGroup>
 </Project>

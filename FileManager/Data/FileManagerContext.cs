@@ -6,11 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using FileManager.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using FileManager.Models.Database.UserRole;
+using FileManager.Models.Database.UserDepartmentRoles;
 using FileManager.Models.Database.DepartmentsDocuments;
 using FileManager.Models.Database.YearDocumentTitles;
 using FileManager.Models.Database.DocumentStatus;
-using FileManager.Models.Database.UserDepartments;
 
 namespace FileManager.Models
 {
@@ -18,11 +17,10 @@ namespace FileManager.Models
     {
         public DbSet<User> User { get; set; }
         public DbSet<Department> Department { get; set; }
-        public DbSet<UserDepartment> UserDepartment { get; set; }
         public DbSet<DepartmentsDocument> DepartmentsDocument { get; set; }
         public DbSet<DepartmentsDocumentsVersion> DepartmentsDocumentsVersion { get; set; }
         public DbSet<Role> Role { get; set; }
-        public DbSet<UserRoleDepartment> UserRoleDepartment { get; set; }
+        public DbSet<UserDepartmentRole> UserRoleDepartment { get; set; }
         public DbSet<DocumentTitle> DocumentTitle { get; set; }
         public DbSet<DocumentType> DocumentType { get; set; }
         public DbSet<Year> Year { get; set; }
@@ -43,7 +41,6 @@ namespace FileManager.Models
             ConfigureDocumentStatus(builder);
             ConfigureYearDocumentTitle(builder);
             ConfigureUserRole(builder);
-            ConfigureUserDepartments(builder);
 
         }
 
@@ -148,8 +145,22 @@ namespace FileManager.Models
 
         private static void ConfigureUserRole(ModelBuilder builder)
         {
-            builder.Entity<UserRole>(b => {
-                b.ToTable("AspNetUserRoles");
+            builder.Entity<UserDepartmentRole>(b => {
+
+                b.HasOne(udt => udt.User)
+                    .WithMany(u => u.UserRoleDepartments)
+                    .HasForeignKey(udt => udt.UserId);
+
+                b.HasOne(udt => udt.Department)
+                    .WithMany(d => d.UserDepartmentRoles)
+                    .HasForeignKey(udt => udt.DepartmentID);
+
+
+                b.HasOne(udt => udt.Role)
+                    .WithMany(r => r.UserRoleDepartments)
+                    .HasForeignKey(udt => udt.RoleId);
+
+                b.ToTable("AspNetUserDepartmentRoles");
             });
 
             builder.Entity<Role>(b => {
@@ -159,23 +170,6 @@ namespace FileManager.Models
             builder.Entity<User>(b => {
                 b.ToTable("AspNetUsers");
             });
-        }
-
-        private static void ConfigureUserDepartments(ModelBuilder builder)
-        {
-            builder.Entity<UserDepartment>(b => {
-
-                b.HasKey(ud => new { ud.DepartmentId, ud.UserId });
-
-                b.HasOne(ud => ud.Department)
-                    .WithMany(d => d.UserDepartments)
-                    .HasForeignKey(ud => ud.DepartmentId);
-
-                b.HasOne(ud => ud.User)
-                    .WithMany(u => u.UserDepartments)
-                    .HasForeignKey(ud => ud.UserId);
-            });
-
         }
 
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FileManager.Models;
-using FileManager.Models.Database.UserDepartments;
+using FileManager.Models.Database.UserDepartmentRoles;
 
 namespace FileManager.Models.Database.DepartmentsDocuments
 {
@@ -12,7 +12,7 @@ namespace FileManager.Models.Database.DepartmentsDocuments
         public Guid ID { get; set; }
         public string Name { get; set; }
 
-        public List<UserDepartment> UserDepartments { get; set; }
+        public List<UserDepartmentRole> UserDepartmentRoles { get; set; }
 
         public List<DepartmentsDocument> DepartmentsDocuments { get; set; }
     }
