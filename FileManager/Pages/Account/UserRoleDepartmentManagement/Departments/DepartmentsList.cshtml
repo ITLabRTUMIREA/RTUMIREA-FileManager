@@ -1,0 +1,25 @@
+﻿@page
+@model FileManager.Pages.Account.Departments.DepartmentsListModel
+@{
+    ViewData["Title"] = "Список кафедр";
+}
+
+<h2>Список кафедр</h2>
+<table class="table">
+    @foreach (var Department in @Model.Departments)
+    {
+        <tr>
+            <td>@Department.Name</td>
+            <td>
+                <form method="post">
+                    <button type="submit" asp-page-handler="Delete" asp-route-id="@Department.ID" class="btn btn-sm btn-danger">
+                        Удалить
+                    </button>
+                </form>
+            </td>
+        </tr>
+    }
+</table>
+<a asp-page="CreateDepartment">Добавить кафедру</a>
+<a asp-page="../UserList">Вернуться назад</a>
+

@@ -1,0 +1,24 @@
+@page
+@model FileManager.Pages.Account.Departments.EditUserDepartmentsModel
+@using FileManager.Models.Database.DepartmentsDocuments;
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<h2>Изменение принадлежности пользователя к кафедрам @Model.ChangeDepartmentViewModel.UserEmail</h2>
+
+<form method="post">
+    <input type="hidden" name="userId" value="@Model.ChangeDepartmentViewModel.UserId" />
+    <div class="form-group">
+        @foreach (Department departament in Model.ChangeDepartmentViewModel.AllDepartments)
+        {
+            <input type="checkbox" name="departments" value="@departament.ID.ToString()"
+                   @((Model.ChangeDepartmentViewModel. UserDepartmentRoles.Where(ud => ud.DepartmentID.Equals(departament.ID)) == null) ? "checked=\"checked\"" : "") />
+            @departament.Name
+            <br />
+        }
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+</form>
+

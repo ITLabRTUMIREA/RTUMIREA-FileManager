@@ -1,0 +1,51 @@
+﻿@page
+@model FileManager.Pages.Account.Roles.EditModel
+@using FileManager.Models.Database.UserDepartmentRoles;
+@using FileManager.Models.Database.DepartmentsDocuments;
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<h2>Изменение прав доступа для пользователя @Model.ChangeRoleViewModel.UserEmail</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Название кафедры</th>
+            @foreach (Role role in Model.ChangeRoleViewModel.AllRoles)
+            {
+                <th scope="col">@role.Name</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @*@foreach ()
+        {
+
+        }*@
+        <tr>
+            <td>
+                <select class="selectpicker" data-live-search="true">
+
+                    @foreach(Department department in Model.ChangeRoleViewModel.AllDepartments )
+                    {
+                        <option value="@department.ID">@department.Name</option>
+                    }
+
+                </select>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<form method="post">
+    <input type="hidden" name="userId" value="@Model.ChangeRoleViewModel.UserId" />
+    <div class="form-group">
+        @foreach (Role role in Model.ChangeRoleViewModel.AllRoles)
+        {
+            <input type="checkbox" name="roles" value="@role.Name"
+                   @(Model.ChangeRoleViewModel.UserRoles.Contains(role.Name) ? "checked=\"checked\"" : "") />@role.Name <br />
+            }
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+</form>
+
