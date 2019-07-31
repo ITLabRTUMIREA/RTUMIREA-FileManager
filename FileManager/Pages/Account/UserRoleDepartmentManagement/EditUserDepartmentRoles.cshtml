@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{handler?}"
 @model FileManager.Pages.Account.Roles.EditModel
 @using FileManager.Models.Database.UserDepartmentRoles;
 @using FileManager.Models.Database.DepartmentsDocuments;
@@ -6,46 +6,73 @@
     ViewData["Title"] = "Edit";
 }
 
-
-<h2>Изменение прав доступа для пользователя @Model.ChangeRoleViewModel.UserEmail</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">Название кафедры</th>
-            @foreach (Role role in Model.ChangeRoleViewModel.AllRoles)
-            {
-                <th scope="col">@role.Name</th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @*@foreach ()
-        {
-
-        }*@
-        <tr>
-            <td>
-                <select class="selectpicker" data-live-search="true">
-
-                    @foreach(Department department in Model.ChangeRoleViewModel.AllDepartments )
-                    {
-                        <option value="@department.ID">@department.Name</option>
-                    }
-
-                </select>
-            </td>
-        </tr>
-    </tbody>
-</table>
 <form method="post">
-    <input type="hidden" name="userId" value="@Model.ChangeRoleViewModel.UserId" />
-    <div class="form-group">
-        @foreach (Role role in Model.ChangeRoleViewModel.AllRoles)
-        {
-            <input type="checkbox" name="roles" value="@role.Name"
-                   @(Model.ChangeRoleViewModel.UserRoles.Contains(role.Name) ? "checked=\"checked\"" : "") />@role.Name <br />
-            }
-    </div>
+    <input type="hidden" name="userId" value="@Model.EditUserDepartmentRolesViewModel.UserId" />
+
+    <h2>Изменение прав доступа для пользователя @Model.EditUserDepartmentRolesViewModel.UserEmail</h2>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Название кафедры</th>
+
+                @foreach (Role role in Model.EditUserDepartmentRolesViewModel.AllRoles)
+                {
+                    <th scope="col">@role.Name</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <select id="select-department" name="department-id" asp-for="@Model.EditUserDepartmentRolesViewModel.DepartmentId"
+                            onchange="UpdateRoles(this.value)"
+                            class="select-department" placeholder="Выберите кафедру">
+                        <option disabled selected value="">Выберите кафедру</option>
+                        @foreach (Department department in Model.EditUserDepartmentRolesViewModel.AllDepartments)
+                        {
+                            <option value="@department.ID">@department.Name</option>
+                        }
+                    </select>
+
+                </td>
+
+                @foreach (Role role in Model.EditUserDepartmentRolesViewModel.AllRoles)
+                {
+                    <td>
+                        <input type="checkbox" name="roles" value="@role.Name"
+                               @(Model.EditUserDepartmentRolesViewModel.UserDepartmentRoles.Contains(role.Name) ? "checked=\"checked\"" : "") />
+                    </td>
+                }
+            </tr>
+        </tbody>
+    </table>
+
     <button type="submit" class="btn btn-primary">Сохранить</button>
 </form>
+@section Scripts{
+    <script type="text/javascript">
+        $(function () {
+            $('.select-department').selectize({
+                create: true,
+                sortField: {
+                    field: 'text',
+                    direction: 'asc'
+                },
+                dropdownParent: 'body'
+            });
+        });
 
+        function UpdateRoles(departmentId) {
+            console.log(departmentId);
+            var xhr = new XMLHttpRequest();
+
+            var query = window.location.search.substring(1);
+            var params = 'EditUserDepartmentRoles?handler=GetRoles&' + query + '&departmentid=' + departmentId;
+
+            xhr.open("GET", params, true);
+
+            xhr.send();
+        }
+    </script>
+}

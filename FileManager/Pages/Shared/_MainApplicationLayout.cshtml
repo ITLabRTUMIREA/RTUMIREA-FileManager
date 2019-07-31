@@ -4,94 +4,73 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - FileManager</title>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/lib/selectize/js/standalone/selectize.js"></script>
+    <link rel="stylesheet" href="/lib/selectize/css/selectize.default.css">
     <environment include="Development">
         <link rel="stylesheet" href="~/css/_MainApplicationLayout.css" />
         <link rel="stylesheet" href="~/css/WorkAreaLayout.css" />
     </environment>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-            crossorigin="anonymous"
-            asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-            asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
-    </script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"
-          asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-    <environment exclude="Development">
-
-
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-    </environment>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="full-page body-content">
-        <div class="user-bar">
-            <div class="btn-group user-group-btn">
-                <div class="user dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <div class="user-data">
-                        Sergei
-                    </div>
-                    <div class="documents-status">
-                        <div class="status-good">g</div>
-                        <div class="status-warning">w</div>
-                        <div class="status-bad">b</div>
-                    </div>
+<div class="full-page">
+    <div class="user-bar">
+        <div class="btn-group user-group-btn">
+            <div class="user dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="user-data">
+                    Sergei
                 </div>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Аккаунт</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a asp-page="/Account/UserRoleDepartmentManagement/UserList">Изменение прав доступа</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a asp-controller="LogOut" asp-action="Index">Выйти</a></li>
-                </ul>
+                <div class="documents-status">
+                    <div class="status-good">g</div>
+                    <div class="status-warning">w</div>
+                    <div class="status-bad">b</div>
+                </div>
+            </div>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Аккаунт</a>
+                <div class="dropdown-divider"></div>
+
+                <a class="dropdown-item" asp-page="/Account/UserRoleDepartmentManagement/UserList">Изменение прав доступа</a>
+                <div class="dropdown-divider"></div>
+
+                <a class="dropdown-item" asp-controller="LogOut" asp-action="Index">Выйти</a>
             </div>
         </div>
-        <div class="router-bar">
-            <div class="select-bar">
-                <ul class="Department">
-                    <li>
-                        <label for="year">Год</label>
-                        <a id="year">Выбранный год</a>
-                    </li>
-                    <li>
-                        <label for="Department">Кафедра</label>
-                        <a id="Department">Выбранная кафедра</a>
-                    </li>
-                    <li>
-                        <label for="DocumentType">Тип документа</label>
-                        <a id="DocumentType">Выбранный тип документа</a>
-                    </li>
-                    <li>
-                        <label for="Document">Документ</label>
-                        <a id="Document">Выбранный документ</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div>
-                @RenderBody()
-        </div>
-        <hr/>
-        <footer>
-            <p>&copy; 2019 - FileManager</p>
-        </footer>
     </div>
-
-    <environment include="Development">
-        <script src="~/js/site.js" asp-append-version="true"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
-                crossorigin="anonymous"
-                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
-        </script>
-
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-    </environment>
+    <div class="router-bar">
+        <div class="select-bar">
+            <ul class="Department">
+                <li>
+                    <label for="year">Год</label>
+                    <a id="year">Выбранный год</a>
+                </li>
+                <li>
+                    <label for="Department">Кафедра</label>
+                    <a id="Department">Выбранная кафедра</a>
+                </li>
+                <li>
+                    <label for="DocumentType">Тип документа</label>
+                    <a id="DocumentType">Выбранный тип документа</a>
+                </li>
+                <li>
+                    <label for="Document">Документ</label>
+                    <a id="Document">Выбранный документ</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div>
+        @RenderBody()
+    </div>
+    <hr/>
+    <footer>
+        <p>&copy; 2019 - FileManager</p>
+    </footer>
+</div>
 
     @RenderSection("Scripts", required: false)
 </body>

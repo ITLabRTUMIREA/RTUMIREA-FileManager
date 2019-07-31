@@ -25,7 +25,7 @@ namespace FileManager.Pages.Account.Roles
             db = context;
         }
 
-        public ChangeRoleViewModel ChangeRoleViewModel = null;
+        public EditUserDepartmentRolesViewModel EditUserDepartmentRolesViewModel = null;
         public async Task<IActionResult> OnGetAsync(string userid)
         {
             // получаем пользователя
@@ -33,14 +33,14 @@ namespace FileManager.Pages.Account.Roles
             if (user != null)
             {
                 // получем список ролей пользователя
-                var userRoles = await _userManager.GetRolesAsync(user);
+                var UserDepartmentRoles = await _userManager.GetRolesAsync(user);
                 var allRoles = _roleManager.Roles.ToList();
                 List<Department> allDepartments = db.Department.ToList();
-                ChangeRoleViewModel = new ChangeRoleViewModel
+                EditUserDepartmentRolesViewModel = new EditUserDepartmentRolesViewModel
                 {
                     UserId = user.Id.ToString(),
                     UserEmail = user.Email,
-                    UserRoles = userRoles,
+                    UserDepartmentRoles = UserDepartmentRoles,
                     AllRoles = allRoles,
                     AllDepartments = allDepartments
 
@@ -50,6 +50,32 @@ namespace FileManager.Pages.Account.Roles
 
             return NotFound();
         }
+
+        public async Task<IActionResult> OnGetGetRolesAsync(string userid, string departmentid)
+        {
+                        // получаем пользователя
+            User user = await _userManager.FindByIdAsync(userid);
+            if (user != null)
+            {
+                // получем список ролей пользователя
+                var UserDepartmentRoles = await _userManager.GetRolesAsync(user);
+                var allRoles = _roleManager.Roles.ToList();
+                List<Department> allDepartments = db.Department.ToList();
+                EditUserDepartmentRolesViewModel = new EditUserDepartmentRolesViewModel
+                {
+                    UserId = user.Id.ToString(),
+                    UserEmail = user.Email,
+                    UserDepartmentRoles = UserDepartmentRoles,
+                    AllRoles = allRoles,
+                    AllDepartments = allDepartments
+
+                };
+                return Page();
+            }
+
+            return NotFound();
+        }
+
         [HttpPost]
         public async Task<IActionResult> OnPostAsync(string userId, List<string> roles)
         {
