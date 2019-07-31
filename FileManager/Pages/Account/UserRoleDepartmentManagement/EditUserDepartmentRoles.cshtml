@@ -6,7 +6,7 @@
     ViewData["Title"] = "Edit";
 }
 
-<form method="post">
+<form method="post" asp-page-handler="UpdateRoles">
     <input type="hidden" name="userId" value="@Model.EditUserDepartmentRolesViewModel.UserId" />
 
     <h2>Изменение прав доступа для пользователя @Model.EditUserDepartmentRolesViewModel.UserEmail</h2>
@@ -25,7 +25,7 @@
         <tbody>
             <tr>
                 <td>
-                    <select id="select-department" name="department-id" asp-for="@Model.EditUserDepartmentRolesViewModel.DepartmentId"
+                    <select id="select-department" name="departmentId" asp-for="@Model.EditUserDepartmentRolesViewModel.DepartmentId"
                             onchange="UpdateRoles(this.value)"
                             class="select-department" placeholder="Выберите кафедру">
                         <option disabled selected value="">Выберите кафедру</option>

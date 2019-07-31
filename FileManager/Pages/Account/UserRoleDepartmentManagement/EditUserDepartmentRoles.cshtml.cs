@@ -10,6 +10,7 @@ using FileManager.ViewModels;
 using FileManager.ViewModels.Account;
 using FileManager.Models.Database.UserDepartmentRoles;
 using FileManager.Models.Database.DepartmentsDocuments;
+using Microsoft.EntityFrameworkCore;
 
 namespace FileManager.Pages.Account.Roles
 {
@@ -26,6 +27,8 @@ namespace FileManager.Pages.Account.Roles
         }
 
         public EditUserDepartmentRolesViewModel EditUserDepartmentRolesViewModel = null;
+        public string PickedDepartmentId = "";
+
         public async Task<IActionResult> OnGetAsync(string userid)
         {
             // получаем пользователя
@@ -33,7 +36,7 @@ namespace FileManager.Pages.Account.Roles
             if (user != null)
             {
                 // получем список ролей пользователя
-                var UserDepartmentRoles = await _userManager.GetRolesAsync(user);
+                var UserDepartmentRoles = await db.UserRoleDepartment.Where(urd => urd.User.Equals(user)).ToListAsync();
                 var allRoles = _roleManager.Roles.ToList();
                 List<Department> allDepartments = db.Department.ToList();
                 EditUserDepartmentRolesViewModel = new EditUserDepartmentRolesViewModel
@@ -53,12 +56,15 @@ namespace FileManager.Pages.Account.Roles
 
         public async Task<IActionResult> OnGetGetRolesAsync(string userid, string departmentid)
         {
-                        // получаем пользователя
+            PickedDepartmentId = departmentid;
+            // получаем пользователя
             User user = await _userManager.FindByIdAsync(userid);
             if (user != null)
             {
                 // получем список ролей пользователя
-                var UserDepartmentRoles = await _userManager.GetRolesAsync(user);
+                var UserDepartmentRoles = await db.UserRoleDepartment
+                    .Where(urd => urd.User.Equals(user) && urd.DepartmentID.ToString() == PickedDepartmentId)
+                    .ToListAsync();
                 var allRoles = _roleManager.Roles.ToList();
                 List<Department> allDepartments = db.Department.ToList();
                 EditUserDepartmentRolesViewModel = new EditUserDepartmentRolesViewModel
@@ -77,7 +83,7 @@ namespace FileManager.Pages.Account.Roles
         }
 
         [HttpPost]
-        public async Task<IActionResult> OnPostAsync(string userId, List<string> roles)
+        public async Task<IActionResult> OnPostUpdateRolesAsync(string userId, string departmentId, List<string> roles)
         {
             // получаем пользователя
             User user = await _userManager.FindByIdAsync(userId);

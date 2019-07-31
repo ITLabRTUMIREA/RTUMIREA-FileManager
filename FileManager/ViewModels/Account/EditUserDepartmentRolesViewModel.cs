@@ -12,7 +12,7 @@ namespace FileManager.ViewModels.Account
         public EditUserDepartmentRolesViewModel()
         {
             AllRoles = new List<Role>();
-            UserDepartmentRoles = new List<string>();
+            UserDepartmentRoles = new List<UserDepartmentRole>();
         }
 
         public string UserId { get; set; }
@@ -22,6 +22,6 @@ namespace FileManager.ViewModels.Account
 
         public List<Department> AllDepartments { get; set; }
         public string DepartmentId { get; set; }
-        public IList<string> UserDepartmentRoles { get; set; }
+        public List<UserDepartmentRole> UserDepartmentRoles { get; set; }
     }
 }
