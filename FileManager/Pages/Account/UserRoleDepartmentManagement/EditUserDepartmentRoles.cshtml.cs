@@ -35,15 +35,13 @@ namespace FileManager.Pages.Account.Roles
             User user = await _userManager.FindByIdAsync(userid);
             if (user != null)
             {
-                // получем список ролей пользователя
-                var UserDepartmentRoles = await db.UserRoleDepartment.Where(urd => urd.User.Equals(user)).ToListAsync();
                 var allRoles = _roleManager.Roles.ToList();
                 List<Department> allDepartments = db.Department.ToList();
                 EditUserDepartmentRolesViewModel = new EditUserDepartmentRolesViewModel
                 {
                     UserId = user.Id.ToString(),
                     UserEmail = user.Email,
-                    UserDepartmentRoles = UserDepartmentRoles,
+                    UserDepartmentRoles = new List<string>() { },
                     AllRoles = allRoles,
                     AllDepartments = allDepartments
 
@@ -62,18 +60,19 @@ namespace FileManager.Pages.Account.Roles
             if (user != null)
             {
                 // получем список ролей пользователя
-                var UserDepartmentRoles = await db.UserRoleDepartment
-                    .Where(urd => urd.User.Equals(user) && urd.DepartmentId.ToString() == PickedDepartmentId)
-                    .ToListAsync();
                 var allRoles = _roleManager.Roles.ToList();
                 List<Department> allDepartments = db.Department.ToList();
                 EditUserDepartmentRolesViewModel = new EditUserDepartmentRolesViewModel
                 {
                     UserId = user.Id.ToString(),
                     UserEmail = user.Email,
-                    UserDepartmentRoles = UserDepartmentRoles,
+                    UserDepartmentRoles = await db.UserRoleDepartment
+                        .Where(urd => urd.UserId.Equals(user.Id) && urd.DepartmentId.ToString() == departmentid)
+                        .Select(urd => urd.Role.Id.ToString().ToLower())
+                        .ToListAsync(),
                     AllRoles = allRoles,
-                    AllDepartments = allDepartments
+                    AllDepartments = allDepartments,
+                    DepartmentId = departmentid
 
                 };
                 return Page();
@@ -92,7 +91,7 @@ namespace FileManager.Pages.Account.Roles
                 // получем список ролей пользователя
                 var UserDepartmentRoles = await db.UserRoleDepartment
                     .Where(urd => urd.UserId.Equals(Guid.Parse(userId)) && urd.DepartmentId.ToString() == departmentId)
-                    .Select(urd => urd.Role.Id.ToString())
+                    .Select(urd => urd.Role.Id.ToString().ToLower())
                     .ToListAsync();
 
                 // получаем список ролей, которые были добавлены
@@ -126,6 +125,8 @@ namespace FileManager.Pages.Account.Roles
                         });
                     }
                 }
+                // TODO Make possible creating record with the same userid and roleid and different departamentid,
+                //  problem is that database creating waste key CONSTRAINT [AK_AspNetUserDepartmentRole_UserId_RoleId] UNIQUE NONCLUSTERED ([UserId] ASC, [RoleId] ASC),
 
                 await db.SaveChangesAsync();
 

@@ -157,18 +157,22 @@ namespace FileManager.Models
             {
                 b.HasKey(udr => new { udr.UserId, udr.RoleId, udr.DepartmentId });
 
+
                 b.HasOne(udt => udt.User)
                     .WithMany(u => u.UserRoleDepartments)
-                    .HasForeignKey(udt => udt.UserId);
+                    .HasForeignKey(udt => udt.UserId)
+                    .IsRequired();
 
                 b.HasOne(udt => udt.Department)
                     .WithMany(d => d.UserDepartmentRoles)
-                    .HasForeignKey(udt => udt.DepartmentId);
+                    .HasForeignKey(udt => udt.DepartmentId)
+                    .IsRequired();
 
 
                 b.HasOne(udt => udt.Role)
                     .WithMany(r => r.UserRoleDepartments)
-                    .HasForeignKey(udt => udt.RoleId);
+                    .HasForeignKey(udt => udt.RoleId)
+                    .IsRequired();
 
                 b.ToTable("AspNetUserDepartmentRole");
             });

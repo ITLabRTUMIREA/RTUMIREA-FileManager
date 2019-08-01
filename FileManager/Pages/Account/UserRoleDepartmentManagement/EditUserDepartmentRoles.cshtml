@@ -41,7 +41,7 @@
                 {
                     <td>
                         <input type="checkbox" name="roles" value="@role.Id"
-                               @(Model.EditUserDepartmentRolesViewModel.UserDepartmentRoles.Exists(urd => urd.RoleId.Equals(role.Id)) ? "checked=\"checked\"" : "") />
+                               @(Model.EditUserDepartmentRolesViewModel.UserDepartmentRoles.Contains(role.Id.ToString()) ? "checked=\"checked\"" : "") />
                     </td>
                 }
             </tr>
@@ -64,14 +64,12 @@
         });
 
         function UpdateRoles(departmentId) {
-            var xhr = new XMLHttpRequest();
+            console.log(departmentId);
 
-            var query = window.location.search.substring(1);
-            var params = 'EditUserDepartmentRoles?handler=GetRoles&' + query + '&departmentid=' + departmentId;
+            var userid = new URL(window.location.href).searchParams.get("userid");
 
-            xhr.open("GET", params, true);
-
-            xhr.send();
+            var newPage = window.location.origin + window.location.pathname + '?handler=GetRoles&userid=' + userid + '&departmentid=' + departmentId;
+            window.location.replace(newPage)
         }
     </script>
 }
