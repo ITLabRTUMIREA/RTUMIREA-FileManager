@@ -38,7 +38,7 @@ namespace FileManager.Pages.Account.Departments
                 return Page();
             }
 
-            Department Department = await db.Department.FirstOrDefaultAsync<Department>(d => d.ID.ToString() == id);
+            Department Department = await db.Department.FirstOrDefaultAsync<Department>(d => d.Id.ToString() == id);
 
             if (Department != null)
             {

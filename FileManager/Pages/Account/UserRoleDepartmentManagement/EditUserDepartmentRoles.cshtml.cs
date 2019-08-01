@@ -63,7 +63,7 @@ namespace FileManager.Pages.Account.Roles
             {
                 // получем список ролей пользователя
                 var UserDepartmentRoles = await db.UserRoleDepartment
-                    .Where(urd => urd.User.Equals(user) && urd.DepartmentID.ToString() == PickedDepartmentId)
+                    .Where(urd => urd.User.Equals(user) && urd.DepartmentId.ToString() == PickedDepartmentId)
                     .ToListAsync();
                 var allRoles = _roleManager.Roles.ToList();
                 List<Department> allDepartments = db.Department.ToList();
@@ -90,17 +90,44 @@ namespace FileManager.Pages.Account.Roles
             if (user != null)
             {
                 // получем список ролей пользователя
-                var userRoles = await _userManager.GetRolesAsync(user);
-                // получаем все роли
-                var allRoles = _roleManager.Roles.ToList();
+                var UserDepartmentRoles = await db.UserRoleDepartment
+                    .Where(urd => urd.UserId.Equals(Guid.Parse(userId)) && urd.DepartmentId.ToString() == departmentId)
+                    .Select(urd => urd.Role.Id.ToString())
+                    .ToListAsync();
+
                 // получаем список ролей, которые были добавлены
-                var addedRoles = roles.Except(userRoles);
+                var addedRoles = roles.Except(UserDepartmentRoles);
                 // получаем роли, которые были удалены
-                var removedRoles = userRoles.Except(roles);
+                var removedRoles = UserDepartmentRoles.Except(roles);
 
-                await _userManager.AddToRolesAsync(user, addedRoles);
+                foreach (var role in addedRoles)
+                {
+                    if (role != null)
+                    {
+                        db.UserRoleDepartment.Add(new UserDepartmentRole()
+                        {
+                            UserId = Guid.Parse(userId),
+                            DepartmentId = Guid.Parse(departmentId),
+                            RoleId = Guid.Parse(role)
+                        });
+                    }
 
-                await _userManager.RemoveFromRolesAsync(user, removedRoles);
+                }
+
+                foreach (var role in removedRoles)
+                {
+                    if (role != null)
+                    {
+                        db.UserRoleDepartment.Remove(new UserDepartmentRole()
+                        {
+                            UserId = Guid.Parse(userId),
+                            DepartmentId = Guid.Parse(departmentId),
+                            RoleId = Guid.Parse(role)
+                        });
+                    }
+                }
+
+                await db.SaveChangesAsync();
 
                 return RedirectToPage("UserList");
             }

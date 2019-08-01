@@ -13,8 +13,8 @@
     <div class="form-group">
         @foreach (Department departament in Model.ChangeDepartmentViewModel.AllDepartments)
         {
-            <input type="checkbox" name="departments" value="@departament.ID.ToString()"
-                   @((Model.ChangeDepartmentViewModel. UserDepartmentRoles.Where(ud => ud.DepartmentID.Equals(departament.ID)) == null) ? "checked=\"checked\"" : "") />
+            <input type="checkbox" name="departments" value="@departament.Id.ToString()"
+                   @((Model.ChangeDepartmentViewModel. UserDepartmentRoles.Where(ud => ud.DepartmentId.Equals(departament.Id)) == null) ? "checked=\"checked\"" : "") />
             @departament.Name
             <br />
         }

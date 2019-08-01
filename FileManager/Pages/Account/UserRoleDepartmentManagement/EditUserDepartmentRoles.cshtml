@@ -31,7 +31,7 @@
                         <option disabled selected value="">Выберите кафедру</option>
                         @foreach (Department department in Model.EditUserDepartmentRolesViewModel.AllDepartments)
                         {
-                            <option value="@department.ID">@department.Name</option>
+                            <option value="@department.Id">@department.Name</option>
                         }
                     </select>
 
@@ -40,8 +40,8 @@
                 @foreach (Role role in Model.EditUserDepartmentRolesViewModel.AllRoles)
                 {
                     <td>
-                        <input type="checkbox" name="roles" value="@role.Name"
-                               @(Model.EditUserDepartmentRolesViewModel.UserDepartmentRoles.Contains(role.Name) ? "checked=\"checked\"" : "") />
+                        <input type="checkbox" name="roles" value="@role.Id"
+                               @(Model.EditUserDepartmentRolesViewModel.UserDepartmentRoles.Exists(urd => urd.RoleId.Equals(role.Id)) ? "checked=\"checked\"" : "") />
                     </td>
                 }
             </tr>
@@ -64,7 +64,6 @@
         });
 
         function UpdateRoles(departmentId) {
-            console.log(departmentId);
             var xhr = new XMLHttpRequest();
 
             var query = window.location.search.substring(1);

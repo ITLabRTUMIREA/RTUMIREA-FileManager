@@ -61,7 +61,7 @@ namespace FileManager.Pages.Account.Departments
                 // получем список кафедр пользователя
                 List<string> userDepartmentsIds = db.UserDepartmentRoles
                     .Where(urd => urd.UserId.Equals(user.Id))
-                    .Select(urd => urd.Department.ID.ToString())
+                    .Select(urd => urd.Department.Id.ToString())
                     .ToList();
                 // получаем список кафедр, которые были добавлены
                 IEnumerable<string> addedDepartmentsIds = Departments.Except(userDepartmentsIds);
@@ -73,15 +73,15 @@ namespace FileManager.Pages.Account.Departments
                     db.UserDepartment.Add(new Models.Database.UserDepartmentRoles.UserDepartmentRole()
                     {
                         UserId = Guid.Parse(userId),
-                        DepartmentID = Guid.Parse(newDepartmentId),
-                        Department = db.Department.FirstOrDefault(d => d.ID.ToString() == newDepartmentId)
+                        DepartmentId = Guid.Parse(newDepartmentId),
+                        Department = db.Department.FirstOrDefault(d => d.Id.ToString() == newDepartmentId)
                     }) ;
                 }
 
                 foreach (string oldDepartmentId in removedDepartments)
                 {
                     db.UserRole.Remove(db.UserRole.FirstOrDefault(
-                        urd => urd.DepartmentID.ToString() == oldDepartmentId
+                        urd => urd.DepartmentId.ToString() == oldDepartmentId
                         && urd.UserId.ToString() == userId));
 
                 }

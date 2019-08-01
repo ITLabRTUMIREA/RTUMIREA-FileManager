@@ -9,7 +9,7 @@ namespace FileManager.Models.Database.DepartmentsDocuments
 {
     public class Department
     {
-        public Guid ID { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
 
         public List<UserDepartmentRole> UserDepartmentRoles { get; set; }

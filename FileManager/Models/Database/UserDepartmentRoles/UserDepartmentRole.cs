@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using FileManager.Models.Database.DepartmentsDocuments;
@@ -15,7 +16,7 @@ namespace FileManager.Models.Database.UserDepartmentRoles
 
         public Role Role { get; set; }
 
-        public Guid DepartmentID { get; set; }
+        public Guid DepartmentId { get; set; }
         public Department Department { get; set; }
     }
 }
