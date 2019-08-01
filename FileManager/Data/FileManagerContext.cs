@@ -153,48 +153,44 @@ namespace FileManager.Models
         private static void ConfigureUserRole(ModelBuilder builder)
 
         {
-        //    builder.Entity<UserDepartmentRole>(b =>
-        //    {
-        //        b.HasKey(udr => new { udr.UserId, udr.RoleId, udr.DepartmentId });
+            builder.Entity<UserDepartmentRole>(b =>
+            {
+                b.HasKey(udr => new { udr.UserId, udr.RoleId, udr.DepartmentId });
 
-        //        //b.HasOne(udt => udt.User)
-        //        //    .WithMany(u => u.UserRoleDepartments)
-        //        //    .HasForeignKey(udt => udt.UserId);
+                b.HasOne(udt => udt.User)
+                    .WithMany(u => u.UserRoleDepartments)
+                    .HasForeignKey(udt => udt.UserId);
 
-        //        //b.HasOne(udt => udt.Department)
-        //        //    .WithMany(d => d.UserDepartmentRoles)
-        //        //    .HasForeignKey(udt => udt.DepartmentId);
-
-
-        //        //b.HasOne(udt => udt.Role)
-        //        //    .WithMany(r => r.UserRoleDepartments)
-        //        //    .HasForeignKey(udt => udt.RoleId);
-
-        //        b.ToTable("AspNetUserDepartmentRole");
-        //    });
-
-        //    builder.Entity<Department>(b =>
-        //    {
-        //        b.HasKey(d => d.Id);
-        //        b.HasMany<UserDepartmentRole>().WithOne(d => d.Department).HasForeignKey(ur => ur.DepartmentId).IsRequired();
-        //    });
-
-        //    builder.Entity<Role>(b =>
-        //    {
-        //        b.HasKey(r => r.Id);
-        //        b.HasMany<UserDepartmentRole>().WithOne(r => r.Role).HasForeignKey(ur => ur.RoleId).IsRequired();
+                b.HasOne(udt => udt.Department)
+                    .WithMany(d => d.UserDepartmentRoles)
+                    .HasForeignKey(udt => udt.DepartmentId);
 
 
-        //        b.ToTable("AspNetRoles");
-        //    });
+                b.HasOne(udt => udt.Role)
+                    .WithMany(r => r.UserRoleDepartments)
+                    .HasForeignKey(udt => udt.RoleId);
 
-        //    builder.Entity<User>(b =>
-        //    {
-        //        b.HasKey(u => u.Id);
-        //        b.HasMany<UserDepartmentRole>().WithOne(u => u.User).HasForeignKey(ur => ur.UserId).IsRequired();
+                b.ToTable("AspNetUserDepartmentRole");
+            });
 
-        //        b.ToTable("AspNetUsers");
-        //    });
+            builder.Entity<Department>(b =>
+            {
+                b.HasKey(d => d.Id);
+            });
+
+            builder.Entity<Role>(b =>
+            {
+                b.HasKey(r => r.Id);
+
+                b.ToTable("AspNetRoles");
+            });
+
+            builder.Entity<User>(b =>
+            {
+                b.HasKey(u => u.Id);
+
+                b.ToTable("AspNetUsers");
+            });
         }
 
     }
