@@ -5,6 +5,39 @@
 @{
     ViewData["Title"] = "Edit";
 }
+<h2>Cписок существующих прав</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Название кафедры</th>
+            <th>Имеющиеся роли</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (IGrouping<string, UserDepartmentRole> userDepartmentRole in Model.allUserDepartmentRoles)
+        {
+
+            <tr>
+                <td>@userDepartmentRole.Key</td>
+
+                <td>
+                    @for (int i = 0; i < userDepartmentRole.Count(); i++)
+                    {
+                        @userDepartmentRole.ElementAt(i).Role.Name
+
+                        @if (userDepartmentRole.Count() > 0 && i < userDepartmentRole.Count() - 1)
+                        {
+                            <span>,</span>
+                        }
+                    }
+                </td>
+
+            </tr>
+
+        }
+    </tbody>
+</table>
+
 
 <form method="post" asp-page-handler="UpdateRoles">
     <input type="hidden" name="userId" value="@Model.EditUserDepartmentRolesViewModel.UserId" />
@@ -25,10 +58,10 @@
         <tbody>
             <tr>
                 <td>
-                    <select id="select-department" name="departmentId" asp-for="@Model.EditUserDepartmentRolesViewModel.DepartmentId"
+                    <select id="select-department" required name="departmentId" asp-for="@Model.EditUserDepartmentRolesViewModel.DepartmentId"
                             onchange="UpdateRoles(this.value)"
                             class="select-department" placeholder="Выберите кафедру">
-                        <option disabled selected value="">Выберите кафедру</option>
+                        <option disabled selected value="" >Выберите кафедру</option>
                         @foreach (Department department in Model.EditUserDepartmentRolesViewModel.AllDepartments)
                         {
                             <option value="@department.Id">@department.Name</option>
@@ -41,7 +74,7 @@
                 {
                     <td>
                         <input type="checkbox" name="roles" value="@role.Id"
-                               @(Model.EditUserDepartmentRolesViewModel.UserDepartmentRoles.Contains(role.Id.ToString()) ? "checked=\"checked\"" : "") />
+                               @(Model.EditUserDepartmentRolesViewModel.UserDepartmentRoles.Select(urd => urd.Role.Id.ToString().ToLower()).Contains(role.Id.ToString()) ? "checked=\"checked\"" : "") />
                     </td>
                 }
             </tr>
@@ -71,5 +104,8 @@
             var newPage = window.location.origin + window.location.pathname + '?handler=GetRoles&userid=' + userid + '&departmentid=' + departmentId;
             window.location.replace(newPage)
         }
+
     </script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
