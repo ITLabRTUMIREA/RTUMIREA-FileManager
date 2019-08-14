@@ -1,0 +1,52 @@
+﻿@page
+@model UserInfoModel
+@using FileManager.Models.Database.UserDepartmentRoles;
+@{
+
+}
+<div class="container">
+    <h2>Ваши данные @Model.currentUser.Email</h2>
+    <form>
+        <div class="form-group">
+            <label for="FirstName" class="col-form-label">FirstName</label>
+            <input id="FirstName" readonly class="form-control" value="@Model.currentUser.FistName" />
+        </div>
+
+        <div class="form-group ">
+            <label for="LastName" class="col-form-label">LastName</label>
+            <input id="LastName" readonly class="form-control" value="@Model.currentUser.LastName" />
+        </div>
+    </form>
+    <h4>Cписок существующих прав</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Название кафедры</th>
+                <th>Имеющиеся роли</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (IGrouping<string, UserDepartmentRole> userDepartmentRole in Model.allUserDepartmentRoles)
+            {
+
+                <tr>
+                    <td>@userDepartmentRole.Key</td>
+
+                    <td>
+                        @for (int i = 0; i < userDepartmentRole.Count(); i++)
+                        {
+                            @userDepartmentRole.ElementAt(i).Role.Name
+
+                            @if (userDepartmentRole.Count() > 0 && i < userDepartmentRole.Count() - 1)
+                            {
+                                <span>,</span>
+                            }
+                        }
+                    </td>
+
+                </tr>
+
+            }
+        </tbody>
+    </table>
+</div>
