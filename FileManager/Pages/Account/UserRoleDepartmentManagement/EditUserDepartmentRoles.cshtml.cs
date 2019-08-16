@@ -28,7 +28,7 @@ namespace FileManager.Pages.Account.Roles
 
         public EditUserDepartmentRolesViewModel EditUserDepartmentRolesViewModel = null;
         public string PickedDepartmentId = "";
-        public User currentUser;
+        public bool IsAdmin = false ;
         public List<IGrouping<string, UserDepartmentRole>> allUserDepartmentRoles;
 
         public async Task<IActionResult> OnGetAsync(string userid)
@@ -36,7 +36,7 @@ namespace FileManager.Pages.Account.Roles
             try
             {
                 // TODO Add check for User rights to edit roles certain department
-                currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                IsAdmin = await _userManager.IsInRoleAsync(await _userManager.GetUserAsync(HttpContext.User),"SystemAdmin");
 
                 // получаем пользователя
                 User user = await _userManager.FindByIdAsync(userid);
@@ -77,7 +77,7 @@ namespace FileManager.Pages.Account.Roles
         {
             try
             {
-                currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                IsAdmin = await _userManager.IsInRoleAsync(await _userManager.GetUserAsync(HttpContext.User), "SystemAdmin");
 
                 PickedDepartmentId = departmentid;
                 // получаем пользователя

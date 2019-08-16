@@ -28,10 +28,6 @@ namespace FileManager.Services.DbInitializeService
             {
                 await _roleManager.CreateAsync(new Role("SystemAdmin"));
             }
-            if (await _roleManager.FindByNameAsync("SystemUser") == null)
-            {
-                await _roleManager.CreateAsync(new Role("SystemUser"));
-            }
             if (await _userManager.FindByNameAsync(_mainUserData.Email) == null)
             {
                 User admin = new User { Email = _mainUserData.Email,
