@@ -5,12 +5,18 @@ You must add `appsettings.Secret.json` into FileManager folder with your configu
 ```json
 {
   "EmailSendingOptions": {
-    "Host": "smtp.gmail.com",
-    "Port": 587,
-    "UseSSL": false,
-    "Email": "mail@gmail.com",
+    "Host": "smtp.yandex.ru",
+    "Port": 465,
+    "UseSSL": true,
+    "Email": "mail@yandex.ru",
     "Password": "password"
 
+  },
+  "DbInitializeMainUser": {
+    "Email": "yourEmail@email.com",
+    "FirstName": "FirstName",
+    "LastName": "LastName",
+    "Password": "password"
   }
 }
 ```

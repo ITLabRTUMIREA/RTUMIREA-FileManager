@@ -13,7 +13,7 @@ using FileManager.Models.Database.DocumentStatus;
 
 namespace FileManager.Models
 {
-    public class FileManagerContext : IdentityDbContext<User, Role, Guid, IdentityUserClaim<Guid>, UserDepartmentRole,
+    public class FileManagerContext : IdentityDbContext<User, Role, Guid, IdentityUserClaim<Guid>, UserRole,
         IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
     {
         public DbSet<User> User { get; set; }
@@ -25,6 +25,7 @@ namespace FileManager.Models
         public DbSet<DocumentTitle> DocumentTitle { get; set; }
         public DbSet<DocumentType> DocumentType { get; set; }
         public DbSet<Year> Year { get; set; }
+        public DbSet<UserRole> UserRole { get; set; }
         public DbSet<YearDocumentTitle> YearDocumentTitle { get; set; }
         public DbSet<RoleStatus> RoleStatus { get; set; }
         public DbSet<DocumentStatusHistory> DocumentStatusHistory { get; set; }
@@ -41,7 +42,7 @@ namespace FileManager.Models
             ConfigureDepartmentsDocument(builder);
             ConfigureDocumentStatus(builder);
             ConfigureYearDocumentTitle(builder);
-            ConfigureUserRole(builder);
+            ConfigureUserDepartmentRoles(builder);
 
         }
 
@@ -150,7 +151,7 @@ namespace FileManager.Models
             });
         }
 
-        private static void ConfigureUserRole(ModelBuilder builder)
+        private static void ConfigureUserDepartmentRoles(ModelBuilder builder)
 
         {
             builder.Entity<UserDepartmentRole>(b =>
@@ -174,7 +175,24 @@ namespace FileManager.Models
                     .HasForeignKey(udt => udt.RoleId)
                     .IsRequired();
 
-                b.ToTable("AspNetUserDepartmentRole");
+                b.ToTable("AspNetUserDepartmentRoles");
+            });
+
+            builder.Entity<UserRole>(b => {
+                b.HasKey(udr => new { udr.UserId, udr.RoleId});
+
+
+                b.HasOne(udt => udt.User)
+                    .WithMany(u => u.UserRoles)
+                    .HasForeignKey(udt => udt.UserId)
+                    .IsRequired();
+
+                b.HasOne(udt => udt.Role)
+                    .WithMany(r => r.UserRoles)
+                    .HasForeignKey(udt => udt.RoleId)
+                    .IsRequired();
+
+                b.ToTable("AspNetUserRoles");
             });
 
             builder.Entity<Department>(b =>

@@ -18,6 +18,8 @@ using FileManager.Services.EmailConfirmationService;
 using FileManager.Services.ResetPasswordService;
 using Microsoft.AspNetCore.Identity;
 using FileManager.Models.Database.UserDepartmentRoles;
+using FileManager.Models.DbInitialize;
+using FileManager.Services.DbInitializeService;
 
 namespace FileManager
 {
@@ -34,9 +36,12 @@ namespace FileManager
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IEmailConfirmationService, EmailConfirmationService>();
+
             services.Configure<EmailSendingOptions>(Configuration.GetSection(nameof(EmailSendingOptions)));
+            services.Configure<DbInitializeMainUser>(Configuration.GetSection(nameof(DbInitializeMainUser)));
 
             services.AddTransient<IResetPasswordService, ResetPasswordService>();
+            services.AddTransient<IDbInitializeService, DbInitializeService>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {

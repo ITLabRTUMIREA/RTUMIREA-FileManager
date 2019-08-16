@@ -16,5 +16,7 @@ namespace FileManager.Models.Database.UserDepartmentRoles
         public List<RoleStatus> RoleStatuses { get; set; }
 
         public List<UserDepartmentRole> UserRoleDepartments { get; set; }
+
+        public List<UserRole> UserRoles { get; set; }
     }
 }

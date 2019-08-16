@@ -13,5 +13,8 @@ namespace FileManager.Models.Database.UserDepartmentRoles
         public string LastName { get; set; }
 
         public List<UserDepartmentRole> UserRoleDepartments { get; set; }
+
+        public List<UserRole> UserRoles { get; set; }
+
     }
 }
