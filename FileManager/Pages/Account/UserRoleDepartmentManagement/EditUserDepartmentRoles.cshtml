@@ -51,17 +51,28 @@
 
                 @foreach (Role role in Model.EditUserDepartmentRolesViewModel.AllRoles)
                 {
-                    <th scope="col">@role.Name</th>
+                    @if (Model.EditUserDepartmentRolesViewModel.UserDepartmentRoles.Exists(udr => udr.Role.Name == "Admin")
+                       && role.Name == "Admin")
+                    {
+                        <th scope="col">@role.Name</th>
+                    }
+                    else if (Model.EditUserDepartmentRolesViewModel.UserDepartmentRoles.Exists(udr => udr.Role.Name == "Admin")
+                        && role.Name != "Admin")
+                    {
+                        <th scope="col">@role.Name</th>
+                    }
+
                 }
             </tr>
         </thead>
+
         <tbody>
             <tr>
                 <td>
                     <select id="select-department" required name="departmentId" asp-for="@Model.EditUserDepartmentRolesViewModel.DepartmentId"
                             onchange="UpdateRoles(this.value)"
                             class="select-department" placeholder="Выберите кафедру">
-                        <option disabled selected value="" >Выберите кафедру</option>
+                        <option disabled selected value="">Выберите кафедру</option>
                         @foreach (Department department in Model.EditUserDepartmentRolesViewModel.AllDepartments)
                         {
                             <option value="@department.Id">@department.Name</option>
@@ -72,10 +83,22 @@
 
                 @foreach (Role role in Model.EditUserDepartmentRolesViewModel.AllRoles)
                 {
-                    <td>
-                        <input type="checkbox" name="roles" value="@role.Id"
-                               @(Model.EditUserDepartmentRolesViewModel.UserDepartmentRoles.Select(urd => urd.Role.Id.ToString().ToLower()).Contains(role.Id.ToString()) ? "checked=\"checked\"" : "") />
-                    </td>
+                    @if (Model.EditUserDepartmentRolesViewModel.UserDepartmentRoles.Exists(udr => udr.Role.Name == "Admin")
+                         && role.Name == "Admin")
+                    {
+                        <td>
+                            <input type="checkbox" name="roles" value="@role.Id"
+                                   @(Model.EditUserDepartmentRolesViewModel.UserDepartmentRoles.Select(urd => urd.Role.Id.ToString().ToLower()).Contains(role.Id.ToString()) ? "checked=\"checked\"" : "") />
+                        </td>
+                    }
+                    else if (Model.EditUserDepartmentRolesViewModel.UserDepartmentRoles.Exists(udr => udr.Role.Name == "Admin")
+                         && role.Name != "Admin")
+                    {
+                        <td>
+                            <input type="checkbox" name="roles" value="@role.Id"
+                                   @(Model.EditUserDepartmentRolesViewModel.UserDepartmentRoles.Select(urd => urd.Role.Id.ToString().ToLower()).Contains(role.Id.ToString()) ? "checked=\"checked\"" : "") />
+                        </td>
+                    }
                 }
             </tr>
         </tbody>
@@ -84,8 +107,7 @@
     <button type="submit" class="btn btn-primary">Сохранить</button>
 </form>
 @section Scripts{
-    <script type="text/javascript">
-        $(function () {
+    <script type="text/javascript">$(function () {
             $('.select-department').selectize({
                 create: true,
                 sortField: {
@@ -103,9 +125,7 @@
 
             var newPage = window.location.origin + window.location.pathname + '?handler=GetRoles&userid=' + userid + '&departmentid=' + departmentId;
             window.location.replace(newPage)
-        }
-
-    </script>
+        }</script>
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

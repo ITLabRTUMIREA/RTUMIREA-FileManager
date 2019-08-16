@@ -28,12 +28,15 @@ namespace FileManager.Pages.Account.Roles
 
         public EditUserDepartmentRolesViewModel EditUserDepartmentRolesViewModel = null;
         public string PickedDepartmentId = "";
+        public User currentUser;
         public List<IGrouping<string, UserDepartmentRole>> allUserDepartmentRoles;
 
         public async Task<IActionResult> OnGetAsync(string userid)
         {
             try
             {
+                // TODO Add check for User rights to edit roles certain department
+                currentUser = await _userManager.GetUserAsync(HttpContext.User);
 
                 // получаем пользователя
                 User user = await _userManager.FindByIdAsync(userid);
@@ -74,6 +77,8 @@ namespace FileManager.Pages.Account.Roles
         {
             try
             {
+                currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
                 PickedDepartmentId = departmentid;
                 // получаем пользователя
                 User user = await _userManager.FindByIdAsync(userid);
