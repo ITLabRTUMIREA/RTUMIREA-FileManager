@@ -8,31 +8,45 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace FileManager.Pages.Account.Roles
 {
     public class IndexModel : PageModel
     {
-            private readonly RoleManager<Role> _roleManager;
-        public IndexModel(RoleManager<Role> roleManager)
+        private readonly FileManagerContext db;
+        private readonly ILogger<IndexModel> _logger;
+
+        public IndexModel(FileManagerContext context,
+            ILogger<IndexModel> logger)
         {
-            _roleManager = roleManager;
+            db = context;
+            _logger = logger;
         }
 
         public List<Role> Roles = null;
         public async Task<IActionResult> OnGet()
         {
-            Roles = await _roleManager.Roles.ToListAsync();
+            Roles = await db.Role.ToListAsync();
             return Page();
         }
         public async Task<IActionResult> OnPostAsync(string id)
         {
-            Role role = await _roleManager.FindByIdAsync(id);
-            if (role != null)
+            try
             {
-                IdentityResult result = await _roleManager.DeleteAsync(role);
+
+                Role role = await db.Role.FirstAsync(r => r.Id.ToString() == id);
+                if (role != null)
+                {
+                    db.Role.Remove(role);
+                    await db.SaveChangesAsync();
+                }
+                return RedirectToPage("/Account/UserRoleDepartmentManagement/Roles/Index");
+            }catch(Exception e)
+            {
+                _logger.LogError(e, "Error while deleting System Role");
+                return NotFound();
             }
-            return RedirectToPage("/Account/UserRoleDepartmentManagement/Roles/Index");
         }
     }
 }

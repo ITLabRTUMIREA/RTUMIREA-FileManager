@@ -4,18 +4,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using FileManager.Models;
 using FileManager.Models.Database.UserDepartmentRoles;
+using FileManager.Models.Database.UserSystemRoles;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 
 namespace FileManager.Pages.Account.Roles
 {
     public class CreateModel : PageModel
     {
-        private readonly RoleManager<Role> _roleManager;
-        public CreateModel(RoleManager<Role> roleManager)
+        private readonly FileManagerContext db;
+        private readonly ILogger<CreateModel> _logger;
+        public CreateModel(FileManagerContext context,
+            ILogger<CreateModel> logger)
         {
-            _roleManager = roleManager;
+            db = context;
+            _logger = logger;
         }
         public IActionResult OnGet()
         {
@@ -24,22 +29,26 @@ namespace FileManager.Pages.Account.Roles
 
         public async Task<IActionResult> OnPostAsync(string name)
         {
-            if (!string.IsNullOrEmpty(name))
+            try
             {
-                IdentityResult result = await _roleManager.CreateAsync(new Role(name));
-                if (result.Succeeded)
+
+                if (!string.IsNullOrEmpty(name))
                 {
-                    return RedirectToPage("Index");
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
+                    await db.AddAsync(new Role(name));
+                    int result = await db.SaveChangesAsync();
+                    if (result > 0)
                     {
-                        ModelState.AddModelError(string.Empty, error.Description);
+                        return RedirectToPage("Index");
                     }
                 }
+                return Page();
+
             }
-            return Page();
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error while adding new System Role");
+                return NotFound();
+            }
         }
     }
 }

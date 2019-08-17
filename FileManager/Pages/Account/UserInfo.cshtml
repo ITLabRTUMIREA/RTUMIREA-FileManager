@@ -33,26 +33,26 @@
                     <td>@userDepartmentRole.Key</td>
 
                     <td>
-                        @for (int i = 0; i < userDepartmentRole.Count(); i++)
-                        {
-                            @userDepartmentRole.ElementAt(i).Role.Name
-
-                            @if (userDepartmentRole.Count() > 0 && i < userDepartmentRole.Count() - 1)
-                            {
-                                <span>,</span>
-                            }
-                        }
+                        @string.Join(", ", userDepartmentRole.Select(udr => udr.Role.Name).ToArray<string>());
                     </td>
 
                 </tr>
 
+            }
+
+            @if (Model.allUserDepartmentRoles.Count == 0)
+            {
+                <tr>
+                    <td>Нет кафедр</td>
+                    <td>Нет ролей на кафедрах</td>
+                </tr>
             }
         </tbody>
     </table>
 
     <hr />
 
-    @if (Model.currentUser.UserRoleDepartments.Exists(urd => urd.Role.Name == "Admin"))
+    @if (Model.IsSystemAdmin)
     {
         <div>
             <button class="btn btn-primary" asp-page="/Account/BuildAdmin">Создать Администратора</button>

@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Identity;
 using FileManager.Models.Database.UserDepartmentRoles;
 using FileManager.Models.DbInitialize;
 using FileManager.Services.DbInitializeService;
+using FileManager.Models.Database.UserSystemRoles;
 
 namespace FileManager
 {
@@ -53,7 +54,7 @@ namespace FileManager
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddIdentity<User, Role>(config => {
+            services.AddIdentity<User, SystemRole>(config => {
                     config.SignIn.RequireConfirmedEmail = true;
                     config.User.RequireUniqueEmail = true;
                 })

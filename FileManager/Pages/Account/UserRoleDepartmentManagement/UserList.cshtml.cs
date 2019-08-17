@@ -12,9 +12,10 @@ using Microsoft.EntityFrameworkCore;
 namespace FileManager.Pages.Account.Departments
 {
     public class UserDepartmentListModel : PageModel
-        // TODO Make Departments managing 
     {
         private readonly UserManager<User> _userManager;
+        public bool IsSystemAdmin = false;
+
         public UserDepartmentListModel (UserManager<User> userManager)
         {
             _userManager = userManager;
@@ -23,6 +24,9 @@ namespace FileManager.Pages.Account.Departments
         public async Task<IActionResult> OnGet()
         {
             Users = await _userManager.Users.ToListAsync();
+
+            IsSystemAdmin = await _userManager.IsInRoleAsync(await _userManager.GetUserAsync(HttpContext.User), "SystemAdmin");
+
             return Page();
         }
     }

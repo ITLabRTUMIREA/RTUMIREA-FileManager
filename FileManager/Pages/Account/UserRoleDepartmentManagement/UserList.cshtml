@@ -10,14 +10,20 @@
 </div>
 
 <h2>Список пользователей</h2>
-<table class="table">
+<table class="table table-bordered">
     @foreach (var user in @Model.Users)
     {
         <tr>
             <td>@user.Email</td>
             <td>
-                <a class="btn btn-sm btn-primary" asp-page="EditUserDepartmentRoles" asp-route-userid="@user.Id">Изменение прав доступа к кафедре</a>
+                <a class="btn btn-sm btn-primary" asp-page="EditUserDepartmentRoles" asp-route-userid="@user.Id">Изменение прав доступа на кафедрах</a>
             </td>
+            @if (Model.IsSystemAdmin)
+            {
+                <td>
+                    <a class="btn btn-sm btn-info" asp-page="EditUserRoles" asp-route-userid="@user.Id">Права доступа в системе</a>
+                </td>
+            }
         </tr>
     }
 </table>

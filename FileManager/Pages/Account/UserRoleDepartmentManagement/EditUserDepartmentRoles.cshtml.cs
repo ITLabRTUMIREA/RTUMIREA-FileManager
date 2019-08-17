@@ -14,37 +14,37 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FileManager.Pages.Account.Roles
 {
-    public class EditModel : PageModel
+    public class EditUserDepartmentRolesModel : PageModel
     {
-        private readonly RoleManager<Role> _roleManager;
         private readonly UserManager<User> _userManager;
         private readonly FileManagerContext db;
-        public EditModel(RoleManager<Role> roleManager, UserManager<User> userManager, FileManagerContext context)
+        public EditUserDepartmentRolesModel(UserManager<User> userManager,
+            FileManagerContext context)
         {
-            _roleManager = roleManager;
             _userManager = userManager;
             db = context;
         }
 
         public EditUserDepartmentRolesViewModel EditUserDepartmentRolesViewModel = null;
         public string PickedDepartmentId = "";
-        public bool IsAdmin = false ;
+        public bool IsSystemAdmin = false;
         public List<IGrouping<string, UserDepartmentRole>> allUserDepartmentRoles;
 
         public async Task<IActionResult> OnGetAsync(string userid)
         {
             try
             {
-                // TODO Add check for User rights to edit roles certain department
-                IsAdmin = await _userManager.IsInRoleAsync(await _userManager.GetUserAsync(HttpContext.User),"SystemAdmin");
+                
+                IsSystemAdmin = await _userManager.IsInRoleAsync(await _userManager.GetUserAsync(HttpContext.User), "SystemAdmin");
 
                 // получаем пользователя
                 User user = await _userManager.FindByIdAsync(userid);
                 if (user != null)
                 {
-                    var allRoles = _roleManager.Roles.ToList();
+                    List<Role> allRoles = await db.Role.ToListAsync();
                     allUserDepartmentRoles = await db.UserRoleDepartment
                             .Where(urd => urd.UserId.Equals(user.Id))
+                            .Include(udr => udr.Role)
                             .GroupBy(urd => urd.Department.Name)
                             .ToListAsync();
 
@@ -77,7 +77,7 @@ namespace FileManager.Pages.Account.Roles
         {
             try
             {
-                IsAdmin = await _userManager.IsInRoleAsync(await _userManager.GetUserAsync(HttpContext.User), "SystemAdmin");
+                IsSystemAdmin = await _userManager.IsInRoleAsync(await _userManager.GetUserAsync(HttpContext.User), "SystemAdmin");
 
                 PickedDepartmentId = departmentid;
                 // получаем пользователя
@@ -85,9 +85,10 @@ namespace FileManager.Pages.Account.Roles
                 if (user != null)
                 {
                     // получем список ролей пользователя
-                    var allRoles = _roleManager.Roles.ToList();
+                    List<Role> allRoles = await db.Role.ToListAsync();
                     allUserDepartmentRoles = await db.UserRoleDepartment
                          .Where(urd => urd.UserId.Equals(user.Id))
+                         .Include(udr => udr.Role)
                          .GroupBy(urd => urd.Department.Name)
                          .ToListAsync();
 
@@ -140,7 +141,7 @@ namespace FileManager.Pages.Account.Roles
                         // получаем список ролей, которые были добавлены
                         var addedRoles = roles.Except(UserDepartmentRoles);
 
-                        var allRoles = _roleManager.Roles
+                        var allRoles = db.Role
                             .Select(r => r.Id.ToString().ToLower())
                             .ToList();
 

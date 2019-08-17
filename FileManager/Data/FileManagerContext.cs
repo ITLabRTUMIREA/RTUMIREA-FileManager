@@ -10,10 +10,11 @@ using FileManager.Models.Database.UserDepartmentRoles;
 using FileManager.Models.Database.DepartmentsDocuments;
 using FileManager.Models.Database.YearDocumentTitles;
 using FileManager.Models.Database.DocumentStatus;
+using FileManager.Models.Database.UserSystemRoles;
 
 namespace FileManager.Models
 {
-    public class FileManagerContext : IdentityDbContext<User, Role, Guid, IdentityUserClaim<Guid>, UserRole,
+    public class FileManagerContext : IdentityDbContext<User, SystemRole, Guid, IdentityUserClaim<Guid>, UserSystemRole,
         IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
     {
         public DbSet<User> User { get; set; }
@@ -21,11 +22,12 @@ namespace FileManager.Models
         public DbSet<DepartmentsDocument> DepartmentsDocument { get; set; }
         public DbSet<DepartmentsDocumentsVersion> DepartmentsDocumentsVersion { get; set; }
         public DbSet<Role> Role { get; set; }
+        public DbSet<SystemRole> SystemRole { get; set; }
         public DbSet<UserDepartmentRole> UserRoleDepartment { get; set; }
         public DbSet<DocumentTitle> DocumentTitle { get; set; }
         public DbSet<DocumentType> DocumentType { get; set; }
         public DbSet<Year> Year { get; set; }
-        public DbSet<UserRole> UserRole { get; set; }
+        public DbSet<UserSystemRole> UserSystemRole { get; set; }
         public DbSet<YearDocumentTitle> YearDocumentTitle { get; set; }
         public DbSet<RoleStatus> RoleStatus { get; set; }
         public DbSet<DocumentStatusHistory> DocumentStatusHistory { get; set; }
@@ -43,6 +45,7 @@ namespace FileManager.Models
             ConfigureDocumentStatus(builder);
             ConfigureYearDocumentTitle(builder);
             ConfigureUserDepartmentRoles(builder);
+            ConfigureUserSystemRoles(builder);
 
         }
 
@@ -178,22 +181,6 @@ namespace FileManager.Models
                 b.ToTable("AspNetUserDepartmentRoles");
             });
 
-            builder.Entity<UserRole>(b => {
-                b.HasKey(udr => new { udr.UserId, udr.RoleId});
-
-
-                b.HasOne(udt => udt.User)
-                    .WithMany(u => u.UserRoles)
-                    .HasForeignKey(udt => udt.UserId)
-                    .IsRequired();
-
-                b.HasOne(udt => udt.Role)
-                    .WithMany(r => r.UserRoles)
-                    .HasForeignKey(udt => udt.RoleId)
-                    .IsRequired();
-
-                b.ToTable("AspNetUserRoles");
-            });
 
             builder.Entity<Department>(b =>
             {
@@ -212,6 +199,32 @@ namespace FileManager.Models
                 b.HasKey(u => u.Id);
 
                 b.ToTable("AspNetUsers");
+            });
+        }
+        private static void ConfigureUserSystemRoles(ModelBuilder builder)
+        {
+            builder.Entity<SystemRole>(b =>
+            {
+                b.HasKey(r => r.Id);
+
+                b.ToTable("AspNetSystemRoles");
+            });
+            builder.Entity<UserSystemRole>(b =>
+            {
+                b.HasKey(udr => new { udr.UserId, udr.RoleId });
+
+
+                b.HasOne(udt => udt.User)
+                    .WithMany(u => u.UserSystemRoles)
+                    .HasForeignKey(udt => udt.UserId)
+                    .IsRequired();
+
+                b.HasOne(udt => udt.SystemRole)
+                    .WithMany(r => r.UserSystemRoles)
+                    .HasForeignKey(udt => udt.RoleId)
+                    .IsRequired();
+
+                b.ToTable("AspNetUserSystemRoles");
             });
         }
 
