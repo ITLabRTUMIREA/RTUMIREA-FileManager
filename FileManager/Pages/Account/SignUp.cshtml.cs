@@ -15,6 +15,7 @@ using FileManager.Services.EmailConfirmationService;
 using Microsoft.Extensions.Options;
 using FileManager.Models.ViewModels.Account;
 using FileManager.Models.Database.UserDepartmentRoles;
+using Microsoft.Extensions.Logging;
 
 namespace FileManager.Pages.SignUp
 {
@@ -23,23 +24,35 @@ namespace FileManager.Pages.SignUp
         private readonly UserManager<User> _userManager;
         private readonly IEmailConfirmationService _emailConfirmationService;
         private readonly IMapper _mapper;
+        private readonly ILogger<SignUpModel> _logger;
+        [BindProperty] public SignUpViewModel SignUpViewModel { get; set; }
 
         public SignUpModel(UserManager<User> userManager,
             IEmailConfirmationService emailConfirmationService,
-            IMapper mapper)
+            IMapper mapper,
+            ILogger<SignUpModel> logger)
         {
             _userManager = userManager;
             _emailConfirmationService = emailConfirmationService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public IActionResult OnGet()
         {
+            try
+            {
+                return Page();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error while getting page SignUp");
+                return NotFound();
+            }
 
-            return Page();
         }
 
-        [BindProperty] public SignUpViewModel SignUpViewModel { get; set; }
+
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -80,14 +93,19 @@ namespace FileManager.Pages.SignUp
                             }
                         }
                     }
+                    return Page();
+                }
+                else
+                {
+                    return Page();
                 }
             }
-            catch (Exception exception)
+            catch (Exception e)
             {
-                Console.WriteLine(exception);
+                _logger.LogError(e, "Error while getting page SignUp");
+                return NotFound();
             }
 
-            return Page();
         }
 
 

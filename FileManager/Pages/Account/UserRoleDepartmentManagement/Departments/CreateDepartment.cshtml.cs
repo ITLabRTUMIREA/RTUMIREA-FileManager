@@ -4,40 +4,79 @@ using System.Linq;
 using System.Threading.Tasks;
 using FileManager.Models;
 using FileManager.Models.Database.DepartmentsDocuments;
+using FileManager.Services.GetAccountDataService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 
 namespace FileManager.Pages.Account.Departments
 {
     public class CreateDepartmentModel : PageModel
-        // TODO Make Departments managing 
     {
         private readonly FileManagerContext db;
-        public CreateDepartmentModel(FileManagerContext context)
+        private readonly IGetAccountDataService _getAccountDataService;
+        private readonly ILogger<CreateDepartmentModel> _logger;
+
+
+        public CreateDepartmentModel(FileManagerContext context,
+            IGetAccountDataService getAccountDataService,
+            ILogger<CreateDepartmentModel> logger)
         {
             db = context;
+            _getAccountDataService = getAccountDataService;
+            _logger = logger;
         }
         public IActionResult OnGet()
         {
-            return Page();
+            try
+            {
+                if (_getAccountDataService.IsSystemAdmin())
+                {
+                    return Page();
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error while getting page CreateDepartment");
+                return NotFound();
+            }
         }
 
         public async Task<IActionResult> OnPostAsync(string name)
         {
-            if (!string.IsNullOrEmpty(name))
+            try
             {
-                Department newDepartment = new Department();
-                newDepartment.Name = name;
+                if (_getAccountDataService.IsSystemAdmin())
+                {
+                    if (!string.IsNullOrEmpty(name))
+                    {
+                        Department newDepartment = new Department();
+                        newDepartment.Name = name;
 
-                await db.Department.AddAsync(newDepartment);
-                await db.SaveChangesAsync();
+                        await db.Department.AddAsync(newDepartment);
+                        await db.SaveChangesAsync();
 
-                return RedirectToPage("DepartmentsList");
-                 
-                
+                        return RedirectToPage("DepartmentsList");
+
+
+                    }
+                    return Page();
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
-            return Page();
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error while creating new department");
+                return NotFound();
+            }
         }
     }
 }

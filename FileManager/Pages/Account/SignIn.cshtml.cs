@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using AutoMapper;
 using FileManager.Models.ViewModels.Account;
 using FileManager.Models.Database.UserDepartmentRoles;
+using Microsoft.Extensions.Logging;
 
 namespace FileManager.Pages.SignIn
 {
@@ -19,22 +20,35 @@ namespace FileManager.Pages.SignIn
     {
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
+        private readonly ILogger<SignInModel> _logger;
+
+        [BindProperty]
+        public SignInViewModel SignInViewModel { get; set; }
 
 
-        public SignInModel(UserManager<User> userManager, SignInManager<User> signInManager)
+        public SignInModel(UserManager<User> userManager,
+            SignInManager<User> signInManager,
+            ILogger<SignInModel> logger)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _logger = logger;
 
         }
 
         public IActionResult OnGet()
         {
-            return Page();
+            try
+            {
+                return Page();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error while getting page SignIn");
+                return NotFound();
+            }
         }
 
-        [BindProperty]
-        public SignInViewModel SignInViewModel { get; set; }
 
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> OnPostAsync()
@@ -68,14 +82,19 @@ namespace FileManager.Pages.SignIn
                     {
                         ModelState.AddModelError(string.Empty, "Неверный Email или пароль");
                     }
+                    return Page();
+                }
+                else
+                {
+                    return Page();
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.LogError(e, "Error while trying SignIn");
+                return NotFound();
             }
 
-            return Page();
         }
     }
 }

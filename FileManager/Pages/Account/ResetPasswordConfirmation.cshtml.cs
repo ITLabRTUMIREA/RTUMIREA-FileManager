@@ -8,23 +8,14 @@ using FileManager.ViewModels.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 
 namespace FileManager.Pages.Account
 {
     public class ResetPasswordConfirmationModel : PageModel
     {
         private readonly UserManager<User> _userManager;
-
-
-        public ResetPasswordConfirmationModel(UserManager<User> userManager)
-        {
-            _userManager = userManager;
-        }
-
-        public IActionResult OnGet()
-        {
-            return Page();
-        }
+        private readonly ILogger<ResetPasswordConfirmationModel> _logger;
 
         [BindProperty]
         public ResetPasswordConfirmationViewModel ResetPasswordConfirmationViewModel { get; set; }
@@ -35,11 +26,41 @@ namespace FileManager.Pages.Account
         [TempData]
         public string resetPasswordConfirmationToken { get; set; }
 
+        public ResetPasswordConfirmationModel(UserManager<User> userManager,
+            ILogger<ResetPasswordConfirmationModel> logger)
+        {
+            _userManager = userManager;
+            _logger = logger;
+        }
+
+        public IActionResult OnGet()
+        {
+            try
+            {
+                return Page();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error while getting page CreateDepartment");
+                return NotFound();
+            }
+        }
+
+
+
         public IActionResult OnGetResetPassword(Guid userId, string token)
         {
-            this.userId = userId;
-            resetPasswordConfirmationToken = token;
-            return Page();
+            try
+            {
+                this.userId = userId;
+                resetPasswordConfirmationToken = token;
+                return Page();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error while reseting password");
+                return NotFound();
+            }
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -67,17 +88,24 @@ namespace FileManager.Pages.Account
                         {
                             ModelState.AddModelError(string.Empty, error.Description);
                         }
+                        return Page();
                     }
+                    else
+                    {
+                        return NotFound();
+                    }
+                }
+                else
+                {
+                    return Page();
                 }
 
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-
+                _logger.LogError(e, "Error while reseting password");
+                return NotFound();
             }
-
-            return Page();
         }
     }
 }

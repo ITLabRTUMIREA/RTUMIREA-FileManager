@@ -11,6 +11,8 @@ using FileManager.ViewModels.Account;
 using FileManager.Models.Database.UserDepartmentRoles;
 using FileManager.Models.Database.DepartmentsDocuments;
 using Microsoft.EntityFrameworkCore;
+using FileManager.Services.GetAccountDataService;
+using Microsoft.Extensions.Logging;
 
 namespace FileManager.Pages.Account.Roles
 {
@@ -18,28 +20,36 @@ namespace FileManager.Pages.Account.Roles
     {
         private readonly UserManager<User> _userManager;
         private readonly FileManagerContext db;
-        public EditUserDepartmentRolesModel(UserManager<User> userManager,
-            FileManagerContext context)
-        {
-            _userManager = userManager;
-            db = context;
-        }
+        private readonly IGetAccountDataService _getAccountDataService;
+        private readonly ILogger<EditUserDepartmentRolesModel> _logger;
 
         public EditUserDepartmentRolesViewModel EditUserDepartmentRolesViewModel = null;
         public string PickedDepartmentId = "";
         public bool IsSystemAdmin = false;
+
         public List<IGrouping<string, UserDepartmentRole>> allUserDepartmentRoles;
+
+        public EditUserDepartmentRolesModel(UserManager<User> userManager,
+            FileManagerContext context,
+            IGetAccountDataService getAccountDataService,
+            ILogger<EditUserDepartmentRolesModel> logger)
+        {
+            _userManager = userManager;
+            db = context;
+            _getAccountDataService = getAccountDataService;
+            _logger = logger;
+        }
+
 
         public async Task<IActionResult> OnGetAsync(string userid)
         {
             try
             {
-                
-                IsSystemAdmin = await _userManager.IsInRoleAsync(await _userManager.GetUserAsync(HttpContext.User), "SystemAdmin");
+                IsSystemAdmin = _getAccountDataService.IsSystemAdmin();
 
                 // получаем пользователя
                 User user = await _userManager.FindByIdAsync(userid);
-                if (user != null)
+                if (user != null && (await _getAccountDataService.IsAdminOnAnyDepartment() || IsSystemAdmin))
                 {
                     List<Role> allRoles = await db.Role.ToListAsync();
                     allUserDepartmentRoles = await db.UserRoleDepartment
@@ -68,45 +78,52 @@ namespace FileManager.Pages.Account.Roles
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.LogError(e, "Error while getting page EditUserDepartmentRoles");
+                return NotFound();
             }
-            return Page();
         }
 
         public async Task<IActionResult> OnGetGetRolesAsync(string userid, string departmentid)
         {
             try
             {
-                IsSystemAdmin = await _userManager.IsInRoleAsync(await _userManager.GetUserAsync(HttpContext.User), "SystemAdmin");
+                IsSystemAdmin = _getAccountDataService.IsSystemAdmin();
 
                 PickedDepartmentId = departmentid;
-                // получаем пользователя
-                User user = await _userManager.FindByIdAsync(userid);
-                if (user != null)
+                if (await _getAccountDataService.IsAdminOnAnyDepartment() || IsSystemAdmin)
                 {
-                    // получем список ролей пользователя
-                    List<Role> allRoles = await db.Role.ToListAsync();
-                    allUserDepartmentRoles = await db.UserRoleDepartment
-                         .Where(urd => urd.UserId.Equals(user.Id))
-                         .Include(udr => udr.Role)
-                         .GroupBy(urd => urd.Department.Name)
-                         .ToListAsync();
-
-                    List<Department> allDepartments = db.Department.ToList();
-
-                    EditUserDepartmentRolesViewModel = new EditUserDepartmentRolesViewModel
+                    // получаем пользователя
+                    User user = await _userManager.FindByIdAsync(userid);
+                    if (user != null)
                     {
-                        UserId = user.Id.ToString(),
-                        UserEmail = user.Email,
-                        UserDepartmentRoles = await db.UserRoleDepartment
-                            .Where(urd => urd.UserId.Equals(user.Id) && urd.DepartmentId.ToString() == departmentid)
-                            .ToListAsync(),
-                        AllRoles = allRoles,
-                        AllDepartments = allDepartments,
-                        DepartmentId = departmentid
+                        // получем список ролей пользователя
+                        List<Role> allRoles = await db.Role.ToListAsync();
+                        allUserDepartmentRoles = await db.UserRoleDepartment
+                             .Where(urd => urd.UserId.Equals(user.Id))
+                             .Include(udr => udr.Role)
+                             .GroupBy(urd => urd.Department.Name)
+                             .ToListAsync();
 
-                    };
-                    return Page();
+                        List<Department> allDepartments = db.Department.ToList();
+
+                        EditUserDepartmentRolesViewModel = new EditUserDepartmentRolesViewModel
+                        {
+                            UserId = user.Id.ToString(),
+                            UserEmail = user.Email,
+                            UserDepartmentRoles = await db.UserRoleDepartment
+                                .Where(urd => urd.UserId.Equals(user.Id) && urd.DepartmentId.ToString() == departmentid)
+                                .ToListAsync(),
+                            AllRoles = allRoles,
+                            AllDepartments = allDepartments,
+                            DepartmentId = departmentid
+
+                        };
+                        return Page();
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
                 }
                 else
                 {
@@ -115,9 +132,9 @@ namespace FileManager.Pages.Account.Roles
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.LogError(e, "Error while getting Department Data for this User");
+                return NotFound();
             }
-            return Page();
         }
 
         [HttpPost]
@@ -125,71 +142,83 @@ namespace FileManager.Pages.Account.Roles
         {
             try
             {
-                if (ModelState.IsValid)
+                if (await _getAccountDataService.IsAdminOnAnyDepartment() || _getAccountDataService.IsSystemAdmin())
                 {
-
-                    // получаем пользователя
-                    User user = await _userManager.FindByIdAsync(userId);
-                    if (user != null)
+                    if (ModelState.IsValid)
                     {
-                        // получем список ролей пользователя
-                        var UserDepartmentRoles = await db.UserRoleDepartment
-                            .Where(urd => urd.UserId.Equals(Guid.Parse(userId)) && urd.DepartmentId.ToString() == departmentId)
-                            .Select(urd => urd.Role.Id.ToString().ToLower())
-                            .ToListAsync();
 
-                        // получаем список ролей, которые были добавлены
-                        var addedRoles = roles.Except(UserDepartmentRoles);
-
-                        var allRoles = db.Role
-                            .Select(r => r.Id.ToString().ToLower())
-                            .ToList();
-
-                        // получаем роли, которые были удалены
-                        var removedRoles = UserDepartmentRoles.Except(roles);
-
-                        foreach (var role in addedRoles)
+                        // получаем пользователя
+                        User user = await _userManager.FindByIdAsync(userId);
+                        if (user != null)
                         {
-                            if (role != null)
+                            // получем список ролей пользователя
+                            var UserDepartmentRoles = await db.UserRoleDepartment
+                                .Where(urd => urd.UserId.Equals(Guid.Parse(userId)) && urd.DepartmentId.ToString() == departmentId)
+                                .Select(urd => urd.Role.Id.ToString().ToLower())
+                                .ToListAsync();
+
+                            // получаем список ролей, которые были добавлены
+                            var addedRoles = roles.Except(UserDepartmentRoles);
+
+                            var allRoles = db.Role
+                                .Select(r => r.Id.ToString().ToLower())
+                                .ToList();
+
+                            // получаем роли, которые были удалены
+                            var removedRoles = UserDepartmentRoles.Except(roles);
+
+                            foreach (var role in addedRoles)
                             {
-                                db.UserRoleDepartment.Add(new UserDepartmentRole()
+                                if (role != null)
                                 {
-                                    UserId = Guid.Parse(userId),
-                                    DepartmentId = Guid.Parse(departmentId),
-                                    RoleId = Guid.Parse(role)
-                                });
+                                    db.UserRoleDepartment.Add(new UserDepartmentRole()
+                                    {
+                                        UserId = Guid.Parse(userId),
+                                        DepartmentId = Guid.Parse(departmentId),
+                                        RoleId = Guid.Parse(role)
+                                    });
+                                }
+
                             }
 
-                        }
-
-                        foreach (var role in removedRoles)
-                        {
-                            if (role != null)
+                            foreach (var role in removedRoles)
                             {
-                                UserDepartmentRole removingRecord = await db.UserRoleDepartment
-                                    .FirstOrDefaultAsync(urd => urd.RoleId.Equals(Guid.Parse(role))
-                                        && urd.UserId.Equals(Guid.Parse(userId))
-                                        && urd.DepartmentId.Equals(Guid.Parse(departmentId)));
+                                if (role != null)
+                                {
+                                    UserDepartmentRole removingRecord = await db.UserRoleDepartment
+                                        .FirstOrDefaultAsync(urd => urd.RoleId.Equals(Guid.Parse(role))
+                                            && urd.UserId.Equals(Guid.Parse(userId))
+                                            && urd.DepartmentId.Equals(Guid.Parse(departmentId)));
 
-                                db.UserRoleDepartment.Remove(removingRecord);
+                                    db.UserRoleDepartment.Remove(removingRecord);
+                                }
                             }
+
+                            await db.SaveChangesAsync();
+
+                            return RedirectToPage("UserDepartmentList");
                         }
-
-                        await db.SaveChangesAsync();
-
-                        return RedirectToPage("UserList");
+                        else
+                        {
+                            return NotFound();
+                        }
                     }
                     else
                     {
-                        return NotFound();
+                        return Page();
                     }
                 }
+                else
+                {
+                    return NotFound();
+                }
+
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.LogError(e, "Error while saving Department Data for this User");
+                return NotFound();
             }
-            return Page();
         }
     }
 }

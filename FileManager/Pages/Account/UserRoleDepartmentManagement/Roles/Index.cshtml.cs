@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FileManager.Models;
 using FileManager.Models.Database.UserDepartmentRoles;
+using FileManager.Services.GetAccountDataService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -16,35 +17,60 @@ namespace FileManager.Pages.Account.Roles
     {
         private readonly FileManagerContext db;
         private readonly ILogger<IndexModel> _logger;
+        private readonly IGetAccountDataService _getAccountDataService;
 
         public IndexModel(FileManagerContext context,
-            ILogger<IndexModel> logger)
+            ILogger<IndexModel> logger,
+             IGetAccountDataService getAccountDataService)
         {
             db = context;
             _logger = logger;
+            _getAccountDataService = getAccountDataService;
         }
 
         public List<Role> Roles = null;
         public async Task<IActionResult> OnGet()
         {
-            Roles = await db.Role.ToListAsync();
-            return Page();
+            try
+            {
+                if (_getAccountDataService.IsSystemAdmin())
+                {
+                    Roles = await db.Role.ToListAsync();
+                    return Page();
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error while getting page of showing list of department roles");
+                return NotFound();
+            }
         }
         public async Task<IActionResult> OnPostAsync(string id)
         {
             try
             {
-
-                Role role = await db.Role.FirstAsync(r => r.Id.ToString() == id);
-                if (role != null)
+                if (_getAccountDataService.IsSystemAdmin())
                 {
-                    db.Role.Remove(role);
-                    await db.SaveChangesAsync();
+                    Role role = await db.Role.FirstAsync(r => r.Id.ToString() == id);
+                    if (role != null)
+                    {
+                        db.Role.Remove(role);
+                        await db.SaveChangesAsync();
+                    }
+                    return RedirectToPage("/Account/UserRoleDepartmentManagement/Roles/Index");
                 }
-                return RedirectToPage("/Account/UserRoleDepartmentManagement/Roles/Index");
-            }catch(Exception e)
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception e)
             {
-                _logger.LogError(e, "Error while deleting System Role");
+                _logger.LogError(e, "Error while deleting department Role");
                 return NotFound();
             }
         }

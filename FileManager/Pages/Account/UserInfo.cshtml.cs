@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using FileManager.Models;
 using FileManager.Models.Database.UserDepartmentRoles;
+using FileManager.Services.GetAccountDataService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -18,6 +19,7 @@ namespace FileManager.Pages.Account
         private readonly UserManager<User> _userManager;
         private readonly FileManagerContext db;
         private readonly ILogger<UserInfoModel> _logger;
+        private readonly IGetAccountDataService _getAccountDataService;
 
         public User currentUser;
         public bool IsSystemAdmin = false;
@@ -27,20 +29,22 @@ namespace FileManager.Pages.Account
 
         public UserInfoModel(UserManager<User> userManager,
             FileManagerContext context,
-            ILogger<UserInfoModel> logger)
+            ILogger<UserInfoModel> logger,
+            IGetAccountDataService getAccountDataService)
         {
             _userManager = userManager;
             db = context;
             _logger = logger;
+            _getAccountDataService = getAccountDataService;
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
             try
             {
-                currentUser =  await _userManager.GetUserAsync(HttpContext.User);
+                currentUser = await _userManager.GetUserAsync(HttpContext.User);
 
-                IsSystemAdmin = await _userManager.IsInRoleAsync(await _userManager.GetUserAsync(HttpContext.User), "SystemAdmin");
+                IsSystemAdmin = _getAccountDataService.IsSystemAdmin();
 
                 if (currentUser != null)
                 {

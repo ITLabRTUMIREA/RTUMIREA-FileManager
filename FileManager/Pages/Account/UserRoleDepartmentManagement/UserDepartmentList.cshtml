@@ -1,12 +1,15 @@
 ﻿@page
 @model FileManager.Pages.Account.Departments.UserDepartmentListModel
 @{
-    ViewData["Title"] = "UserList";
+    ViewData["Title"] = "UserDepartmentList";
 }
 
 <div>
-    <a asp-page="Departments/DepartmentsList">Управление кафедрами</a>
-    <a asp-page="Roles/Index">Управление ролями</a>
+    @if (Model.IsSystemAdmin)
+    {
+        <a class="btn btn-info" asp-page="Departments/DepartmentsList">Управление кафедрами</a>
+        <a class="btn btn-info" asp-page="Roles/Index">Управление ролями</a>
+    }
 </div>
 
 <h2>Список пользователей</h2>
