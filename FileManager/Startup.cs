@@ -21,6 +21,7 @@ using FileManager.Models.Database.UserDepartmentRoles;
 using FileManager.Models.DbInitialize;
 using FileManager.Services.DbInitializeService;
 using FileManager.Models.Database.UserSystemRoles;
+using FileManager.Services.GetAccountDataService;
 
 namespace FileManager
 {
@@ -43,6 +44,7 @@ namespace FileManager
 
             services.AddTransient<IResetPasswordService, ResetPasswordService>();
             services.AddTransient<IDbInitializeService, DbInitializeService>();
+            services.AddTransient<IGetAccountDataService, GetAccountDataService>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -71,17 +73,8 @@ namespace FileManager
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                app.UseHsts();
-            }
+            app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
