@@ -114,21 +114,13 @@ namespace FileManager.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
+                    b.Property<string>("ConcurrencyStamp");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(256);
+                    b.Property<string>("Name");
 
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256);
+                    b.Property<string>("NormalizedName");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
                 });
@@ -198,13 +190,52 @@ namespace FileManager.Migrations
 
                     b.HasKey("UserId", "RoleId", "DepartmentId");
 
-                    b.HasAlternateKey("UserId", "RoleId");
-
                     b.HasIndex("DepartmentId");
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserDepartmentRole");
+                    b.ToTable("AspNetUserDepartmentRoles");
+                });
+
+            modelBuilder.Entity("FileManager.Models.Database.UserSystemRoles.SystemRole", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetSystemRoles");
+                });
+
+            modelBuilder.Entity("FileManager.Models.Database.UserSystemRoles.UserSystemRole", b =>
+                {
+                    b.Property<Guid>("UserId");
+
+                    b.Property<Guid>("RoleId");
+
+                    b.Property<Guid?>("RoleId1");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("RoleId1");
+
+                    b.ToTable("AspNetUserSystemRoles");
                 });
 
             modelBuilder.Entity("FileManager.Models.Database.YearDocumentTitles.DocumentTitle", b =>
@@ -400,6 +431,23 @@ namespace FileManager.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("FileManager.Models.Database.UserSystemRoles.UserSystemRole", b =>
+                {
+                    b.HasOne("FileManager.Models.Database.UserSystemRoles.SystemRole", "SystemRole")
+                        .WithMany("UserSystemRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("FileManager.Models.Database.UserDepartmentRoles.Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId1");
+
+                    b.HasOne("FileManager.Models.Database.UserDepartmentRoles.User", "User")
+                        .WithMany("UserSystemRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("FileManager.Models.Database.YearDocumentTitles.DocumentTitle", b =>
                 {
                     b.HasOne("FileManager.Models.Database.YearDocumentTitles.DocumentType", "DocumentType")
@@ -423,7 +471,7 @@ namespace FileManager.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.HasOne("FileManager.Models.Database.UserDepartmentRoles.Role")
+                    b.HasOne("FileManager.Models.Database.UserSystemRoles.SystemRole")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);

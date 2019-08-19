@@ -4,42 +4,76 @@ using System.Linq;
 using System.Threading.Tasks;
 using FileManager.Models;
 using FileManager.Models.Database.UserDepartmentRoles;
+using FileManager.Models.Database.UserSystemRoles;
+using FileManager.Services.GetAccountDataService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 
 namespace FileManager.Pages.Account.Roles
 {
     public class CreateModel : PageModel
     {
-        private readonly RoleManager<Role> _roleManager;
-        public CreateModel(RoleManager<Role> roleManager)
+        private readonly FileManagerContext db;
+        private readonly ILogger<CreateModel> _logger;
+        private readonly IGetAccountDataService _getAccountDataService;
+
+        public CreateModel(FileManagerContext context,
+            ILogger<CreateModel> logger,
+            IGetAccountDataService getAccountDataService)
         {
-            _roleManager = roleManager;
+            db = context;
+            _logger = logger;
+            _getAccountDataService = getAccountDataService;
         }
         public IActionResult OnGet()
         {
-            return Page();
+            try
+            {
+                if (_getAccountDataService.IsSystemAdmin())
+                {
+                    return Page();
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error while getting page of Creating role");
+                return NotFound();
+            }
         }
 
         public async Task<IActionResult> OnPostAsync(string name)
         {
-            if (!string.IsNullOrEmpty(name))
+            try
             {
-                IdentityResult result = await _roleManager.CreateAsync(new Role(name));
-                if (result.Succeeded)
+                if (_getAccountDataService.IsSystemAdmin())
                 {
-                    return RedirectToPage("Index");
+                    if (!string.IsNullOrEmpty(name))
+                    {
+                        await db.AddAsync(new Role(name));
+                        int result = await db.SaveChangesAsync();
+                        if (result > 0)
+                        {
+                            return RedirectToPage("Index");
+                        }
+                    }
+                    return Page();
                 }
                 else
                 {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
+                    return NotFound();
                 }
             }
-            return Page();
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error while adding new Department Role");
+                return NotFound();
+            }
         }
     }
 }

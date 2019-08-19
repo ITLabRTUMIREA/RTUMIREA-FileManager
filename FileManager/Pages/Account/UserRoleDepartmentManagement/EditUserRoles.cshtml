@@ -1,0 +1,23 @@
+﻿@page "{userid?}"
+@model EditUserRolesModel
+@using FileManager.Models.Database.UserSystemRoles;
+@{
+    ViewData["Title"] = "Edit User Roles";
+}
+<h2>Изменение ролей для пользователя @Model.EditUserRolesViewModel.UserEmail</h2>
+
+<form asp-page-handler="UpdateUserRoles" method="post">
+    <input type="hidden" name="userId" value="@Model.EditUserRolesViewModel.UserId" />
+    <div class="form-group">
+
+        @foreach (SystemRole role in Model.EditUserRolesViewModel.AllSystemRoles)
+        {
+            <input type="checkbox" name="roles" value="@role.Name"
+                   @(Model.EditUserRolesViewModel.UserSystemRoles.Contains(role.Name) ? "checked=\"checked\"" : "") />@role.Name <br />
+            }
+    </div>
+    <a class="btn-link" asp-page="UserDepartmentList"> Вернуться к списку пользователей</a>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+</form>
+
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

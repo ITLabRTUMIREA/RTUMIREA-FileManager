@@ -10,6 +10,7 @@ using FileManager.ViewModels.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 
 namespace FileManager.Pages.Account.ForgotPasswordPage
@@ -18,16 +19,30 @@ namespace FileManager.Pages.Account.ForgotPasswordPage
     {
         private readonly UserManager<User> _userManager;
         private readonly IResetPasswordService _resetPasswordService;
-        public ForgotPasswordPageModel(UserManager<User> userManager, IResetPasswordService resetPasswordService)
+        private readonly ILogger<ForgotPasswordPageModel> _logger;
+        [BindProperty] public ForgotPasswordViewModel ForgotPasswordViewModel { get; set; }
+
+        public ForgotPasswordPageModel(UserManager<User> userManager,
+            IResetPasswordService resetPasswordService,
+            ILogger<ForgotPasswordPageModel> logger)
         {
             _userManager = userManager;
             _resetPasswordService = resetPasswordService;
+            _logger = logger;
         }
-        [BindProperty] public ForgotPasswordViewModel ForgotPasswordViewModel { get; set; }
+
 
         public IActionResult OnGet()
         {
-            return Page();
+            try
+            {
+                return Page();
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, "Error while getting page ForgotPasswordPage");
+                return NotFound();
+            }
         }
 
         [ValidateAntiForgeryToken]
@@ -62,13 +77,13 @@ namespace FileManager.Pages.Account.ForgotPasswordPage
                 {
                     ModelState.AddModelError(string.Empty, "Неверный Email");
                 }
+                return Page();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.LogError(e, "Error while interaction on ForgotPasswordPage");
+                return NotFound();
             }
-
-            return Page();
         }
 
     }

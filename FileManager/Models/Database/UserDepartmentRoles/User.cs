@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FileManager.Models.Database.UserSystemRoles;
 using FileManager.Models.Database.UserDepartmentRoles;
 using Microsoft.AspNetCore.Identity;
 
@@ -13,5 +14,8 @@ namespace FileManager.Models.Database.UserDepartmentRoles
         public string LastName { get; set; }
 
         public List<UserDepartmentRole> UserRoleDepartments { get; set; }
+
+        public List<UserSystemRole> UserSystemRoles { get; set; }
+
     }
 }

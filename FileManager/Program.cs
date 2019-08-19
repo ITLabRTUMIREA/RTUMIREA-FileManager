@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using FileManager.Models;
+using FileManager.Services.DbInitializeService;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -14,7 +15,7 @@ namespace FileManager
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var host = CreateWebHostBuilder(args).Build();
 
@@ -26,6 +27,11 @@ namespace FileManager
                 {
                     var context = services.GetRequiredService<FileManagerContext>();
                     context.Database.EnsureCreated();
+
+                    var dbInitializeService = services.GetRequiredService<IDbInitializeService>();
+                    await dbInitializeService.Initialize();
+
+
                 }
                 catch (Exception ex)
                 {

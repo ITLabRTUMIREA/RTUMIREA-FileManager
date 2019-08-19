@@ -8,18 +8,21 @@
 <table class="table">
     @foreach (var role in @Model.Roles)
     {
-        <tr>
-            <td>@role.Name</td>
-            <td>
-                <form asp-route-id="@role.Id" method="post">
-                    <button type="submit" class="btn btn-sm btn-danger">
-                        Удалить
-                    </button>
-                </form>
-            </td>
-        </tr>
+        @if(role.Name != "SystemAdmin")
+        {
+            <tr>
+                <td>@role.Name</td>
+                <td>
+                    <form asp-route-id="@role.Id" method="post">
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            Удалить
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
     }
 </table>
 <a asp-page="Create">Добавить роль</a>
-<a asp-page="../UserList">Вернуться назад</a>
+<a asp-page="../UserDepartmentList">Вернуться назад</a>
 
