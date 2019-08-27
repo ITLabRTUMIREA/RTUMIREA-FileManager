@@ -7,9 +7,11 @@ using FileManager.Models.Database.UserDepartmentRoles;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SmartBreadcrumbs.Attributes;
 
 namespace FileManager.Pages
 {
+    [DefaultBreadcrumb("Index Page")]
     public class IndexModel : PageModel
     {
         private readonly SignInManager<User> _signInManager;
