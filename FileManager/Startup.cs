@@ -22,6 +22,7 @@ using FileManager.Models.DbInitialize;
 using FileManager.Services.DbInitializeService;
 using FileManager.Models.Database.UserSystemRoles;
 using FileManager.Services.GetAccountDataService;
+using SmartBreadcrumbs.Extensions;
 
 namespace FileManager
 {
@@ -45,6 +46,16 @@ namespace FileManager
             services.AddTransient<IResetPasswordService, ResetPasswordService>();
             services.AddTransient<IDbInitializeService, DbInitializeService>();
             services.AddTransient<IGetAccountDataService, GetAccountDataService>();
+
+            services.AddBreadcrumbs(GetType().Assembly, options =>
+            {
+                options.TagName = "nav";
+                options.TagClasses = "";
+                options.OlClasses = "breadcrumb";
+                options.LiClasses = "breadcrumb-item";
+                options.ActiveLiClasses = "breadcrumb-item active";
+                options.SeparatorElement = "<span class=\"oi ml-2 mr-2 oi-chevron-right\"></span>";
+            });
 
             services.Configure<CookiePolicyOptions>(options =>
             {
