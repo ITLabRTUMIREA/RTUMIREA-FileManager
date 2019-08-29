@@ -51,7 +51,9 @@
     .select-bar > nav > ol{
         margin-bottom:0;
     }
-
+.bg-folder{
+    background-image:url("../images/documents-folder-icon.svg")
+}
 .router-content {
     grid-row-start: 3;
     border: 1px solid red;
