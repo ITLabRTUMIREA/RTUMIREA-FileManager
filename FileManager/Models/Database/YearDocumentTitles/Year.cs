@@ -7,6 +7,11 @@ namespace FileManager.Models.Database.YearDocumentTitles
 {
     public class Year
     {
+        public Year(int number)
+        {
+            Id = Guid.NewGuid();
+            Number = number;
+        }
         public Guid Id { get; set; }
         public int Number { get; set; }
 
