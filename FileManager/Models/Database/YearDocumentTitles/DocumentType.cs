@@ -7,7 +7,7 @@ namespace FileManager.Models.Database.YearDocumentTitles
 {
     public class DocumentType
     {
-        public Guid ID { get; set; }
+        public Guid Id { get; set; }
         public string Type { get; set; }
 
         public List<DocumentTitle> DocumentTitles { get; set; }

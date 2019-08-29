@@ -9,12 +9,12 @@ namespace FileManager.Models.Database.YearDocumentTitles
 {
     public class YearDocumentTitle
     {
-        public Guid ID { get; set; }
+        public Guid Id { get; set; }
 
-        public Guid YearID { get; set; }
+        public Guid YearId { get; set; }
         public Year Year { get; set; }
 
-        public Guid DocumentTitleID { get; set; }
+        public Guid DocumentTitleId { get; set; }
         public DocumentTitle DocumentTitle { get; set; }
 
         public List<DepartmentsDocument> DepartmentsDocuments { get; set; }

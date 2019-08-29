@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FileManager.Models;
 using FileManager.Models.Database.UserDepartmentRoles;
+using FileManager.Models.Database.YearDocumentTitles;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -14,13 +15,12 @@ namespace FileManager.Pages
     [DefaultBreadcrumb("Index Page")]
     public class IndexModel : PageModel
     {
-        private readonly SignInManager<User> _signInManager;
-        private readonly UserManager<User> _userManager;
-        public IndexModel(UserManager<User> userManager, SignInManager<User> signInManager)
-        {
-            _signInManager = signInManager;
-            _userManager = userManager;
+        private readonly FileManagerContext db;
+        public List<Year> Years;
 
+        public IndexModel(FileManagerContext context)
+        {
+            db = context;
         }
         public IActionResult OnGet()
         {
@@ -30,6 +30,8 @@ namespace FileManager.Pages
             }
             else
             {
+                Years = db.Year.ToList();
+
                 return Page();
             }
         }
