@@ -55,27 +55,27 @@ namespace FileManager.Models
             builder.Entity<DepartmentsDocument>(b =>
             {
 
-                b.HasKey(dd => dd.ID);
+                b.HasKey(dd => dd.Id);
 
-                b.HasAlternateKey(dd => new { dd.DepartmentID, dd.YearDocumentTitleID });
+                b.HasAlternateKey(dd => new { dd.DepartmentId, dd.YearDocumentTitleId });
 
                 b.HasOne(dd => dd.YearDocumentTitle)
                     .WithMany(ydt => ydt.DepartmentsDocuments)
-                    .HasForeignKey(dd => dd.YearDocumentTitleID);
+                    .HasForeignKey(dd => dd.YearDocumentTitleId);
 
                 b.HasOne(dd => dd.Department)
                     .WithMany(d => d.DepartmentsDocuments)
-                    .HasForeignKey(dd => dd.DepartmentID);
+                    .HasForeignKey(dd => dd.DepartmentId);
             });
 
             builder.Entity<DepartmentsDocumentsVersion>(b =>
             {
 
-                b.HasKey(ddv => ddv.ID);
+                b.HasKey(ddv => ddv.Id);
 
                 b.HasOne(ddv => ddv.DepartmentsDocument)
                     .WithMany(dd => dd.DepartmentsDocumentsVersions)
-                    .HasForeignKey(ddv => ddv.DepartmentDocumentID);
+                    .HasForeignKey(ddv => ddv.DepartmentDocumentId);
             });
         }
 
@@ -83,35 +83,35 @@ namespace FileManager.Models
         {
             builder.Entity<DocumentStatus>(b =>
             {
-                b.HasKey(ds => ds.ID);
+                b.HasKey(ds => ds.Id);
             });
 
             builder.Entity<RoleStatus>(b =>
             {
 
-                b.HasKey(rs => new { rs.RoleID, rs.DocumentStatusID });
+                b.HasKey(rs => new { rs.RoleId, rs.DocumentStatusId });
 
                 b.HasOne(rs => rs.Role)
                    .WithMany(r => r.RoleStatuses)
-                   .HasForeignKey(rs => rs.RoleID);
+                   .HasForeignKey(rs => rs.RoleId);
 
                 b.HasOne(rs => rs.DocumentStatus)
                     .WithMany(ds => ds.RoleStatuses)
-                    .HasForeignKey(rs => rs.DocumentStatusID);
+                    .HasForeignKey(rs => rs.DocumentStatusId);
             });
 
             builder.Entity<DocumentStatusHistory>(b =>
             {
 
-                b.HasKey(dsh => new { dsh.DocumentStatusID, dsh.DepartmentsDocumentID });
+                b.HasKey(dsh => new { dsh.DocumentStatusId, dsh.DepartmentsDocumentId });
 
                 b.HasOne(dsh => dsh.DocumentStatus)
                    .WithMany(ds => ds.DocumentStatusHistories)
-                   .HasForeignKey(dsh => dsh.DocumentStatusID);
+                   .HasForeignKey(dsh => dsh.DocumentStatusId);
 
                 b.HasOne(dsh => dsh.DepartmentsDocument)
                     .WithMany(ds => ds.DocumentStatusHistories)
-                    .HasForeignKey(dsh => dsh.DepartmentsDocumentID);
+                    .HasForeignKey(dsh => dsh.DepartmentsDocumentId);
             });
         }
 
@@ -119,38 +119,38 @@ namespace FileManager.Models
         {
             builder.Entity<Year>(b =>
             {
-                b.HasKey(y => y.ID);
+                b.HasKey(y => y.Id);
             });
 
             builder.Entity<DocumentType>(b =>
             {
-                b.HasKey(dtp => dtp.ID);
+                b.HasKey(dtp => dtp.Id);
             });
 
             builder.Entity<DocumentTitle>(b =>
             {
 
-                b.HasKey(dt => dt.ID);
+                b.HasKey(dt => dt.Id);
 
                 b.HasOne(dtp => dtp.DocumentType)
                    .WithMany(dt => dt.DocumentTitles)
-                   .HasForeignKey(dtp => dtp.DocumentTypeID);
+                   .HasForeignKey(dtp => dtp.DocumentTypeId);
             });
 
             builder.Entity<YearDocumentTitle>(b =>
             {
 
-                b.HasKey(ydt => ydt.ID);
+                b.HasKey(ydt => ydt.Id);
 
-                b.HasAlternateKey(ydt => new { ydt.DocumentTitleID, ydt.YearID });
+                b.HasAlternateKey(ydt => new { ydt.DocumentTitleId, ydt.YearId });
 
                 b.HasOne(ydt => ydt.DocumentTitle)
                     .WithMany(dt => dt.YearDocumentTitles)
-                    .HasForeignKey(ydt => ydt.DocumentTitleID);
+                    .HasForeignKey(ydt => ydt.DocumentTitleId);
 
                 b.HasOne(ydt => ydt.Year)
                     .WithMany(y => y.YearDocumentTitles)
-                    .HasForeignKey(ydt => ydt.YearID);
+                    .HasForeignKey(ydt => ydt.YearId);
             });
         }
 
@@ -163,7 +163,7 @@ namespace FileManager.Models
 
 
                 b.HasOne(udt => udt.User)
-                    .WithMany(u => u.UserRoleDepartments)
+                    .WithMany(u => u.UserDepartmentRoles)
                     .HasForeignKey(udt => udt.UserId)
                     .IsRequired();
 
@@ -174,7 +174,7 @@ namespace FileManager.Models
 
 
                 b.HasOne(udt => udt.Role)
-                    .WithMany(r => r.UserRoleDepartments)
+                    .WithMany(r => r.UserDepartmentRoles)
                     .HasForeignKey(udt => udt.RoleId)
                     .IsRequired();
 

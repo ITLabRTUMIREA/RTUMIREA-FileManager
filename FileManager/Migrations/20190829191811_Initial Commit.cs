@@ -79,36 +79,36 @@ namespace FileManager.Migrations
                 name: "DocumentStatus",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     Status = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DocumentStatus", x => x.ID);
+                    table.PrimaryKey("PK_DocumentStatus", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "DocumentType",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     Type = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DocumentType", x => x.ID);
+                    table.PrimaryKey("PK_DocumentType", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Year",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
+                    Id = table.Column<Guid>(nullable: false),
+                    Number = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Year", x => x.ID);
+                    table.PrimaryKey("PK_Year", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -178,8 +178,7 @@ namespace FileManager.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(nullable: false),
-                    RoleId = table.Column<Guid>(nullable: false),
-                    RoleId1 = table.Column<Guid>(nullable: true)
+                    RoleId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -190,12 +189,6 @@ namespace FileManager.Migrations
                         principalTable: "AspNetSystemRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserSystemRoles_AspNetRoles_RoleId1",
-                        column: x => x.RoleId1,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_AspNetUserSystemRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -259,22 +252,22 @@ namespace FileManager.Migrations
                 name: "RoleStatus",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(nullable: false),
-                    DocumentStatusID = table.Column<Guid>(nullable: false),
-                    RoleID = table.Column<Guid>(nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
+                    DocumentStatusId = table.Column<Guid>(nullable: false),
+                    RoleId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RoleStatus", x => new { x.RoleID, x.DocumentStatusID });
+                    table.PrimaryKey("PK_RoleStatus", x => new { x.RoleId, x.DocumentStatusId });
                     table.ForeignKey(
-                        name: "FK_RoleStatus_DocumentStatus_DocumentStatusID",
-                        column: x => x.DocumentStatusID,
+                        name: "FK_RoleStatus_DocumentStatus_DocumentStatusId",
+                        column: x => x.DocumentStatusId,
                         principalTable: "DocumentStatus",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RoleStatus_AspNetRoles_RoleID",
-                        column: x => x.RoleID,
+                        name: "FK_RoleStatus_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -284,18 +277,18 @@ namespace FileManager.Migrations
                 name: "DocumentTitle",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    DocumentTypeID = table.Column<Guid>(nullable: false)
+                    DocumentTypeId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DocumentTitle", x => x.ID);
+                    table.PrimaryKey("PK_DocumentTitle", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DocumentTitle_DocumentType_DocumentTypeID",
-                        column: x => x.DocumentTypeID,
+                        name: "FK_DocumentTitle_DocumentType_DocumentTypeId",
+                        column: x => x.DocumentTypeId,
                         principalTable: "DocumentType",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -303,25 +296,25 @@ namespace FileManager.Migrations
                 name: "YearDocumentTitle",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(nullable: false),
-                    YearID = table.Column<Guid>(nullable: false),
-                    DocumentTitleID = table.Column<Guid>(nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
+                    YearId = table.Column<Guid>(nullable: false),
+                    DocumentTitleId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_YearDocumentTitle", x => x.ID);
-                    table.UniqueConstraint("AK_YearDocumentTitle_DocumentTitleID_YearID", x => new { x.DocumentTitleID, x.YearID });
+                    table.PrimaryKey("PK_YearDocumentTitle", x => x.Id);
+                    table.UniqueConstraint("AK_YearDocumentTitle_DocumentTitleId_YearId", x => new { x.DocumentTitleId, x.YearId });
                     table.ForeignKey(
-                        name: "FK_YearDocumentTitle_DocumentTitle_DocumentTitleID",
-                        column: x => x.DocumentTitleID,
+                        name: "FK_YearDocumentTitle_DocumentTitle_DocumentTitleId",
+                        column: x => x.DocumentTitleId,
                         principalTable: "DocumentTitle",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_YearDocumentTitle_Year_YearID",
-                        column: x => x.YearID,
+                        name: "FK_YearDocumentTitle_Year_YearId",
+                        column: x => x.YearId,
                         principalTable: "Year",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -329,25 +322,25 @@ namespace FileManager.Migrations
                 name: "DepartmentsDocument",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(nullable: false),
-                    YearDocumentTitleID = table.Column<Guid>(nullable: false),
-                    DepartmentID = table.Column<Guid>(nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
+                    YearDocumentTitleId = table.Column<Guid>(nullable: false),
+                    DepartmentId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DepartmentsDocument", x => x.ID);
-                    table.UniqueConstraint("AK_DepartmentsDocument_DepartmentID_YearDocumentTitleID", x => new { x.DepartmentID, x.YearDocumentTitleID });
+                    table.PrimaryKey("PK_DepartmentsDocument", x => x.Id);
+                    table.UniqueConstraint("AK_DepartmentsDocument_DepartmentId_YearDocumentTitleId", x => new { x.DepartmentId, x.YearDocumentTitleId });
                     table.ForeignKey(
-                        name: "FK_DepartmentsDocument_Department_DepartmentID",
-                        column: x => x.DepartmentID,
+                        name: "FK_DepartmentsDocument_Department_DepartmentId",
+                        column: x => x.DepartmentId,
                         principalTable: "Department",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DepartmentsDocument_YearDocumentTitle_YearDocumentTitleID",
-                        column: x => x.YearDocumentTitleID,
+                        name: "FK_DepartmentsDocument_YearDocumentTitle_YearDocumentTitleId",
+                        column: x => x.YearDocumentTitleId,
                         principalTable: "YearDocumentTitle",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -355,18 +348,18 @@ namespace FileManager.Migrations
                 name: "DepartmentsDocumentsVersion",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     Version = table.Column<short>(nullable: false),
-                    DepartmentDocumentID = table.Column<Guid>(nullable: false)
+                    DepartmentDocumentId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DepartmentsDocumentsVersion", x => x.ID);
+                    table.PrimaryKey("PK_DepartmentsDocumentsVersion", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DepartmentsDocumentsVersion_DepartmentsDocument_DepartmentDocumentID",
-                        column: x => x.DepartmentDocumentID,
+                        name: "FK_DepartmentsDocumentsVersion_DepartmentsDocument_DepartmentDocumentId",
+                        column: x => x.DepartmentDocumentId,
                         principalTable: "DepartmentsDocument",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -374,25 +367,25 @@ namespace FileManager.Migrations
                 name: "DocumentStatusHistory",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CommentEdits = table.Column<string>(nullable: true),
-                    DocumentStatusID = table.Column<Guid>(nullable: false),
-                    DepartmentsDocumentID = table.Column<Guid>(nullable: false)
+                    DocumentStatusId = table.Column<Guid>(nullable: false),
+                    DepartmentsDocumentId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DocumentStatusHistory", x => new { x.DocumentStatusID, x.DepartmentsDocumentID });
+                    table.PrimaryKey("PK_DocumentStatusHistory", x => new { x.DocumentStatusId, x.DepartmentsDocumentId });
                     table.ForeignKey(
-                        name: "FK_DocumentStatusHistory_DepartmentsDocument_DepartmentsDocumentID",
-                        column: x => x.DepartmentsDocumentID,
+                        name: "FK_DocumentStatusHistory_DepartmentsDocument_DepartmentsDocumentId",
+                        column: x => x.DepartmentsDocumentId,
                         principalTable: "DepartmentsDocument",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DocumentStatusHistory_DocumentStatus_DocumentStatusID",
-                        column: x => x.DocumentStatusID,
+                        name: "FK_DocumentStatusHistory_DocumentStatus_DocumentStatusId",
+                        column: x => x.DocumentStatusId,
                         principalTable: "DocumentStatus",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -446,39 +439,34 @@ namespace FileManager.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserSystemRoles_RoleId1",
-                table: "AspNetUserSystemRoles",
-                column: "RoleId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DepartmentsDocument_YearDocumentTitleID",
+                name: "IX_DepartmentsDocument_YearDocumentTitleId",
                 table: "DepartmentsDocument",
-                column: "YearDocumentTitleID");
+                column: "YearDocumentTitleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DepartmentsDocumentsVersion_DepartmentDocumentID",
+                name: "IX_DepartmentsDocumentsVersion_DepartmentDocumentId",
                 table: "DepartmentsDocumentsVersion",
-                column: "DepartmentDocumentID");
+                column: "DepartmentDocumentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DocumentStatusHistory_DepartmentsDocumentID",
+                name: "IX_DocumentStatusHistory_DepartmentsDocumentId",
                 table: "DocumentStatusHistory",
-                column: "DepartmentsDocumentID");
+                column: "DepartmentsDocumentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DocumentTitle_DocumentTypeID",
+                name: "IX_DocumentTitle_DocumentTypeId",
                 table: "DocumentTitle",
-                column: "DocumentTypeID");
+                column: "DocumentTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RoleStatus_DocumentStatusID",
+                name: "IX_RoleStatus_DocumentStatusId",
                 table: "RoleStatus",
-                column: "DocumentStatusID");
+                column: "DocumentStatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_YearDocumentTitle_YearID",
+                name: "IX_YearDocumentTitle_YearId",
                 table: "YearDocumentTitle",
-                column: "YearID");
+                column: "YearId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
