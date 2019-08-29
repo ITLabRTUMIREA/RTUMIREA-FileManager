@@ -27,7 +27,6 @@
     <PackageReference Include="SmartBreadcrumbs" Version="2.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Migrations\" />
     <Folder Include="wwwroot\lib\selectize\" />
   </ItemGroup>
   <ItemGroup>

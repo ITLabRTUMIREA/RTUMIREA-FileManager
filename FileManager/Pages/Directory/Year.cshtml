@@ -1,0 +1,19 @@
+﻿@page
+@model FileManager.Pages.Directory.YearModel
+@using FileManager.Models.Database.DepartmentsDocuments;
+@{
+}
+<div class="row">
+    @foreach (Department department in Model.Departments)
+    {
+        <div class="col-sm-1 mx-3">
+            <a asp-page="/Directory/Department"
+               asp-route-departmentId="@department.Id"
+               asp-route-yearId="@Model.selectedYearId">
+
+                @department.Name
+
+            </a>
+        </div>
+    }
+</div>

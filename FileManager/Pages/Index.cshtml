@@ -5,10 +5,10 @@
     ViewData["Title"] = "Home page";
     Layout = "Shared/_MainApplicationLayout";
 }
-<div>
+<div class="row">
     @foreach (Year year in Model.Years)
     {
-        <div>
+        <div class="col-sm-1 mx-3">
             <a asp-page="/Directory/Year" asp-route-yearId="@year.Id">
                 @year.Number
             </a>
