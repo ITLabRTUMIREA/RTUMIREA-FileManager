@@ -8,13 +8,13 @@ namespace FileManager.Models.Database.DocumentStatus
 {
     public class DocumentStatusHistory
     {
-        public Guid ID { get; set; }
+        public Guid Id { get; set; }
         public string CommentEdits { get; set; }
 
-        public Guid DocumentStatusID { get; set; }
+        public Guid DocumentStatusId { get; set; }
         public DocumentStatus DocumentStatus { get; set; }
 
-        public Guid DepartmentsDocumentID { get; set; }
+        public Guid DepartmentsDocumentId { get; set; }
         public DepartmentsDocument DepartmentsDocument { get; set; }
 
 

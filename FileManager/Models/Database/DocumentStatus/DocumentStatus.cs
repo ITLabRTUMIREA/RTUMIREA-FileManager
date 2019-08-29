@@ -7,7 +7,7 @@ namespace FileManager.Models.Database.DocumentStatus
 {
     public class DocumentStatus
     {
-        public Guid ID { get; set; }
+        public Guid Id { get; set; }
         public string Status { get; set; }
 
         public List<DocumentStatusHistory> DocumentStatusHistories { get; set; }
