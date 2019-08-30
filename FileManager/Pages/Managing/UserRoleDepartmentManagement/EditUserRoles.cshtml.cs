@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
-namespace FileManager.Pages.Account.UserRoleDepartmentManagement
+namespace FileManager.Pages.Managing.UserRoleDepartmentManagement
 {
     public class EditUserRolesModel : PageModel
     {

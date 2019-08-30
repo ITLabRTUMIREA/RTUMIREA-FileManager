@@ -1,0 +1,27 @@
+﻿@page
+@model FileManager.Pages.Managing.UserRoleDepartmentManagement.Roles.IndexModel
+@{
+    ViewData["Title"] = "Список ролей";
+}
+
+<h2>Список ролей</h2>
+<table class="table">
+    @foreach (var role in @Model.Roles)
+    {
+
+        <tr>
+            <td>@role.Name</td>
+            <td>
+                <form asp-route-id="@role.Id" method="post">
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Удалить
+                    </button>
+                </form>
+            </td>
+        </tr>
+
+    }
+</table>
+<a asp-page="Create">Добавить роль</a>
+<a asp-page="../UserDepartmentList">Вернуться назад</a>
+

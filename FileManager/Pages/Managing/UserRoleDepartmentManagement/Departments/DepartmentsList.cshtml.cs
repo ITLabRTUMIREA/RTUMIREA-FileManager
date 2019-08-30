@@ -3,36 +3,41 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FileManager.Models;
-using FileManager.Models.Database.UserDepartmentRoles;
-using FileManager.Models.Database.UserSystemRoles;
+using FileManager.Models.Database.DepartmentsDocuments;
 using FileManager.Services.GetAccountDataService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace FileManager.Pages.Account.Roles
+namespace FileManager.Pages.Managing.UserRoleDepartmentManagement.Departments
 {
-    public class CreateModel : PageModel
+    public class DepartmentsListModel : PageModel
     {
         private readonly FileManagerContext db;
-        private readonly ILogger<CreateModel> _logger;
+        private readonly ILogger<DepartmentsListModel> _logger;
         private readonly IGetAccountDataService _getAccountDataService;
 
-        public CreateModel(FileManagerContext context,
-            ILogger<CreateModel> logger,
-            IGetAccountDataService getAccountDataService)
+        public List<Department> Departments;
+
+        public DepartmentsListModel(FileManagerContext context,
+             ILogger<DepartmentsListModel> logger,
+             IGetAccountDataService getAccountDataService)
         {
             db = context;
             _logger = logger;
             _getAccountDataService = getAccountDataService;
         }
-        public IActionResult OnGet()
+
+        public async Task<IActionResult> OnGet()
         {
             try
             {
                 if (_getAccountDataService.IsSystemAdmin())
                 {
+                    Departments = await db.Department.ToListAsync<Department>();
+
                     return Page();
                 }
                 else
@@ -42,27 +47,30 @@ namespace FileManager.Pages.Account.Roles
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error while getting page of Creating role");
+                _logger.LogError(e, "Error while getting page DepartmentList");
                 return NotFound();
             }
         }
 
-        public async Task<IActionResult> OnPostAsync(string name)
+        public async Task<IActionResult> OnPostDeleteAsync(string id)
         {
             try
             {
                 if (_getAccountDataService.IsSystemAdmin())
                 {
-                    if (!string.IsNullOrEmpty(name))
+                    if (id.Equals(null))
                     {
-                        await db.AddAsync(new Role(name));
-                        int result = await db.SaveChangesAsync();
-                        if (result > 0)
-                        {
-                            return RedirectToPage("Index");
-                        }
+                        return Page();
                     }
-                    return Page();
+
+                    Department Department = await db.Department.FirstOrDefaultAsync<Department>(d => d.Id.ToString() == id);
+
+                    if (Department != null)
+                    {
+                        db.Department.Remove(Department);
+                        await db.SaveChangesAsync();
+                    }
+                    return RedirectToPage("/Managing/UserRoleDepartmentManagement/Departments/DepartmentsList");
                 }
                 else
                 {
@@ -71,7 +79,7 @@ namespace FileManager.Pages.Account.Roles
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error while adding new Department Role");
+                _logger.LogError(e, "Error while deleting department");
                 return NotFound();
             }
         }

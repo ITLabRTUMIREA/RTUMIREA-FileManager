@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace FileManager.Pages.Account.Departments
+namespace FileManager.Pages.Managing.UserRoleDepartmentManagement
 {
     public class UserDepartmentListModel : PageModel
     {

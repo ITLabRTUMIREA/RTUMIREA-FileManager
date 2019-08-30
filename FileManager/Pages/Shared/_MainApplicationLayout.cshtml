@@ -28,7 +28,10 @@
 
                 @if (IsSystemAdmin || IsDepartmentAdmin)
                 {
-                    <a class="dropdown-item" asp-page="/Account/UserRoleDepartmentManagement/UserDepartmentList">Изменение прав доступа</a>
+                    <a class="dropdown-item" asp-page="/Managing/UserRoleDepartmentManagement/UserDepartmentList">Изменение прав доступа</a>
+                    <div class="dropdown-divider"></div>
+
+                    <a class="dropdown-item" asp-page="/Managing/ReportingYears/Index">Управление отчетными годами</a>
                     <div class="dropdown-divider"></div>
                 }
 
@@ -38,7 +41,7 @@
     </div>
     <div class="router-bar">
         <div class="select-bar">
-            
+
             <breadcrumb></breadcrumb>
         </div>
     </div>
