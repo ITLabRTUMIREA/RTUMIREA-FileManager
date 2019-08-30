@@ -63,9 +63,9 @@ namespace FileManager.Services.DbInitializeService
 
         private async Task InitializeReportingYearsList()
         {
-            if(db.ReportingYear.FirstOrDefault(y => y.Number == DateTime.Now.ReportingYear) == null)
+            if(db.ReportingYear.FirstOrDefault(y => y.Number == DateTime.Now.Year) == null)
             {
-                await db.ReportingYear.AddAsync(new ReportingYear(DateTime.Now.ReportingYear));
+                await db.ReportingYear.AddAsync(new ReportingYear(DateTime.Now.Year));
 
                 await db.SaveChangesAsync();
             }
