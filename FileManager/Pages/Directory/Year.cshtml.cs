@@ -12,18 +12,18 @@ using SmartBreadcrumbs.Nodes;
 
 namespace FileManager.Pages.Directory
 {
-    public class YearModel : PageModel
+    public class ReportingYearModel : PageModel
     {
         private readonly FileManagerContext db;
-        private readonly ILogger<YearModel> _logger;
+        private readonly ILogger<ReportingYearModel> _logger;
 
         public List<Department> Departments;
-        public Guid selectedYearId;
+        public Guid selectedReportingYearId;
        
 
 
-        public YearModel(FileManagerContext context,
-            ILogger<YearModel> logger)
+        public ReportingYearModel(FileManagerContext context,
+            ILogger<ReportingYearModel> logger)
         {
             db = context;
             _logger = logger;
@@ -32,19 +32,19 @@ namespace FileManager.Pages.Directory
         {
             try
             {
-                selectedYearId = yearId;
+                selectedReportingYearId = yearId;
 
                 Departments = db.Department.ToList();
 
-                RazorPageBreadcrumbNode YearBreadCrumbNode = new RazorPageBreadcrumbNode("/Path",
-                    db.Year
+                RazorPageBreadcrumbNode ReportingYearBreadCrumbNode = new RazorPageBreadcrumbNode("/Path",
+                    db.ReportingYear
                     .FirstOrDefault(y => y.Id.Equals(yearId))
                     .Number.ToString())
                 {
                     OverwriteTitleOnExactMatch = true,
                 };
 
-                ViewData["BreadcrumbNode"] = YearBreadCrumbNode;
+                ViewData["BreadcrumbNode"] = ReportingYearBreadCrumbNode;
 
                 return Page();
             }

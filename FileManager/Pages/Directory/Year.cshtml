@@ -1,5 +1,5 @@
 ﻿@page
-@model FileManager.Pages.Directory.YearModel
+@model FileManager.Pages.Directory.ReportingYearModel
 @using FileManager.Models.Database.DepartmentsDocuments;
 @{
 }
@@ -9,7 +9,7 @@
         <div class="col-sm-1 mx-3">
             <a asp-page="/Directory/Department"
                asp-route-departmentId="@department.Id"
-               asp-route-yearId="@Model.selectedYearId">
+               asp-route-yearId="@Model.selectedReportingYearId">
 
                 @department.Name
 

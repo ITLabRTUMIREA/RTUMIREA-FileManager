@@ -100,7 +100,7 @@ namespace FileManager.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Year",
+                name: "ReportingYear",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -108,7 +108,7 @@ namespace FileManager.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Year", x => x.Id);
+                    table.PrimaryKey("PK_ReportingYear", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -293,27 +293,27 @@ namespace FileManager.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "YearDocumentTitle",
+                name: "ReportingYearDocumentTitle",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    YearId = table.Column<Guid>(nullable: false),
+                    ReportingYearId = table.Column<Guid>(nullable: false),
                     DocumentTitleId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_YearDocumentTitle", x => x.Id);
-                    table.UniqueConstraint("AK_YearDocumentTitle_DocumentTitleId_YearId", x => new { x.DocumentTitleId, x.YearId });
+                    table.PrimaryKey("PK_ReportingYearDocumentTitle", x => x.Id);
+                    table.UniqueConstraint("AK_ReportingYearDocumentTitle_DocumentTitleId_ReportingYearId", x => new { x.DocumentTitleId, x.ReportingYearId });
                     table.ForeignKey(
-                        name: "FK_YearDocumentTitle_DocumentTitle_DocumentTitleId",
+                        name: "FK_ReportingYearDocumentTitle_DocumentTitle_DocumentTitleId",
                         column: x => x.DocumentTitleId,
                         principalTable: "DocumentTitle",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_YearDocumentTitle_Year_YearId",
-                        column: x => x.YearId,
-                        principalTable: "Year",
+                        name: "FK_ReportingYearDocumentTitle_ReportingYear_ReportingYearId",
+                        column: x => x.ReportingYearId,
+                        principalTable: "ReportingYear",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -323,13 +323,13 @@ namespace FileManager.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    YearDocumentTitleId = table.Column<Guid>(nullable: false),
+                    ReportingYearDocumentTitleId = table.Column<Guid>(nullable: false),
                     DepartmentId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DepartmentsDocument", x => x.Id);
-                    table.UniqueConstraint("AK_DepartmentsDocument_DepartmentId_YearDocumentTitleId", x => new { x.DepartmentId, x.YearDocumentTitleId });
+                    table.UniqueConstraint("AK_DepartmentsDocument_DepartmentId_ReportingYearDocumentTitleId", x => new { x.DepartmentId, x.ReportingYearDocumentTitleId });
                     table.ForeignKey(
                         name: "FK_DepartmentsDocument_Department_DepartmentId",
                         column: x => x.DepartmentId,
@@ -337,9 +337,9 @@ namespace FileManager.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DepartmentsDocument_YearDocumentTitle_YearDocumentTitleId",
-                        column: x => x.YearDocumentTitleId,
-                        principalTable: "YearDocumentTitle",
+                        name: "FK_DepartmentsDocument_ReportingYearDocumentTitle_ReportingYearDocumentTitleId",
+                        column: x => x.ReportingYearDocumentTitleId,
+                        principalTable: "ReportingYearDocumentTitle",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -439,9 +439,9 @@ namespace FileManager.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DepartmentsDocument_YearDocumentTitleId",
+                name: "IX_DepartmentsDocument_ReportingYearDocumentTitleId",
                 table: "DepartmentsDocument",
-                column: "YearDocumentTitleId");
+                column: "ReportingYearDocumentTitleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DepartmentsDocumentsVersion_DepartmentDocumentId",
@@ -464,9 +464,9 @@ namespace FileManager.Migrations
                 column: "DocumentStatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_YearDocumentTitle_YearId",
-                table: "YearDocumentTitle",
-                column: "YearId");
+                name: "IX_ReportingYearDocumentTitle_ReportingYearId",
+                table: "ReportingYearDocumentTitle",
+                column: "ReportingYearId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -517,13 +517,13 @@ namespace FileManager.Migrations
                 name: "Department");
 
             migrationBuilder.DropTable(
-                name: "YearDocumentTitle");
+                name: "ReportingYearDocumentTitle");
 
             migrationBuilder.DropTable(
                 name: "DocumentTitle");
 
             migrationBuilder.DropTable(
-                name: "Year");
+                name: "ReportingYear");
 
             migrationBuilder.DropTable(
                 name: "DocumentType");

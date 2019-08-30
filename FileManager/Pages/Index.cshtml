@@ -1,15 +1,15 @@
 ﻿@page
 @model IndexModel
-@using FileManager.Models.Database.YearDocumentTitles;
+@using FileManager.Models.Database.ReportingYearDocumentTitles;
 @{
     ViewData["Title"] = "Home page";
     Layout = "Shared/_MainApplicationLayout";
 }
 <div class="row">
-    @foreach (Year year in Model.Years)
+    @foreach (ReportingYear year in Model.ReportingYears)
     {
         <div class="col-sm-1 mx-3">
-            <a asp-page="/Directory/Year" asp-route-yearId="@year.Id">
+            <a asp-page="/Directory/ReportingYear" asp-route-yearId="@year.Id">
                 @year.Number
             </a>
         </div>

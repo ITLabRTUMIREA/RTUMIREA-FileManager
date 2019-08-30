@@ -1,7 +1,7 @@
 ﻿using FileManager.Models;
 using FileManager.Models.Database.UserDepartmentRoles;
 using FileManager.Models.Database.UserSystemRoles;
-using FileManager.Models.Database.YearDocumentTitles;
+using FileManager.Models.Database.ReportingYearDocumentTitles;
 using FileManager.Models.DbInitialize;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -34,7 +34,7 @@ namespace FileManager.Services.DbInitializeService
         {
             await InitializeSystemAdmin();
 
-            await InitializeYearsList();
+            await InitializeReportingYearsList();
         }
 
         private async Task InitializeSystemAdmin()
@@ -61,11 +61,11 @@ namespace FileManager.Services.DbInitializeService
             }
         }
 
-        private async Task InitializeYearsList()
+        private async Task InitializeReportingYearsList()
         {
-            if(db.Year.FirstOrDefault(y => y.Number == DateTime.Now.Year) == null)
+            if(db.ReportingYear.FirstOrDefault(y => y.Number == DateTime.Now.ReportingYear) == null)
             {
-                await db.Year.AddAsync(new Year(DateTime.Now.Year));
+                await db.ReportingYear.AddAsync(new ReportingYear(DateTime.Now.ReportingYear));
 
                 await db.SaveChangesAsync();
             }

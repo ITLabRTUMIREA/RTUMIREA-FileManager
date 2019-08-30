@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FileManager.Models;
 using FileManager.Models.Database.UserDepartmentRoles;
-using FileManager.Models.Database.YearDocumentTitles;
+using FileManager.Models.Database.ReportingYearDocumentTitles;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -16,7 +16,7 @@ namespace FileManager.Pages
     public class IndexModel : PageModel
     {
         private readonly FileManagerContext db;
-        public List<Year> Years;
+        public List<ReportingYear> ReportingYears;
 
         public IndexModel(FileManagerContext context)
         {
@@ -30,7 +30,7 @@ namespace FileManager.Pages
             }
             else
             {
-                Years = db.Year.ToList();
+                ReportingYears = db.ReportingYear.ToList();
 
                 return Page();
             }
