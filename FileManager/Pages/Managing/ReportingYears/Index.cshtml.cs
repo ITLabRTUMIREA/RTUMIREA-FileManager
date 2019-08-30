@@ -4,35 +4,39 @@ using System.Linq;
 using System.Threading.Tasks;
 using FileManager.Models;
 using FileManager.Models.Database.UserDepartmentRoles;
-using FileManager.Models.Database.UserSystemRoles;
+using FileManager.Models.Database.ReportingYearDocumentTitles;
 using FileManager.Services.GetAccountDataService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace FileManager.Pages.Account.Roles
+namespace FileManager.Pages.Managing.ReportingYears
 {
-    public class CreateModel : PageModel
+    public class IndexModel : PageModel
     {
         private readonly FileManagerContext db;
-        private readonly ILogger<CreateModel> _logger;
+        private readonly ILogger<IndexModel> _logger;
         private readonly IGetAccountDataService _getAccountDataService;
 
-        public CreateModel(FileManagerContext context,
-            ILogger<CreateModel> logger,
-            IGetAccountDataService getAccountDataService)
+        public IndexModel(FileManagerContext context,
+            ILogger<IndexModel> logger,
+             IGetAccountDataService getAccountDataService)
         {
             db = context;
             _logger = logger;
             _getAccountDataService = getAccountDataService;
         }
-        public IActionResult OnGet()
+
+        public List<ReportingYear> ReportingYears;
+        public async Task<IActionResult> OnGet()
         {
             try
             {
                 if (_getAccountDataService.IsSystemAdmin())
                 {
+                    ReportingYears = await db.ReportingYear.ToListAsync();
                     return Page();
                 }
                 else
@@ -42,27 +46,23 @@ namespace FileManager.Pages.Account.Roles
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error while getting page of Creating role");
+                _logger.LogError(e, "Error while getting page of showing list of reporing years");
                 return NotFound();
             }
         }
-
-        public async Task<IActionResult> OnPostAsync(string name)
+        public async Task<IActionResult> OnPostAsync(string id)
         {
             try
             {
                 if (_getAccountDataService.IsSystemAdmin())
                 {
-                    if (!string.IsNullOrEmpty(name))
+                    ReportingYear year = await db.ReportingYear.FirstAsync(r => r.Id.ToString() == id);
+                    if (year != null)
                     {
-                        await db.AddAsync(new Role(name));
-                        int result = await db.SaveChangesAsync();
-                        if (result > 0)
-                        {
-                            return RedirectToPage("Index");
-                        }
+                        db.ReportingYear.Remove(year);
+                        await db.SaveChangesAsync();
                     }
-                    return Page();
+                    return RedirectToPage("/Managing/ReportingYears/Index");
                 }
                 else
                 {
@@ -71,7 +71,7 @@ namespace FileManager.Pages.Account.Roles
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error while adding new Department Role");
+                _logger.LogError(e, "Error while deleting year");
                 return NotFound();
             }
         }

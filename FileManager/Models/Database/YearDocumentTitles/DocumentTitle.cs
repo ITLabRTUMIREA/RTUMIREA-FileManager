@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FileManager.Models.Database.YearDocumentTitles
+namespace FileManager.Models.Database.ReportingYearDocumentTitles
 { 
     public class DocumentTitle
     {
@@ -13,6 +13,6 @@ namespace FileManager.Models.Database.YearDocumentTitles
         public Guid DocumentTypeId { get; set; }
         public DocumentType DocumentType { get; set; }
 
-        public List<YearDocumentTitle> YearDocumentTitles { get; set; }
+        public List<ReportingYearDocumentTitle> ReportingYearDocumentTitles { get; set; }
     }
 }

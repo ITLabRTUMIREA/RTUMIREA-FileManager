@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using FileManager.Models.Database.UserDepartmentRoles;
 using FileManager.Models.Database.DepartmentsDocuments;
-using FileManager.Models.Database.YearDocumentTitles;
+using FileManager.Models.Database.ReportingYearDocumentTitles;
 using FileManager.Models.Database.DocumentStatus;
 using FileManager.Models.Database.UserSystemRoles;
 
@@ -26,9 +26,9 @@ namespace FileManager.Models
         public DbSet<UserDepartmentRole> UserRoleDepartment { get; set; }
         public DbSet<DocumentTitle> DocumentTitle { get; set; }
         public DbSet<DocumentType> DocumentType { get; set; }
-        public DbSet<Year> Year { get; set; }
+        public DbSet<ReportingYear> ReportingYear { get; set; }
         public DbSet<UserSystemRole> UserSystemRole { get; set; }
-        public DbSet<YearDocumentTitle> YearDocumentTitle { get; set; }
+        public DbSet<ReportingYearDocumentTitle> ReportingYearDocumentTitle { get; set; }
         public DbSet<RoleStatus> RoleStatus { get; set; }
         public DbSet<DocumentStatusHistory> DocumentStatusHistory { get; set; }
         public DbSet<DocumentStatus> DocumentStatus { get; set; }
@@ -43,7 +43,7 @@ namespace FileManager.Models
 
             ConfigureDepartmentsDocument(builder);
             ConfigureDocumentStatus(builder);
-            ConfigureYearDocumentTitle(builder);
+            ConfigureReportingYearDocumentTitle(builder);
             ConfigureUserDepartmentRoles(builder);
             ConfigureUserSystemRoles(builder);
 
@@ -57,11 +57,11 @@ namespace FileManager.Models
 
                 b.HasKey(dd => dd.Id);
 
-                b.HasAlternateKey(dd => new { dd.DepartmentId, dd.YearDocumentTitleId });
+                b.HasAlternateKey(dd => new { dd.DepartmentId, dd.ReportingYearDocumentTitleId });
 
-                b.HasOne(dd => dd.YearDocumentTitle)
+                b.HasOne(dd => dd.ReportingYearDocumentTitle)
                     .WithMany(ydt => ydt.DepartmentsDocuments)
-                    .HasForeignKey(dd => dd.YearDocumentTitleId);
+                    .HasForeignKey(dd => dd.ReportingYearDocumentTitleId);
 
                 b.HasOne(dd => dd.Department)
                     .WithMany(d => d.DepartmentsDocuments)
@@ -115,9 +115,9 @@ namespace FileManager.Models
             });
         }
 
-        private static void ConfigureYearDocumentTitle(ModelBuilder builder)
+        private static void ConfigureReportingYearDocumentTitle(ModelBuilder builder)
         {
-            builder.Entity<Year>(b =>
+            builder.Entity<ReportingYear>(b =>
             {
                 b.HasKey(y => y.Id);
             });
@@ -137,20 +137,20 @@ namespace FileManager.Models
                    .HasForeignKey(dtp => dtp.DocumentTypeId);
             });
 
-            builder.Entity<YearDocumentTitle>(b =>
+            builder.Entity<ReportingYearDocumentTitle>(b =>
             {
 
                 b.HasKey(ydt => ydt.Id);
 
-                b.HasAlternateKey(ydt => new { ydt.DocumentTitleId, ydt.YearId });
+                b.HasAlternateKey(ydt => new { ydt.DocumentTitleId, ydt.ReportingYearId });
 
                 b.HasOne(ydt => ydt.DocumentTitle)
-                    .WithMany(dt => dt.YearDocumentTitles)
+                    .WithMany(dt => dt.ReportingYearDocumentTitles)
                     .HasForeignKey(ydt => ydt.DocumentTitleId);
 
-                b.HasOne(ydt => ydt.Year)
-                    .WithMany(y => y.YearDocumentTitles)
-                    .HasForeignKey(ydt => ydt.YearId);
+                b.HasOne(ydt => ydt.ReportingYear)
+                    .WithMany(y => y.ReportingYearDocumentTitles)
+                    .HasForeignKey(ydt => ydt.ReportingYearId);
             });
         }
 

@@ -5,14 +5,14 @@ using System.Security.AccessControl;
 using System.Threading.Tasks;
 using FileManager.Models.Database.DepartmentsDocuments;
 
-namespace FileManager.Models.Database.YearDocumentTitles
+namespace FileManager.Models.Database.ReportingYearDocumentTitles
 {
-    public class YearDocumentTitle
+    public class ReportingYearDocumentTitle
     {
         public Guid Id { get; set; }
 
-        public Guid YearId { get; set; }
-        public Year Year { get; set; }
+        public Guid ReportingYearId { get; set; }
+        public ReportingYear ReportingYear { get; set; }
 
         public Guid DocumentTitleId { get; set; }
         public DocumentTitle DocumentTitle { get; set; }

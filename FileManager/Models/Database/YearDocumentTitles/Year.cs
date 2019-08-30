@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FileManager.Models.Database.YearDocumentTitles
+namespace FileManager.Models.Database.ReportingYearDocumentTitles
 {
-    public class Year
+    public class ReportingYear
     {
-        public Year(int number)
+        public ReportingYear(int number)
         {
             Id = Guid.NewGuid();
             Number = number;
@@ -15,6 +15,6 @@ namespace FileManager.Models.Database.YearDocumentTitles
         public Guid Id { get; set; }
         public int Number { get; set; }
 
-        public List<YearDocumentTitle> YearDocumentTitles { get; set; }
+        public List<ReportingYearDocumentTitle> ReportingYearDocumentTitles { get; set; }
     }
 }

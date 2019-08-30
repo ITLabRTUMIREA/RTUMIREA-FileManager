@@ -1,5 +1,5 @@
 ﻿@page
-@model FileManager.Pages.Account.Roles.CreateModel
+@model FileManager.Pages.Managing.ReportingYears.CreateModel
 @{
     ViewData["Title"] = "Create";
 }
@@ -8,10 +8,11 @@
  
 <form method="post">
     <div class="form-group">
-        <label for="name">Новая роль</label>
-        <input required name="name" class="form-control" />
+        <label for="number">Новый год</label>
+        <input required name="number" type="number" class="form-control" />
     </div>
     <button type="submit" class="btn btn-primary">Добавить</button>
+    <script>debugger</script>
 </form>
 
 <a asp-page="Index">Вернуться назад</a>
