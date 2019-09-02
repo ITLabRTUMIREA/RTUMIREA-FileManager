@@ -1,0 +1,24 @@
+﻿@page
+@model FileManager.Pages.Directory.DocumentTypeModel
+@using FileManager.Models.Database.ReportingYearDocumentTitles;
+@{
+    ViewData["Title"] = "DocumentType";
+}
+
+<div class="row">
+    @foreach (DocumentTitle documentTitle in Model.DocumentsTitles)
+    {
+        <div class="col-sm-1 mx-3">
+            <a asp-page="/Directory/DocumentTitle"
+               asp-route-departmentId="@Model.selectedDepartmentId"
+               asp-route-yearId="@Model.selectedReportingYearId"
+               asp-route-documentTypeId="@Model.selectedDepartmentId"
+               asp-route-documentTitleId="@documentTitle.Id">
+
+                @documentTitle.Name
+
+            </a>
+        </div>
+    }
+</div>
+

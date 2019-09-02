@@ -1,0 +1,27 @@
+﻿@page
+@model FileManager.Pages.Managing.DocumentTypes.IndexModel
+@{
+    ViewData["Title"] = "Список типов документов";
+}
+
+<h2>Список типов документов</h2>
+<table class="table">
+    @foreach (var type in @Model.DocumentTypes)
+    {
+
+        <tr>
+            <td>@type.Type</td>
+            <td>
+                <form asp-route-id="@type.Id" method="post">
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Удалить
+                    </button>
+                </form>
+            </td>
+        </tr>
+
+    }
+</table>
+<a asp-page="Create">Добавить отчетный год</a>
+<a asp-page="../../Index">Вернуться назад</a>
+
