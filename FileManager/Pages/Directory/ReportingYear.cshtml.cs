@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FileManager.Models;
 using FileManager.Models.Database.DepartmentsDocuments;
+using FileManager.Services.SmartBreadcrumbService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
@@ -16,17 +17,19 @@ namespace FileManager.Pages.Directory
     {
         private readonly FileManagerContext db;
         private readonly ILogger<ReportingYearModel> _logger;
+        private readonly ISmartBreadcrumbService _breadcrumbService;
 
         public List<Department> Departments;
         public Guid selectedReportingYearId;
-       
 
 
         public ReportingYearModel(FileManagerContext context,
-            ILogger<ReportingYearModel> logger)
+            ILogger<ReportingYearModel> logger,
+            ISmartBreadcrumbService breadcrumbService)
         {
             db = context;
             _logger = logger;
+            _breadcrumbService = breadcrumbService;
         }
         public IActionResult OnGet(Guid yearId)
         {
@@ -36,15 +39,7 @@ namespace FileManager.Pages.Directory
 
                 Departments = db.Department.ToList();
 
-                RazorPageBreadcrumbNode ReportingYearBreadCrumbNode = new RazorPageBreadcrumbNode("/Path",
-                    db.ReportingYear
-                    .FirstOrDefault(y => y.Id.Equals(yearId))
-                    .Number.ToString())
-                {
-                    OverwriteTitleOnExactMatch = true,
-                };
-
-                ViewData["BreadcrumbNode"] = ReportingYearBreadCrumbNode;
+                ViewData["BreadcrumbNode"] = _breadcrumbService.GetReportingYearBreadCrumbNode(yearId);
 
                 return Page();
             }

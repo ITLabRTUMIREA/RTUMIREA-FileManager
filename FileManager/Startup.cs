@@ -23,6 +23,7 @@ using FileManager.Services.DbInitializeService;
 using FileManager.Models.Database.UserSystemRoles;
 using FileManager.Services.GetAccountDataService;
 using SmartBreadcrumbs.Extensions;
+using FileManager.Services.SmartBreadcrumbService;
 
 namespace FileManager
 {
@@ -46,6 +47,7 @@ namespace FileManager
             services.AddTransient<IResetPasswordService, ResetPasswordService>();
             services.AddTransient<IDbInitializeService, DbInitializeService>();
             services.AddTransient<IGetAccountDataService, GetAccountDataService>();
+            services.AddTransient<ISmartBreadcrumbService, SmartBreadcrumbService>();
 
             services.AddBreadcrumbs(GetType().Assembly, options =>
             {
