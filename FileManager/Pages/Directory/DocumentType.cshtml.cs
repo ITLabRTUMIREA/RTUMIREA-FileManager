@@ -8,48 +8,49 @@ using FileManager.Services.SmartBreadcrumbService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using SmartBreadcrumbs.Attributes;
-using SmartBreadcrumbs.Nodes;
 
 namespace FileManager.Pages.Directory
 {
-    public class DepartmentModel : PageModel
+    public class DocumentTypeModel : PageModel
     {
         private readonly FileManagerContext db;
-        private readonly ILogger<DepartmentModel> _logger;
+        private readonly ILogger<DocumentTypeModel> _logger;
         private readonly ISmartBreadcrumbService _breadcrumbService;
 
-        public List<DocumentType> DocumentTypes;
+        public List<DocumentTitle> DocumentsTitles;
 
         public Guid selectedReportingYearId;
         public Guid selectedDepartmentId;
+        public Guid selectedDocumentTypeId;
 
-        public DepartmentModel(FileManagerContext context,
-            ILogger<DepartmentModel> logger,
+        public DocumentTypeModel(FileManagerContext context,
+            ILogger<DocumentTypeModel> logger,
             ISmartBreadcrumbService breadcrumbService)
         {
             db = context;
             _logger = logger;
             _breadcrumbService = breadcrumbService;
         }
-        public IActionResult OnGet(Guid yearId, Guid departmentId)
+        public IActionResult OnGet(Guid yearId, Guid departmentId, Guid documentTypeId)
         {
             try
             {
                 selectedReportingYearId = yearId;
                 selectedDepartmentId = departmentId;
+                selectedDocumentTypeId = documentTypeId;
 
-                DocumentTypes = db.DocumentType.ToList();
+                DocumentsTitles = db.DocumentTitle.ToList();
 
-                ViewData["BreadcrumbNode"] = _breadcrumbService.GetDepartmentBreadCrumbNode(
+                ViewData["BreadcrumbNode"] = _breadcrumbService.GetDocumentTypeBreadCrumbNode(
                     yearId,
-                    departmentId);
+                    departmentId,
+                    documentTypeId);
 
                 return Page();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error while getting department page");
+                _logger.LogError(ex, "Error while getting documentType page");
                 return NotFound();
             }
 
