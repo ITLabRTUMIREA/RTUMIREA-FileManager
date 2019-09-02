@@ -42,6 +42,7 @@ namespace FileManager.Pages.Directory
                 DocumentTypes = db.DocumentType.ToList();
 
                 ViewData["BreadcrumbNode"] = _breadcrumbService.GetDepartmentBreadCrumbNode(
+                    yearId,
                     departmentId,
                     _breadcrumbService.GetReportingYearBreadCrumbNode(yearId));
 

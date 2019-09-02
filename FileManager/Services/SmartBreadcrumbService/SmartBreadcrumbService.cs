@@ -32,7 +32,7 @@ namespace FileManager.Services.SmartBreadcrumbService
 
             };
         }
-        public RazorPageBreadcrumbNode GetDepartmentBreadCrumbNode(Guid departmentId, RazorPageBreadcrumbNode parentBreadcrumbNode)
+        public RazorPageBreadcrumbNode GetDepartmentBreadCrumbNode(Guid yearId,Guid departmentId, RazorPageBreadcrumbNode parentBreadcrumbNode)
         {
             return new RazorPageBreadcrumbNode("/Path",
                     db.Department
@@ -40,6 +40,8 @@ namespace FileManager.Services.SmartBreadcrumbService
             {
                 OverwriteTitleOnExactMatch = true,
                 Parent = parentBreadcrumbNode,
+                RouteValues = new { yearId = yearId,
+                    departmentId = departmentId}
                 
             };
         }

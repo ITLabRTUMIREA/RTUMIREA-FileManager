@@ -9,6 +9,6 @@ namespace FileManager.Services.SmartBreadcrumbService
     public interface ISmartBreadcrumbService
     {
         RazorPageBreadcrumbNode GetReportingYearBreadCrumbNode(Guid yearId);
-        RazorPageBreadcrumbNode GetDepartmentBreadCrumbNode(Guid departmentId, RazorPageBreadcrumbNode parentBreadcrumbNode);
+        RazorPageBreadcrumbNode GetDepartmentBreadCrumbNode(Guid yearId,Guid departmentId, RazorPageBreadcrumbNode parentBreadcrumbNode);
     }
 }
