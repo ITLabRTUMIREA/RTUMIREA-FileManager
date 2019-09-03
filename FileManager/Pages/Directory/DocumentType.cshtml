@@ -9,10 +9,10 @@
     @foreach (DocumentTitle documentTitle in Model.DocumentsTitles)
     {
         <div class="col-sm-1 mx-3">
-            <a asp-page="/Directory/DocumentTitle"
+            <a asp-page="/Directory/Document"
                asp-route-departmentId="@Model.selectedDepartmentId"
                asp-route-yearId="@Model.selectedReportingYearId"
-               asp-route-documentTypeId="@Model.selectedDepartmentId"
+               asp-route-documentTypeId="@Model.selectedDocumentTypeId"
                asp-route-documentTitleId="@documentTitle.Id">
 
                 @documentTitle.Name

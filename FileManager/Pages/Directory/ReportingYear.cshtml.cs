@@ -31,7 +31,7 @@ namespace FileManager.Pages.Directory
             _logger = logger;
             _breadcrumbService = breadcrumbService;
         }
-        public IActionResult OnGet(Guid yearId)
+        public async Task<IActionResult> OnGetAsync(Guid yearId)
         {
             try
             {
@@ -39,7 +39,7 @@ namespace FileManager.Pages.Directory
 
                 Departments = db.Department.ToList();
 
-                ViewData["BreadcrumbNode"] = _breadcrumbService.GetReportingYearBreadCrumbNode(yearId);
+                ViewData["BreadcrumbNode"] = await _breadcrumbService.GetReportingYearBreadCrumbNodeAsync(yearId);
 
                 return Page();
             }

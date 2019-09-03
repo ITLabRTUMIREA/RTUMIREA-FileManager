@@ -8,11 +8,15 @@ namespace FileManager.Services.SmartBreadcrumbService
 {
     public interface ISmartBreadcrumbService
     {
-        RazorPageBreadcrumbNode GetReportingYearBreadCrumbNode(Guid yearId);
-        RazorPageBreadcrumbNode GetDepartmentBreadCrumbNode(Guid yearId,
+        Task<RazorPageBreadcrumbNode> GetReportingYearBreadCrumbNodeAsync(Guid yearId);
+        Task<RazorPageBreadcrumbNode> GetDepartmentBreadCrumbNodeAsync(Guid yearId,
             Guid departmentId);
-        RazorPageBreadcrumbNode GetDocumentTypeBreadCrumbNode(Guid yearId,
+        Task<RazorPageBreadcrumbNode> GetDocumentTypeBreadCrumbNodeAsync(Guid yearId,
             Guid departmentId,
             Guid documentTypeId);
+        Task<RazorPageBreadcrumbNode> GetDocumentBreadCrumbNodeAsync(Guid yearId,
+            Guid departmentId,
+            Guid documentTypeId,
+            Guid documentTitleId);
     }
 }

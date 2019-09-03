@@ -1,5 +1,6 @@
 ﻿using FileManager.Models;
 using FileManager.Pages.Directory;
+using Microsoft.EntityFrameworkCore;
 using SmartBreadcrumbs.Extensions;
 using SmartBreadcrumbs.Nodes;
 using System;
@@ -18,29 +19,28 @@ namespace FileManager.Services.SmartBreadcrumbService
             db = context;
         }
 
-        public RazorPageBreadcrumbNode GetReportingYearBreadCrumbNode(Guid yearId)
+        public async Task<RazorPageBreadcrumbNode> GetReportingYearBreadCrumbNodeAsync(Guid yearId)
         {
             return new RazorPageBreadcrumbNode(ReflectionExtensions
                 .ExtractRazorPageKey(typeof(ReportingYearModel)),
-                        db.ReportingYear
-                        .FirstOrDefault(y => y.Id.Equals(yearId))
-                        .Number.ToString())
+                         (await db.ReportingYear
+                            .FirstOrDefaultAsync(y => y.Id.Equals(yearId))).Number.ToString())
             {
                 OverwriteTitleOnExactMatch = true,
                 RouteValues = new { yearId }
 
             };
         }
-        public RazorPageBreadcrumbNode GetDepartmentBreadCrumbNode(Guid yearId,
+        public async Task<RazorPageBreadcrumbNode> GetDepartmentBreadCrumbNodeAsync(Guid yearId,
             Guid departmentId)
         {
             return new RazorPageBreadcrumbNode(ReflectionExtensions
                 .ExtractRazorPageKey(typeof(DepartmentModel)),
-                    db.Department
-                    .FirstOrDefault(y => y.Id.Equals(departmentId)).Name)
+                    (await db.Department
+                    .FirstOrDefaultAsync(y => y.Id.Equals(departmentId))).Name)
             {
                 OverwriteTitleOnExactMatch = true,
-                Parent = GetReportingYearBreadCrumbNode(yearId),
+                Parent = await GetReportingYearBreadCrumbNodeAsync(yearId),
                 RouteValues = new
                 {
                     yearId,
@@ -49,22 +49,45 @@ namespace FileManager.Services.SmartBreadcrumbService
 
             };
         }
-        public RazorPageBreadcrumbNode GetDocumentTypeBreadCrumbNode(Guid yearId,
+        public async Task<RazorPageBreadcrumbNode> GetDocumentTypeBreadCrumbNodeAsync(Guid yearId,
             Guid departmentId,
             Guid documentTypeId)
         {
             return new RazorPageBreadcrumbNode(ReflectionExtensions
                 .ExtractRazorPageKey(typeof(DocumentTypeModel)),
-                    db.DocumentType
-                    .FirstOrDefault(y => y.Id.Equals(documentTypeId)).Type)
+                    (await db.DocumentType
+                    .FirstOrDefaultAsync(y => y.Id.Equals(documentTypeId))).Type)
             {
                 OverwriteTitleOnExactMatch = true,
-                Parent = GetDepartmentBreadCrumbNode(yearId, departmentId),
+                Parent = await GetDepartmentBreadCrumbNodeAsync(yearId, departmentId),
                 RouteValues = new
                 {
                     yearId,
                     departmentId,
                     documentTypeId
+                }
+
+            };
+        }
+        public async Task<RazorPageBreadcrumbNode> GetDocumentBreadCrumbNodeAsync(Guid yearId,
+            Guid departmentId,
+            Guid documentTypeId,
+            Guid documentTitleId)
+        {
+            return new RazorPageBreadcrumbNode(ReflectionExtensions
+                .ExtractRazorPageKey(typeof(DocumentModel)),
+                   (await db.DocumentTitle
+                    .FirstOrDefaultAsync(y => y.Id.Equals(documentTitleId))).Name)
+            {
+                OverwriteTitleOnExactMatch = true,
+                Parent = await GetDocumentTypeBreadCrumbNodeAsync(yearId, departmentId, documentTypeId),
+                RouteValues = new
+                {
+                    yearId,
+                    departmentId,
+                    documentTypeId,
+                    documentTitleId
+
                 }
 
             };
