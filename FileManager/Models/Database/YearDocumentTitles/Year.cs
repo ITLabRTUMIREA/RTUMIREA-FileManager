@@ -7,6 +7,7 @@ namespace FileManager.Models.Database.ReportingYearDocumentTitles
 {
     public class ReportingYear
     {
+        public ReportingYear() { }
         public ReportingYear(int number)
         {
             Id = Guid.NewGuid();

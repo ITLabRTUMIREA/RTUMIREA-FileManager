@@ -12,6 +12,13 @@
         <tr>
             <td>@type.Type</td>
             <td>
+                <button class="btn btn-sm">
+                    <a class="nav-link" asp-page="DocumentTitles/Index" asp-route-documentTypeId="@type.Id">
+                        Управление доступными наименованиями документов
+                    </a>
+                </button>
+            </td>
+            <td>
                 <form asp-route-id="@type.Id" method="post">
                     <button type="submit" class="btn btn-sm btn-danger">
                         Удалить
@@ -22,6 +29,6 @@
 
     }
 </table>
-<a asp-page="Create">Добавить отчетный год</a>
+<a asp-page="Create">Добавить тип документа</a>
 <a asp-page="../../Index">Вернуться назад</a>
 

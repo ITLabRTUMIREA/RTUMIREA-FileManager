@@ -39,7 +39,9 @@ namespace FileManager.Pages.Directory
                 selectedDepartmentId = departmentId;
                 selectedDocumentTypeId = documentTypeId;
 
-                DocumentsTitles = db.DocumentTitle.ToList();
+                DocumentsTitles = db.DocumentTitle
+                    .Where(dt => dt.DocumentTypeId.Equals(documentTypeId))
+                    .ToList();
 
                 ViewData["BreadcrumbNode"] = _breadcrumbService.GetDocumentTypeBreadCrumbNode(
                     yearId,
