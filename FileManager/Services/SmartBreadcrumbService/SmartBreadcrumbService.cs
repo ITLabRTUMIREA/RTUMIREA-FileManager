@@ -27,7 +27,7 @@ namespace FileManager.Services.SmartBreadcrumbService
                         .Number.ToString())
             {
                 OverwriteTitleOnExactMatch = true,
-                RouteValues = new { yearId = yearId }
+                RouteValues = new { yearId }
 
             };
         }
@@ -43,8 +43,8 @@ namespace FileManager.Services.SmartBreadcrumbService
                 Parent = GetReportingYearBreadCrumbNode(yearId),
                 RouteValues = new
                 {
-                    yearId = yearId,
-                    departmentId = departmentId
+                    yearId,
+                    departmentId
                 }
 
             };
@@ -62,9 +62,9 @@ namespace FileManager.Services.SmartBreadcrumbService
                 Parent = GetDepartmentBreadCrumbNode(yearId, departmentId),
                 RouteValues = new
                 {
-                    yearId = yearId,
-                    departmentId = departmentId,
-                    documentTypeId = documentTypeId
+                    yearId,
+                    departmentId,
+                    documentTypeId
                 }
 
             };
