@@ -49,7 +49,7 @@ namespace FileManager.Pages.Managing.UserRoleDepartmentManagement
 
                 // получаем пользователя
                 User user = await _userManager.FindByIdAsync(userid);
-                if (user != null && (await _getAccountDataService.IsAdminOnAnyDepartment() || IsSystemAdmin))
+                if (user != null && (await _getAccountDataService.UserIsAdminOnAnyDepartment() || IsSystemAdmin))
                 {
                     List<Role> allRoles = await db.Role.ToListAsync();
                     allUserDepartmentRoles = await db.UserRoleDepartment
@@ -90,7 +90,7 @@ namespace FileManager.Pages.Managing.UserRoleDepartmentManagement
                 IsSystemAdmin = _getAccountDataService.IsSystemAdmin();
 
                 PickedDepartmentId = departmentid;
-                if (await _getAccountDataService.IsAdminOnAnyDepartment() || IsSystemAdmin)
+                if (await _getAccountDataService.UserIsAdminOnAnyDepartment() || IsSystemAdmin)
                 {
                     // получаем пользователя
                     User user = await _userManager.FindByIdAsync(userid);
@@ -142,7 +142,7 @@ namespace FileManager.Pages.Managing.UserRoleDepartmentManagement
         {
             try
             {
-                if (await _getAccountDataService.IsAdminOnAnyDepartment() || _getAccountDataService.IsSystemAdmin())
+                if (await _getAccountDataService.UserIsAdminOnAnyDepartment() || _getAccountDataService.IsSystemAdmin())
                 {
                     if (ModelState.IsValid)
                     {

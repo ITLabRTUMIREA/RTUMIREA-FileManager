@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FileManager.Models;
 using FileManager.Models.Database.ReportingYearDocumentTitles;
+using FileManager.Services.GetAccountDataService;
 using FileManager.Services.SmartBreadcrumbService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -16,6 +17,7 @@ namespace FileManager.Pages.Directory
         private readonly FileManagerContext db;
         private readonly ILogger<DocumentTypeModel> _logger;
         private readonly ISmartBreadcrumbService _breadcrumbService;
+        private readonly IGetAccountDataService _getAccountDataService;
 
         public List<DocumentTitle> DocumentsTitles;
 
@@ -25,16 +27,22 @@ namespace FileManager.Pages.Directory
 
         public DocumentTypeModel(FileManagerContext context,
             ILogger<DocumentTypeModel> logger,
-            ISmartBreadcrumbService breadcrumbService)
+            ISmartBreadcrumbService breadcrumbService,
+            IGetAccountDataService getAccountDataService)
         {
             db = context;
             _logger = logger;
             _breadcrumbService = breadcrumbService;
+            _getAccountDataService = getAccountDataService;
         }
         public async Task<IActionResult> OnGetAsync(Guid yearId, Guid departmentId, Guid documentTypeId)
         {
             try
             {
+                if (!await _getAccountDataService.UserIsHaveAnyRoleOnDepartment(departmentId))
+                {
+                    return NotFound();
+                }
                 selectedReportingYearId = yearId;
                 selectedDepartmentId = departmentId;
                 selectedDocumentTypeId = documentTypeId;

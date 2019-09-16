@@ -51,17 +51,17 @@
 
                 @foreach (Role role in Model.EditUserDepartmentRolesViewModel.AllRoles)
                 {
-                    @if (Model.EditUserDepartmentRolesViewModel.UserDepartmentRoles.Exists(udr => udr.Role.Name == "Admin")
-                  && role.Name == "Admin")
+                    @if ((!string.IsNullOrEmpty(Model.PickedDepartmentId)
+                       && await _getAccountDataService.UserIsAdminOnDepartment(Guid.Parse(Model.PickedDepartmentId))
+                       || Model.IsSystemAdmin)
+                     && role.Name == "Admin")
                     {
                         <th scope="col">@role.Name</th>
                     }
-                    else if (Model.EditUserDepartmentRolesViewModel.UserDepartmentRoles.Exists(udr => udr.Role.Name == "Admin")
-                        && role.Name != "Admin")
-                    {
-                        <th scope="col">@role.Name</th>
-                    }
-                    else if (Model.IsSystemAdmin)
+                    else if ((!string.IsNullOrEmpty(Model.PickedDepartmentId)
+                        && await _getAccountDataService.UserIsAdminOnDepartment(Guid.Parse(Model.PickedDepartmentId))
+                        || Model.IsSystemAdmin)
+                      && role.Name != "Admin")
                     {
                         <th scope="col">@role.Name</th>
                     }
@@ -78,9 +78,9 @@
                             class="select-department" placeholder="Выберите кафедру">
                         <option disabled selected value="">Выберите кафедру</option>
                         @foreach (Department department in Model.EditUserDepartmentRolesViewModel.AllDepartments)
+                    {
+                        if (await _getAccountDataService.UserIsAdminOnDepartment(department.Id) || Model.IsSystemAdmin)
                         {
-                            if (await _getAccountDataService.IsAdminOnDepartment(department.Id) || Model.IsSystemAdmin)
-                            {
                                 <option value="@department.Id">@department.Name</option>
                             }
                         }
@@ -90,23 +90,20 @@
 
                 @foreach (Role role in Model.EditUserDepartmentRolesViewModel.AllRoles)
                 {
-                    @if (Model.EditUserDepartmentRolesViewModel.UserDepartmentRoles.Exists(udr => udr.Role.Name == "Admin")
-                      && role.Name == "Admin")
+                    @if ((!string.IsNullOrEmpty(Model.PickedDepartmentId)
+                       && await _getAccountDataService.UserIsAdminOnDepartment(Guid.Parse(Model.PickedDepartmentId))
+                       || Model.IsSystemAdmin)
+                     && role.Name == "Admin")
                     {
                         <td>
                             <input type="checkbox" name="roles" value="@role.Id"
                                    @(Model.EditUserDepartmentRolesViewModel.UserDepartmentRoles.Select(urd => urd.Role.Id.ToString().ToLower()).Contains(role.Id.ToString()) ? "checked=\"checked\"" : "") />
                         </td>
                     }
-                    else if (Model.EditUserDepartmentRolesViewModel.UserDepartmentRoles.Exists(udr => udr.Role.Name == "Admin")
+                    else if ((!string.IsNullOrEmpty(Model.PickedDepartmentId)
+                        && await _getAccountDataService.UserIsAdminOnDepartment(Guid.Parse(Model.PickedDepartmentId)) 
+                        || Model.IsSystemAdmin)
                          && role.Name != "Admin")
-                    {
-                        <td>
-                            <input type="checkbox" name="roles" value="@role.Id"
-                                   @(Model.EditUserDepartmentRolesViewModel.UserDepartmentRoles.Select(urd => urd.Role.Id.ToString().ToLower()).Contains(role.Id.ToString()) ? "checked=\"checked\"" : "") />
-                        </td>
-                    }
-                    else if (Model.IsSystemAdmin)
                     {
                         <td>
                             <input type="checkbox" name="roles" value="@role.Id"

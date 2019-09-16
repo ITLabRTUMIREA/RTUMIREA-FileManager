@@ -37,7 +37,7 @@ namespace FileManager.Pages.Managing.UserRoleDepartmentManagement
             {
                 IsSystemAdmin = _getAccountDataService.IsSystemAdmin();
 
-                if (IsSystemAdmin || await _getAccountDataService.IsAdminOnAnyDepartment())
+                if (IsSystemAdmin || await _getAccountDataService.UserIsAdminOnAnyDepartment())
                 {
                     Users = await _userManager.Users.ToListAsync();
 
