@@ -58,12 +58,14 @@ namespace FileManager.Pages.Managing.DocumentTypes.DocumentTitles
             {
                 if (_getAccountDataService.IsSystemAdmin())
                 {
-                    await db.DocumentTitle.AddAsync(new DocumentTitle(name, documentTypeId));
-                    int result = await db.SaveChangesAsync();
-                    if (result > 0)
+                    if (await CreateNewDocumentTitle(name, documentTypeId) > 0)
                     {
-                        return RedirectToPage("Index", routeValues: new { documentTypeId });
+                        if (await CreateNewReportingYearDocumentTitleRecord(name, documentTypeId) > 0)
+                        {
+                            return RedirectToPage("Index", routeValues: new { documentTypeId });
+                        }
                     }
+
 
                     return Page();
                 }
@@ -77,6 +79,21 @@ namespace FileManager.Pages.Managing.DocumentTypes.DocumentTitles
                 _logger.LogError(e, "Error while adding new Document title");
                 return NotFound();
             }
+        }
+
+        private async Task<int> CreateNewDocumentTitle(string name, Guid documentTypeId)
+        {
+            await db.DocumentTitle.AddAsync(new DocumentTitle(name, documentTypeId));
+            return await db.SaveChangesAsync();
+        }
+        private async Task<int> CreateNewReportingYearDocumentTitleRecord(string name, Guid documentTypeId)
+        {
+            Guid documentTitleId = (await db.DocumentTitle.FirstOrDefaultAsync(dt => dt.Name == name && dt.DocumentTypeId == documentTypeId)).Id;
+            Guid reportingYearId = (await db.ReportingYear.FirstOrDefaultAsync(ry => ry.Number == DateTime.Now.Year)).Id;
+
+            await db.ReportingYearDocumentTitle.AddAsync(new ReportingYearDocumentTitle(reportingYearId, documentTitleId));
+
+            return await db.SaveChangesAsync();
         }
     }
 }

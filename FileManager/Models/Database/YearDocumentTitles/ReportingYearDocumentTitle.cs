@@ -9,6 +9,12 @@ namespace FileManager.Models.Database.ReportingYearDocumentTitles
 {
     public class ReportingYearDocumentTitle
     {
+        public ReportingYearDocumentTitle(Guid reportingYearId, Guid documentTitleId)
+        {
+            Id = Guid.NewGuid();
+            ReportingYearId = reportingYearId;
+            DocumentTitleId = documentTitleId;
+        }
         public Guid Id { get; set; }
 
         public Guid ReportingYearId { get; set; }
