@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\lib\selectize\" />
+    <Folder Include="wwwroot\Files\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="wwwroot\lib\open-iconic\.gitignore" />
