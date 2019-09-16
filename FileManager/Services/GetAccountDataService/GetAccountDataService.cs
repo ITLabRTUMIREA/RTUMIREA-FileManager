@@ -1,4 +1,5 @@
 ﻿using FileManager.Models;
+using FileManager.Models.Database.DepartmentsDocuments;
 using FileManager.Models.Database.UserDepartmentRoles;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -33,34 +34,46 @@ namespace FileManager.Services.GetAccountDataService
             return _signInManager.Context.User.IsInRole("SystemAdmin");
         }
 
-        public async Task<bool> IsAdminOnAnyDepartment()
+        public async Task<bool> UserIsAdminOnAnyDepartment()
         {
-            Guid userId = (await _userManager.GetUserAsync(_signInManager.Context.User.Clone())).Id;
-
-            UserDepartmentRole currentUserWithAdminRole = await db.UserRoleDepartment
-                .FirstOrDefaultAsync(urd => urd.UserId.Equals(userId) && urd.Role.Name == "Admin");
-
-            if (currentUserWithAdminRole != null)
+            if (Guid.TryParse(_userManager.GetUserId(_signInManager.Context.User), out Guid userId))
             {
-                return true;
+
+                UserDepartmentRole currentUserWithAdminRole = await db.UserRoleDepartment
+                .FirstOrDefaultAsync(urd => urd.UserId == userId && urd.Role.Name == "Admin");
+
+                return currentUserWithAdminRole != null;
             }
             else
             {
                 return false;
             }
         }
-        public async Task<bool> IsAdminOnDepartment(Guid departmentId)
+        public async Task<bool> UserIsHaveAnyRoleOnDepartment(Guid departmentId)
         {
-            Guid userId = (await _userManager.GetUserAsync(_signInManager.Context.User.Clone())).Id;
-
-            UserDepartmentRole currentUserWithAdminRoleOnDepartment = await db.UserRoleDepartment
-                .FirstOrDefaultAsync(urd => urd.UserId.Equals(userId)
-                    && urd.Role.Name == "Admin"
-                    && urd.DepartmentId.Equals(departmentId));
-
-            if (currentUserWithAdminRoleOnDepartment != null)
+            if (Guid.TryParse(_userManager.GetUserId(_signInManager.Context.User), out Guid userId))
             {
-                return true;
+
+                UserDepartmentRole currentUserWithAnyRole = await db.UserRoleDepartment
+                    .FirstOrDefaultAsync(urd => urd.UserId == userId && urd.DepartmentId == departmentId);
+
+                return currentUserWithAnyRole != null;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public async Task<bool> UserIsAdminOnDepartment(Guid departmentId)
+        {
+            if (Guid.TryParse(_userManager.GetUserId(_signInManager.Context.User), out Guid userId))
+            {
+
+                UserDepartmentRole currentUserWithAdminRoleOnDepartment = await db.UserRoleDepartment
+                    .FirstOrDefaultAsync(urd => urd.UserId.Equals(userId)
+                        && urd.Role.Name == "Admin"
+                        && urd.DepartmentId == departmentId);
+                return currentUserWithAdminRoleOnDepartment != null;
             }
             else
             {
@@ -68,7 +81,18 @@ namespace FileManager.Services.GetAccountDataService
             }
         }
 
+        public IQueryable<Department> SelectDepartmentsWhereUserHaveAnyRole(IQueryable<Department> departments)
+        {
+            if (Guid.TryParse(_userManager.GetUserId(_signInManager.Context.User), out Guid userId))
+            {
+                return departments.Where(d => d.UserDepartmentRoles.Any(urd => urd.UserId == userId));
+            }
+            else
+            {
+                return default;
+            }
 
+        }
         public async Task<User> GetCurrentUser()
         {
             return await _userManager.GetUserAsync(_signInManager.Context.User.Clone());

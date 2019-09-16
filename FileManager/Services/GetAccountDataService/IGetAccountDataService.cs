@@ -1,4 +1,5 @@
-﻿using FileManager.Models.Database.UserDepartmentRoles;
+﻿using FileManager.Models.Database.DepartmentsDocuments;
+using FileManager.Models.Database.UserDepartmentRoles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,15 @@ namespace FileManager.Services.GetAccountDataService
     {
         bool IsSystemAdmin();
 
-        Task<bool> IsAdminOnAnyDepartment();
+        Task<bool> UserIsAdminOnAnyDepartment();
 
-        Task<bool> IsAdminOnDepartment(Guid departmentId);
+        Task<bool> UserIsHaveAnyRoleOnDepartment(Guid departmentId);
+
+        Task<bool> UserIsAdminOnDepartment(Guid departmentId);
 
         Task<User> GetCurrentUser();
+
+        IQueryable<Department> SelectDepartmentsWhereUserHaveAnyRole(IQueryable<Department> departments);
 
 
     }
