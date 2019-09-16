@@ -56,6 +56,10 @@ namespace FileManager.Migrations
 
                     b.Property<Guid>("DepartmentDocumentId");
 
+                    b.Property<string>("FileName");
+
+                    b.Property<string>("Path");
+
                     b.Property<short>("Version");
 
                     b.HasKey("Id");
@@ -107,6 +111,64 @@ namespace FileManager.Migrations
                     b.HasIndex("DocumentStatusId");
 
                     b.ToTable("RoleStatus");
+                });
+
+            modelBuilder.Entity("FileManager.Models.Database.ReportingYearDocumentTitles.DocumentTitle", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("DocumentTypeId");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DocumentTypeId");
+
+                    b.ToTable("DocumentTitle");
+                });
+
+            modelBuilder.Entity("FileManager.Models.Database.ReportingYearDocumentTitles.DocumentType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Type");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DocumentType");
+                });
+
+            modelBuilder.Entity("FileManager.Models.Database.ReportingYearDocumentTitles.ReportingYear", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Number");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ReportingYear");
+                });
+
+            modelBuilder.Entity("FileManager.Models.Database.ReportingYearDocumentTitles.ReportingYearDocumentTitle", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("DocumentTitleId");
+
+                    b.Property<Guid>("ReportingYearId");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("DocumentTitleId", "ReportingYearId");
+
+                    b.HasIndex("ReportingYearId");
+
+                    b.ToTable("ReportingYearDocumentTitle");
                 });
 
             modelBuilder.Entity("FileManager.Models.Database.UserDepartmentRoles.Role", b =>
@@ -234,64 +296,6 @@ namespace FileManager.Migrations
                     b.ToTable("AspNetUserSystemRoles");
                 });
 
-            modelBuilder.Entity("FileManager.Models.Database.ReportingYearDocumentTitles.DocumentTitle", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("DocumentTypeId");
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DocumentTypeId");
-
-                    b.ToTable("DocumentTitle");
-                });
-
-            modelBuilder.Entity("FileManager.Models.Database.ReportingYearDocumentTitles.DocumentType", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Type");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DocumentType");
-                });
-
-            modelBuilder.Entity("FileManager.Models.Database.ReportingYearDocumentTitles.ReportingYear", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("Number");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ReportingYear");
-                });
-
-            modelBuilder.Entity("FileManager.Models.Database.ReportingYearDocumentTitles.ReportingYearDocumentTitle", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("DocumentTitleId");
-
-                    b.Property<Guid>("ReportingYearId");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("DocumentTitleId", "ReportingYearId");
-
-                    b.HasIndex("ReportingYearId");
-
-                    b.ToTable("ReportingYearDocumentTitle");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
@@ -409,6 +413,27 @@ namespace FileManager.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("FileManager.Models.Database.ReportingYearDocumentTitles.DocumentTitle", b =>
+                {
+                    b.HasOne("FileManager.Models.Database.ReportingYearDocumentTitles.DocumentType", "DocumentType")
+                        .WithMany("DocumentTitles")
+                        .HasForeignKey("DocumentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("FileManager.Models.Database.ReportingYearDocumentTitles.ReportingYearDocumentTitle", b =>
+                {
+                    b.HasOne("FileManager.Models.Database.ReportingYearDocumentTitles.DocumentTitle", "DocumentTitle")
+                        .WithMany("ReportingYearDocumentTitles")
+                        .HasForeignKey("DocumentTitleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("FileManager.Models.Database.ReportingYearDocumentTitles.ReportingYear", "ReportingYear")
+                        .WithMany("ReportingYearDocumentTitles")
+                        .HasForeignKey("ReportingYearId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("FileManager.Models.Database.UserDepartmentRoles.UserDepartmentRole", b =>
                 {
                     b.HasOne("FileManager.Models.Database.DepartmentsDocuments.Department", "Department")
@@ -437,27 +462,6 @@ namespace FileManager.Migrations
                     b.HasOne("FileManager.Models.Database.UserDepartmentRoles.User", "User")
                         .WithMany("UserSystemRoles")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("FileManager.Models.Database.ReportingYearDocumentTitles.DocumentTitle", b =>
-                {
-                    b.HasOne("FileManager.Models.Database.ReportingYearDocumentTitles.DocumentType", "DocumentType")
-                        .WithMany("DocumentTitles")
-                        .HasForeignKey("DocumentTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("FileManager.Models.Database.ReportingYearDocumentTitles.ReportingYearDocumentTitle", b =>
-                {
-                    b.HasOne("FileManager.Models.Database.ReportingYearDocumentTitles.DocumentTitle", "DocumentTitle")
-                        .WithMany("ReportingYearDocumentTitles")
-                        .HasForeignKey("DocumentTitleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("FileManager.Models.Database.ReportingYearDocumentTitles.ReportingYear", "ReportingYear")
-                        .WithMany("ReportingYearDocumentTitles")
-                        .HasForeignKey("ReportingYearId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

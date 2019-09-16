@@ -9,6 +9,12 @@ namespace FileManager.Models.Database.DepartmentsDocuments
 {
     public class DepartmentsDocument
     {
+        public DepartmentsDocument(Guid departmentId, Guid reportingYearDocumentTitleId)
+        {
+            Id = Guid.NewGuid();
+            DepartmentId = departmentId;
+            ReportingYearDocumentTitleId = reportingYearDocumentTitleId;
+        }
         public Guid Id { get; set; }
 
         public Guid ReportingYearDocumentTitleId { get; set; }
