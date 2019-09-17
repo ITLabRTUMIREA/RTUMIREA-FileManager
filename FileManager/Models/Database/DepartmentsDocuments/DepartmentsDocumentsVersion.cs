@@ -7,7 +7,8 @@ namespace FileManager.Models.Database.DepartmentsDocuments
 {
     public class DepartmentsDocumentsVersion
     {
-        public DepartmentsDocumentsVersion(Guid departmentsDocumentId, string fileName, string path,int lastVersion = 0)
+        public DepartmentsDocumentsVersion() { }
+        public DepartmentsDocumentsVersion(Guid departmentsDocumentId, string fileName, string path, int lastVersion = 0)
         {
             Id = Guid.NewGuid();
             FileName = fileName;

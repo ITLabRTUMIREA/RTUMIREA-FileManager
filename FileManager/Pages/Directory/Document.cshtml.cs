@@ -105,11 +105,20 @@ namespace FileManager.Pages.Directory
 
                         DepartmentsDocument departmentsDocument = await GetDepartmentsDocument(departmentId, reportingYearDocumentTitleId);
 
-                        await SaveDocumentPath(departmentsDocument.Id, uploadedFile.FileName, path);
+                        if (await SaveDocumentPath(departmentsDocument.Id, uploadedFile.FileName, path) > 0)
+                        {
+                            return RedirectToPage("Document", routeValues: new
+                            {
+                                yearId,
+                                departmentId,
+                                documentTypeId,
+                                documentTitleId
+                            });
+                        }
 
                     }
                 }
-                return Page();
+                return NotFound();
             }
             catch (Exception ex)
             {
@@ -139,7 +148,7 @@ namespace FileManager.Pages.Directory
             return departmentsDocument;
         }
 
-        public async Task SaveDocumentPath(Guid departmentsDocumentId, string FileName, string path)
+        public async Task<int> SaveDocumentPath(Guid departmentsDocumentId, string FileName, string path)
         {
             DepartmentsDocumentsVersion departmentsDocumentsVersion;
             if (await db.DepartmentsDocumentsVersion
@@ -157,7 +166,7 @@ namespace FileManager.Pages.Directory
             }
             await db.DepartmentsDocumentsVersion.AddAsync(departmentsDocumentsVersion);
 
-            await db.SaveChangesAsync();
+            return await db.SaveChangesAsync();
         }
     }
 }
