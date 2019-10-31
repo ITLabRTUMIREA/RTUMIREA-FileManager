@@ -24,6 +24,7 @@ using FileManager.Models.Database.UserSystemRoles;
 using FileManager.Services.GetAccountDataService;
 using SmartBreadcrumbs.Extensions;
 using FileManager.Services.SmartBreadcrumbService;
+using FileManager.Services.FileManagerService;
 
 namespace FileManager
 {
@@ -48,6 +49,7 @@ namespace FileManager
             services.AddTransient<IDbInitializeService, DbInitializeService>();
             services.AddTransient<IGetAccountDataService, GetAccountDataService>();
             services.AddTransient<ISmartBreadcrumbService, SmartBreadcrumbService>();
+            services.AddTransient<IFileManagerService, FileManagerService>();
 
             services.AddBreadcrumbs(GetType().Assembly, options =>
             {

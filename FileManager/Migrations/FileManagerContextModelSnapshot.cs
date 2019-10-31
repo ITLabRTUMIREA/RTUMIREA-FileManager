@@ -60,7 +60,7 @@ namespace FileManager.Migrations
 
                     b.Property<string>("Path");
 
-                    b.Property<int>("Version");
+                    b.Property<DateTime>("UploadedDateTime");
 
                     b.HasKey("Id");
 

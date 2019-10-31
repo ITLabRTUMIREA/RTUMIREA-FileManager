@@ -8,12 +8,11 @@ namespace FileManager.Models.Database.DepartmentsDocuments
     public class DepartmentsDocumentsVersion
     {
         public DepartmentsDocumentsVersion() { }
-        public DepartmentsDocumentsVersion(Guid departmentsDocumentId, string fileName, string path, int lastVersion = 0)
+        public DepartmentsDocumentsVersion(Guid departmentsDocumentId, string fileName, string path, DateTime uploadedDateTime)
         {
-            Id = Guid.NewGuid();
             FileName = fileName;
             Path = path;
-            Version = ++lastVersion;
+            UploadedDateTime = uploadedDateTime;
             DepartmentDocumentId = departmentsDocumentId;
         }
         public Guid Id { get; set; }
@@ -21,7 +20,7 @@ namespace FileManager.Models.Database.DepartmentsDocuments
         public string FileName { get; set; }
         public string Path { get; set; }
 
-        public int Version { get; set; }
+        public DateTime UploadedDateTime { get; set; }
 
         public Guid DepartmentDocumentId { get; set; }
         public DepartmentsDocument DepartmentsDocument { get; set; }

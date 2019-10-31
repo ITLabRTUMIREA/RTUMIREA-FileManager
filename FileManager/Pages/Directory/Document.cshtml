@@ -1,19 +1,67 @@
 ﻿@page
 @model FileManager.Pages.Directory.DocumentModel
+@using FileManager.Models.Database.DepartmentsDocuments;
 @{
     ViewData["Title"] = "Document";
+}
+@section Scripts{
+    <script src="~/js/InputFileLabelService/InputFileLabelService.js"></script>
 }
 
 <h2>Document @Model.DocumentsTitle.Name</h2>
 
-<form class="form-group" method="post" asp-page-handler="SaveFile"
+<form class="form-group mb-3" method="post" asp-page-handler="SaveFile"
       asp-route-departmentId="@Model.selectedDepartmentId"
       asp-route-yearId="@Model.selectedReportingYearId"
       asp-route-documentTypeId="@Model.selectedDocumentTypeId"
       asp-route-documentTitleId="@Model.selectedDocumentTitleId"
       enctype="multipart/form-data">
-    <label for="fileInput">Загрузить документ</label>
-    <input id="fileInput" name="uploadedFile" class="custom-file-input" type="file" />
-    <input type="submit" class="btn btn-success" value="Загрузить" />
+    <div class="input-group mb-3">
+        <div class="custom-file">
+            <input type="file"
+                   oninput="setLabelValueForInputFile(this,`selectedFile`)"
+                   accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                   required name="uploadedFile" class="custom-file-input" id="inputGroupFile">
+            <label class="custom-file-label" id="selectedFile" for="inputGroupFile">Выберите файл</label>
+        </div>
+    </div>
+
+    <input type="submit" class="btn btn-success form-control" value="Загрузить" />
 </form>
+
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Дата и время загрузки файла
+                </th>
+                <th>
+                    Имя файла
+                </th>
+                <th>
+                    Скачать файл
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DepartmentsDocumentsVersion document in Model.UploadedDocuments)
+            {
+                <tr>
+                    <td>
+                        @document.UploadedDateTime
+                    </td>
+                    <td>
+                        @document.FileName
+                    </td>
+                    <td>
+                        <a class="btn btn-info" asp-page-handler="DownloadDocument" asp-route-departmentsDocumentsVersionId="@document.Id">
+                            Скачать
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
