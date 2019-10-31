@@ -5,7 +5,7 @@
     ViewData["Title"] = "Document";
 }
 @section Scripts{
-    <script src="~/js/InputFileLabelService/InputFileLabelService.js"></script>
+    <script defer src="~/js/InputFileLabelService/InputFileLabelService.js"></script>
 }
 
 <h2>Document @Model.DocumentsTitle.Name</h2>
@@ -19,7 +19,7 @@
     <div class="input-group mb-3">
         <div class="custom-file">
             <input type="file"
-                   oninput="setLabelValueForInputFile(this,`selectedFile`)"
+                   oninput="setLabelValueForInputFile(this,`inputGroupFile`,`selectedFile`)"
                    accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                    required name="uploadedFile" class="custom-file-input" id="inputGroupFile">
             <label class="custom-file-label" id="selectedFile" for="inputGroupFile">Выберите файл</label>
