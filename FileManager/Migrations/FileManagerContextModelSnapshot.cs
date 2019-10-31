@@ -118,6 +118,8 @@ namespace FileManager.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Description");
+
                     b.Property<Guid>("DocumentTypeId");
 
                     b.Property<string>("Name");

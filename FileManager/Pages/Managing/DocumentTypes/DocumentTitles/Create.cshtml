@@ -9,8 +9,12 @@
 <form method="post">
     <div class="form-group">
         <input hidden name="documentTypeId" value="@Model.selectedDocumentType.Id" />
+
         <label for="name">Новое наименование</label>
-        <input required name="name" class="form-control" />
+        <input required name="name" class="form-control" />     
+        
+        <label for="description">Описание документа</label>
+        <textarea required name="description" class="form-control" ></textarea>
     </div>
     <button type="submit" class="btn btn-primary">Добавить</button>
 </form>

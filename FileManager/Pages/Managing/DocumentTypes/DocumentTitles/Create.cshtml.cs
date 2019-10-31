@@ -52,13 +52,13 @@ namespace FileManager.Pages.Managing.DocumentTypes.DocumentTitles
             }
         }
 
-        public async Task<IActionResult> OnPostAsync(string name, Guid documentTypeId)
+        public async Task<IActionResult> OnPostAsync(string name, Guid documentTypeId, string description)
         {
             try
             {
                 if (_getAccountDataService.IsSystemAdmin())
                 {
-                    if (await CreateNewDocumentTitle(name, documentTypeId) > 0)
+                    if (await CreateNewDocumentTitle(name, documentTypeId, description) > 0)
                     {
                         if (await CreateNewReportingYearDocumentTitleRecord(name, documentTypeId) > 0)
                         {
@@ -81,11 +81,13 @@ namespace FileManager.Pages.Managing.DocumentTypes.DocumentTitles
             }
         }
 
-        private async Task<int> CreateNewDocumentTitle(string name, Guid documentTypeId)
+        private async Task<int> CreateNewDocumentTitle(string name, Guid documentTypeId, string description)
         {
-            await db.DocumentTitle.AddAsync(new DocumentTitle(name, documentTypeId));
+            await db.DocumentTitle.AddAsync(new DocumentTitle(name, documentTypeId, description));
             return await db.SaveChangesAsync();
         }
+
+
         private async Task<int> CreateNewReportingYearDocumentTitleRecord(string name, Guid documentTypeId)
         {
             Guid documentTitleId = (await db.DocumentTitle.FirstOrDefaultAsync(dt => dt.Name == name && dt.DocumentTypeId == documentTypeId)).Id;
