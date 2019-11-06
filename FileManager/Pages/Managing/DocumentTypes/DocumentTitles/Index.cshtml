@@ -12,8 +12,17 @@
         <tr>
             <td>@title.Name</td>
             <td>
+                <a class="btn btn-sm btn-warning" 
+                   asp-route-titleId="@title.Id"
+                   asp-page="EditDocumentTitle">
+                    Изменить
+
+                </a>
+            </td>
+            <td>
                 <form asp-route-titleId="@title.Id"
                       asp-route-documentTypeId="@Model.selectedDocumentType.Id"
+                      asp-page-handler="Delete"
                       method="post">
                     <button type="submit" class="btn btn-sm btn-danger">
                         Удалить

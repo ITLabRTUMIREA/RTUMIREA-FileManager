@@ -56,7 +56,7 @@ namespace FileManager.Pages.Managing.DocumentTypes.DocumentTitles
                 return NotFound();
             }
         }
-        public async Task<IActionResult> OnPostAsync(Guid titleId, Guid documentTypeId)
+        public async Task<IActionResult> OnPostDeleteAsync(Guid titleId, Guid documentTypeId)
         {
             try
             {
