@@ -36,7 +36,6 @@ namespace FileManager.Pages.Managing.DocumentTypes.DocumentTitles
                 {
 
                     selectedDocumentTitle = await db.DocumentTitle
-                       .Include(dt => dt.DocumentType)
                        .FirstOrDefaultAsync(dt => dt.Id == titleId);
                     return Page();
                 }
@@ -51,20 +50,37 @@ namespace FileManager.Pages.Managing.DocumentTypes.DocumentTitles
                 return NotFound();
             }
         }
-        public async Task<IActionResult> OnPostAsync(Guid titleId)
+        public async Task<IActionResult> OnPostAsync(Guid titleId, string titleName, string titleDescription)
         {
-            // TODO Fix updating document title and his description
-            // TODO Do nice view of document title and his description 
             try
             {
                 if (_getAccountDataService.IsSystemAdmin())
                 {
+                    selectedDocumentTitle = await db.DocumentTitle
+                       .Include(dt => dt.DocumentType)
+                       .FirstOrDefaultAsync(dt => dt.Id == titleId);
+
                     if (selectedDocumentTitle != null)
                     {
-                        db.DocumentTitle.Update(selectedDocumentTitle);
 
-                        if (await db.SaveChangesAsync() > 0)
-                            return RedirectToPage("Index", new { selectedDocumentTitle.DocumentType.Id });
+                        if (selectedDocumentTitle.Description != titleDescription || selectedDocumentTitle.Name != titleName)
+                        {
+                            if (selectedDocumentTitle.Name != titleName)
+                                selectedDocumentTitle.Name = titleName;
+
+                            if (selectedDocumentTitle.Description != titleDescription)
+                                selectedDocumentTitle.Description = titleDescription;
+
+                            if (await TryUpdateModelAsync<DocumentTitle>(selectedDocumentTitle))
+                            {
+                                if (await db.SaveChangesAsync() > 0)
+                                    return RedirectToPage("Index", new { documentTypeId = selectedDocumentTitle.DocumentType.Id });
+                            }
+                        }
+                        else
+                        {
+                            return RedirectToPage("Index", new { documentTypeId = selectedDocumentTitle.DocumentType.Id });
+                        }
 
                         _logger.LogError("Error while saving changed on page of Editing document title.\nFailed to save changes");
                         return NotFound();
