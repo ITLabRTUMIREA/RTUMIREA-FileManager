@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace FileManager.Pages.Managing.ReportingYears
 {
@@ -19,6 +20,10 @@ namespace FileManager.Pages.Managing.ReportingYears
         private readonly FileManagerContext db;
         private readonly ILogger<CreateModel> _logger;
         private readonly IGetAccountDataService _getAccountDataService;
+        public List<DocumentType> documentTypes;
+
+        // Document titles, which will be used in new reportingYear
+        public List<string> addingDocumentTitles = new List<string>();
 
         public CreateModel(FileManagerContext context,
             ILogger<CreateModel> logger,
@@ -28,12 +33,15 @@ namespace FileManager.Pages.Managing.ReportingYears
             _logger = logger;
             _getAccountDataService = getAccountDataService;
         }
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
             try
             {
                 if (_getAccountDataService.IsSystemAdmin())
                 {
+                    documentTypes = await db.DocumentType
+                        .Include(dt => dt.DocumentTitles)
+                        .ToListAsync();
                     return Page();
                 }
                 else
@@ -48,7 +56,9 @@ namespace FileManager.Pages.Managing.ReportingYears
             }
         }
 
-        public async Task<IActionResult> OnPostAsync(int number)
+
+
+        public async Task<IActionResult> OnPostAsync(int number, List<string> title, List<string> type, string addAll)
         {
             try
             {
