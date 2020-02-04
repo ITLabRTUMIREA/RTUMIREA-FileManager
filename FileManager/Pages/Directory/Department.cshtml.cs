@@ -8,6 +8,7 @@ using FileManager.Services.GetAccountDataService;
 using FileManager.Services.SmartBreadcrumbService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SmartBreadcrumbs.Attributes;
 using SmartBreadcrumbs.Nodes;
@@ -47,21 +48,30 @@ namespace FileManager.Pages.Directory
                 selectedReportingYearId = yearId;
                 selectedDepartmentId = departmentId;
 
-                DocumentTypes = db.DocumentType.ToList();
+                // Get all documentTitles in current year
+                var allTitlesInReportingYear = await db.ReportingYearDocumentTitle
+                    .Where(rydt => rydt.ReportingYearId == yearId)
+                    .ToListAsync();
 
-                ViewData["BreadcrumbNode"] = await _breadcrumbService.GetDepartmentBreadCrumbNodeAsync(
-                    yearId,
-                    departmentId);
+                // Show document types, which have any document Title connected to current year 
+                DocumentTypes = await db.DocumentType
+                    .Include(dt => dt.DocumentTitles)
+                    .Where(dtype => dtype.DocumentTitles.Exists(dt => allTitlesInReportingYear.Exists(tit=>tit.DocumentTitleId == dt.Id)))
+                    .ToListAsync();
 
-                return Page();
-            }
+            ViewData["BreadcrumbNode"] = await _breadcrumbService.GetDepartmentBreadCrumbNodeAsync(
+                yearId,
+                departmentId);
+
+            return Page();
+        }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error while getting department page");
                 return NotFound();
-            }
+    }
 
 
-        }
+}
     }
 }
