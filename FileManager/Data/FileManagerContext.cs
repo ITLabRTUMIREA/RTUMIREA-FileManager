@@ -102,8 +102,7 @@ namespace FileManager.Models
 
             builder.Entity<DocumentStatusHistory>(b =>
             {
-
-                b.HasKey(dsh => new { dsh.DocumentStatusId, dsh.DepartmentsDocumentId });
+                b.HasKey(dsh => dsh.Id);
 
                 b.HasOne(dsh => dsh.DocumentStatus)
                    .WithMany(ds => ds.DocumentStatusHistories)

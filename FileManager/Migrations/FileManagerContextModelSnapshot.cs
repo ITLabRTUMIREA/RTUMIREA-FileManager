@@ -15,7 +15,7 @@ namespace FileManager.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
+                .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -83,17 +83,22 @@ namespace FileManager.Migrations
 
             modelBuilder.Entity("FileManager.Models.Database.DocumentStatus.DocumentStatusHistory", b =>
                 {
-                    b.Property<Guid>("DocumentStatusId");
-
-                    b.Property<Guid>("DepartmentsDocumentId");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("CommentEdits");
 
-                    b.Property<Guid>("Id");
+                    b.Property<Guid>("DepartmentsDocumentId");
 
-                    b.HasKey("DocumentStatusId", "DepartmentsDocumentId");
+                    b.Property<Guid>("DocumentStatusId");
+
+                    b.Property<DateTime>("SettingDateTime");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("DepartmentsDocumentId");
+
+                    b.HasIndex("DocumentStatusId");
 
                     b.ToTable("DocumentStatusHistory");
                 });
