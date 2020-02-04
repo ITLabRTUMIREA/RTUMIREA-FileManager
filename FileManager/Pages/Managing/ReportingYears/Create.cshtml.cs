@@ -57,18 +57,55 @@ namespace FileManager.Pages.Managing.ReportingYears
         }
 
 
+        private async Task AddDocumentTitlesToNewReportingYearAsync(Guid yearId, List<Guid> titles, List<Guid> types, string addAll)
+        {
+            //  If user selected all, then get all documentTitles and make connection between each documentTitle and new reportingYear
+            if (addAll != null && addAll == "on")
+            {
+                List<ReportingYearDocumentTitle> reportingYearDocumentTitles = new List<ReportingYearDocumentTitle>();
+                (await db.DocumentTitle.ToListAsync())
+                    .ForEach(ac => reportingYearDocumentTitles.Add(new ReportingYearDocumentTitle(yearId, ac.Id)));
+                await db.ReportingYearDocumentTitle.AddRangeAsync(reportingYearDocumentTitles);
+            }
+            else
+            {
 
-        public async Task<IActionResult> OnPostAsync(int number, List<string> title, List<string> type, string addAll)
+                List<ReportingYearDocumentTitle> reportingYearDocumentTitles = new List<ReportingYearDocumentTitle>();
+                (await db.DocumentTitle.ToListAsync())
+                    .FindAll(dt =>
+                    {
+                        if (types.Contains(dt.DocumentTypeId))
+                        {
+                            return true;
+                        }
+                        if (titles.Contains(dt.Id))
+                        {
+                            return true;
+                        }
+                        return false;
+                    })
+                    .ForEach(ac => reportingYearDocumentTitles.Add(new ReportingYearDocumentTitle(yearId, ac.Id)));
+                await db.ReportingYearDocumentTitle.AddRangeAsync(reportingYearDocumentTitles);
+            }
+        }
+        public async Task<IActionResult> OnPostAsync(int number, List<Guid> titles, List<Guid> types, string addAll)
         {
             try
             {
                 if (_getAccountDataService.IsSystemAdmin())
                 {
-                    await db.ReportingYear.AddAsync(new ReportingYear(number));
+                    var newReportingYear = new ReportingYear(number);
+                    await db.ReportingYear.AddAsync(newReportingYear);
                     int result = await db.SaveChangesAsync();
                     if (result > 0)
                     {
-                        return RedirectToPage("Index");
+                        await AddDocumentTitlesToNewReportingYearAsync(newReportingYear.Id, titles, types, addAll);
+
+                        result = await db.SaveChangesAsync();
+                        if (result > 0)
+                        {
+                            return RedirectToPage("Index");
+                        }
                     }
 
                     return Page();
