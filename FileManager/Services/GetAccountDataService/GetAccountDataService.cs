@@ -64,6 +64,21 @@ namespace FileManager.Services.GetAccountDataService
                 return false;
             }
         }
+        public async Task<bool> UserIsCheckerOnDepartment(Guid departmentId)
+        {
+            if (Guid.TryParse(_userManager.GetUserId(_signInManager.Context.User), out Guid userId))
+            {
+
+                UserDepartmentRole currentUserWithCheckerRole = await db.UserRoleDepartment
+                    .FirstOrDefaultAsync(urd => urd.UserId == userId && urd.DepartmentId == departmentId && urd.Role.Name == "Checker");
+
+                return currentUserWithCheckerRole != null;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public async Task<bool> UserIsAdminOnDepartment(Guid departmentId)
         {
             if (Guid.TryParse(_userManager.GetUserId(_signInManager.Context.User), out Guid userId))

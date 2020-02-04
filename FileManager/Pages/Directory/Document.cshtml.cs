@@ -5,7 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using FileManager.Models;
 using FileManager.Models.Database.DepartmentsDocuments;
+using FileManager.Models.Database.DocumentStatus;
 using FileManager.Models.Database.ReportingYearDocumentTitles;
+using FileManager.Services.DocumentManagerService;
 using FileManager.Services.FileManagerService;
 using FileManager.Services.GetAccountDataService;
 using FileManager.Services.SmartBreadcrumbService;
@@ -25,9 +27,16 @@ namespace FileManager.Pages.Directory
         private readonly ISmartBreadcrumbService _breadcrumbService;
         private readonly IGetAccountDataService _getAccountDataService;
         private readonly IFileManagerService _fileManagerService;
+        private readonly IDocumentManagerService _documentManagerService;
 
         public DocumentTitle DocumentsTitle;
         public List<DepartmentsDocumentsVersion> UploadedDocuments;
+        public List<DocumentStatusHistory> DocumentStatusHistories;
+        public bool IsUserTheChecker = false;
+        public string actualDocumentStatus;
+        public List<DocumentStatus> AllAvailabledocumentStatuses;
+        public DepartmentsDocument departmentsDocument;
+        public Guid NewDocumentStatus;
 
         public Guid selectedReportingYearId;
         public Guid selectedDepartmentId;
@@ -39,13 +48,16 @@ namespace FileManager.Pages.Directory
             ILogger<DocumentModel> logger,
             ISmartBreadcrumbService breadcrumbService,
             IGetAccountDataService getAccountDataService,
-            IFileManagerService fileManagerService)
+            IFileManagerService fileManagerService,
+            IDocumentManagerService documentManagerService)
         {
             db = context;
             _logger = logger;
             _breadcrumbService = breadcrumbService;
             _getAccountDataService = getAccountDataService;
             _fileManagerService = fileManagerService;
+            _documentManagerService = documentManagerService;
+
         }
         public async Task<IActionResult> OnGetAsync(Guid yearId, Guid departmentId, Guid documentTypeId, Guid documentTitleId)
         {
@@ -62,10 +74,19 @@ namespace FileManager.Pages.Directory
 
                 DocumentsTitle = await db.DocumentTitle.FirstOrDefaultAsync(dt => dt.Id.Equals(documentTitleId));
 
-                DepartmentsDocument departmentsDocument = await _fileManagerService
-                    .GetDepartmentsDocument(departmentId,
-                        await _fileManagerService.GetCurrentReportingYearDocumentTitleId(yearId, documentTitleId));
+                IsUserTheChecker = await _getAccountDataService.UserIsCheckerOnDepartment(departmentId);
 
+                AllAvailabledocumentStatuses = await db.DocumentStatus.ToListAsync();
+
+                departmentsDocument = await _documentManagerService
+                     .GetDepartmentsDocument(departmentId,
+                         await _documentManagerService.GetCurrentReportingYearDocumentTitleId(yearId, documentTitleId));
+
+                DocumentStatusHistories = await db.DocumentStatusHistory
+                    .Include(dsh => dsh.DocumentStatus)
+                    .Where(dd => dd.DepartmentsDocumentId == departmentsDocument.Id)
+                    .OrderBy(dd => dd.SettingDateTime)
+                    .ToListAsync();
 
                 UploadedDocuments = await db.DepartmentsDocumentsVersion
                     .Where(ddv => ddv.DepartmentDocumentId == departmentsDocument.Id)
@@ -103,6 +124,40 @@ namespace FileManager.Pages.Directory
                             yearId,
                             departmentId,
                             documentTitleId) > 0)
+                    {
+                        return RedirectToPage("Document", routeValues: new
+                        {
+                            yearId,
+                            departmentId,
+                            documentTypeId,
+                            documentTitleId
+                        });
+                    }
+
+                }
+                return NotFound();
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while saving document");
+                return NotFound();
+            }
+        }
+        public async Task<IActionResult> OnPostSetDocumentStatusAsync(Guid newStatusId, string comment, Guid departmentDocumentId,
+            Guid yearId, Guid departmentId, Guid documentTypeId, Guid documentTitleId)
+        {
+            try
+            {
+                if (newStatusId != null)
+                {
+                    var newStatus = new DocumentStatusHistory(newStatusId, comment, departmentDocumentId, DateTime.Now);
+                    var UpdatedDepartamentDocument = (await db.DepartmentsDocument.FirstOrDefaultAsync(dd => dd.Id == departmentDocumentId));
+                    UpdatedDepartamentDocument.DocumentStatusHistories.Add(newStatus);
+
+                    db.DepartmentsDocument.Update(UpdatedDepartamentDocument);
+
+                    if (await db.SaveChangesAsync() > 0)
                     {
                         return RedirectToPage("Document", routeValues: new
                         {

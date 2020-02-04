@@ -7,6 +7,11 @@ namespace FileManager.Models.Database.DocumentStatus
 {
     public class DocumentStatus
     {
+        public DocumentStatus(string Status)
+        {
+            this.Id = Guid.NewGuid();
+            this.Status = Status;
+        }
         public Guid Id { get; set; }
         public string Status { get; set; }
 

@@ -1,6 +1,7 @@
 ﻿@page
 @model FileManager.Pages.Directory.DocumentModel
 @using FileManager.Models.Database.DepartmentsDocuments;
+@using FileManager.Models.Database.DocumentStatus;
 @{
     ViewData["Title"] = "Document";
 }
@@ -9,7 +10,69 @@
 }
 
 <h2>Document @Model.DocumentsTitle.Name</h2>
+<div>
+    @if (Model.DocumentStatusHistories.LastOrDefault() != null)
+    {
+        <p>
+            Статус @Model.DocumentStatusHistories.LastOrDefault().DocumentStatus.Status Дата статуса: @Model.DocumentStatusHistories.LastOrDefault().SettingDateTime
+        </p>
+        @if (@Model.DocumentStatusHistories.LastOrDefault().CommentEdits != null)
+        {
+            <p>
+                Комментарий проверяющего: @Model.DocumentStatusHistories.LastOrDefault().CommentEdits
+            </p>
+        }
+        else
+        {
+            <p>
+                Комментарий проверяющего: проверяющий не оставил комментарий
+            </p>
+        }
+    }
+    else
+    {
+        <p>
+            Cтатус еще не установлен
+        </p>
+    }
+</div>
+<div>
+    <button class="btn btn-light" type="button" data-toggle="collapse" data-target="#allStatuses" aria-expanded="false" aria-controls="allStatuses">
+        Показать все статусы
+    </button>
+    <div class="collapse" id="allStatuses">
+        <ul class="list-group">
+            @foreach (DocumentStatusHistory status in Model.DocumentStatusHistories)
+            {
+                <li class="list-group-item">Статус: @status.DocumentStatus.Status , Дата Статуса: @status.SettingDateTime</li>
+            }
+        </ul>
+    </div>
+</div>
+@if (Model.IsUserTheChecker)
+{
+    <div>
+        <form method="post" asp-page-handler="SetDocumentStatus"
+              asp-route-departmentId="@Model.selectedDepartmentId"
+              asp-route-departmentDocumentId="@Model.departmentsDocument.Id"
+              asp-route-yearId="@Model.selectedReportingYearId"
+              asp-route-documentTypeId="@Model.selectedDocumentTypeId"
+              asp-route-documentTitleId="@Model.selectedDocumentTitleId">
+            <p>Установление нового статуса</p>
+            <select name="newStatusId" asp-for="@Model.NewDocumentStatus">
+                <option disabled>Выберите статус</option>
+                @foreach (DocumentStatus status in Model.AllAvailabledocumentStatuses)
+                {
+                    <option value="@status.Id">@status.Status</option>
+                }
+            </select>
+            <textarea name="comment"></textarea>
+            <button class="btn btn-light">Установить статус</button>
+        </form>
 
+    </div>
+
+}
 <div class="form-group">
     <label for="description">Описание документа</label>
     <textarea class="form-control" name="description" id="description" rows="10" cols="150">@Model.DocumentsTitle.Description</textarea>

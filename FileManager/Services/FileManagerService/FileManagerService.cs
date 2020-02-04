@@ -1,5 +1,6 @@
 ﻿using FileManager.Models;
 using FileManager.Models.Database.DepartmentsDocuments;
+using FileManager.Services.DocumentManagerService;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,15 +19,18 @@ namespace FileManager.Services.FileManagerService
         private readonly FileManagerContext db;
         private readonly ILogger<FileManagerService> _logger;
         private readonly IHostingEnvironment _appEnvironment;
+        private readonly IDocumentManagerService _documentManagerService;
 
         public FileManagerService(
             FileManagerContext context,
             ILogger<FileManagerService> logger,
-            IHostingEnvironment appEnvironment)
+            IHostingEnvironment appEnvironment,
+            IDocumentManagerService documentManagerService)
         {
             db = context;
             _logger = logger;
             _appEnvironment = appEnvironment;
+            _documentManagerService = documentManagerService;
         }
         public async Task<int> UploadFileAsync(IFormFile uploadedFile,
             Guid yearId,
@@ -44,12 +48,12 @@ namespace FileManager.Services.FileManagerService
                     await uploadedFile.OpenReadStream().CopyToAsync(fileStream);
                 }
 
-                Guid reportingYearDocumentTitleId = await GetCurrentReportingYearDocumentTitleId(yearId, documentTitleId);
+                Guid reportingYearDocumentTitleId = await _documentManagerService.GetCurrentReportingYearDocumentTitleId(yearId, documentTitleId);
 
                 if (reportingYearDocumentTitleId != null)
                 {
 
-                    DepartmentsDocument departmentsDocument = await GetDepartmentsDocument(departmentId, reportingYearDocumentTitleId);
+                    DepartmentsDocument departmentsDocument = await _documentManagerService.GetDepartmentsDocument(departmentId, reportingYearDocumentTitleId);
 
                     return await SaveDocumentPathAsync(departmentsDocument.Id, uploadedFile.FileName, path);
                 }
@@ -57,34 +61,7 @@ namespace FileManager.Services.FileManagerService
             return -1;
         }
 
-        public async Task<Guid> GetCurrentReportingYearDocumentTitleId(Guid yearId, Guid documentTitleId)
-        {
-            return (await db.ReportingYearDocumentTitle
-                    .FirstOrDefaultAsync(rydt => rydt.ReportingYearId == yearId
-                        && rydt.DocumentTitleId == documentTitleId)
-                    ).Id;
-        }
 
-        public async Task<DepartmentsDocument> GetDepartmentsDocument(Guid departmentId, Guid reportingYearDocumentTitleId)
-        {
-            DepartmentsDocument departmentsDocument;
-
-            if (await db.DepartmentsDocument.FirstOrDefaultAsync(dd => dd.DepartmentId == departmentId
-                    && dd.ReportingYearDocumentTitleId == reportingYearDocumentTitleId) != null)
-            {
-                departmentsDocument = await db.DepartmentsDocument.FirstOrDefaultAsync(dd => dd.DepartmentId == departmentId
-                    && dd.ReportingYearDocumentTitleId == reportingYearDocumentTitleId);
-            }
-            else
-            {
-                departmentsDocument = new DepartmentsDocument(departmentId, reportingYearDocumentTitleId);
-
-                await db.DepartmentsDocument.AddAsync(departmentsDocument);
-
-                await db.SaveChangesAsync();
-            }
-            return departmentsDocument;
-        }
 
         public async Task<int> SaveDocumentPathAsync(Guid departmentsDocumentId, string FileName, string path)
         {

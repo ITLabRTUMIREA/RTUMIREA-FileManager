@@ -20,7 +20,6 @@ namespace FileManager.Services.GetAccountDataService
         Task<User> GetCurrentUser();
 
         IQueryable<Department> SelectDepartmentsWhereUserHaveAnyRole(IQueryable<Department> departments);
-
-
+        Task<bool> UserIsCheckerOnDepartment(Guid departmentId);
     }
 }

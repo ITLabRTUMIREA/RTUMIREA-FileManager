@@ -10,10 +10,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FileManager.Models.Database.DocumentStatus;
 
 namespace FileManager.Services.DbInitializeService
 {
-    public class DbInitializeService: IDbInitializeService
+    public class DbInitializeService : IDbInitializeService
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<SystemRole> _roleManager;
@@ -35,6 +36,8 @@ namespace FileManager.Services.DbInitializeService
             await InitializeSystemAdmin();
 
             await InitializeReportingYearsList();
+
+            await CreateDocumentStatuses();
         }
 
         private async Task InitializeSystemAdmin()
@@ -63,9 +66,30 @@ namespace FileManager.Services.DbInitializeService
 
         private async Task InitializeReportingYearsList()
         {
-            if(db.ReportingYear.FirstOrDefault(y => y.Number == DateTime.Now.Year) == null)
+            if (db.ReportingYear.FirstOrDefault(y => y.Number == DateTime.Now.Year) == null)
             {
                 await db.ReportingYear.AddAsync(new ReportingYear(DateTime.Now.Year));
+
+                await db.SaveChangesAsync();
+            }
+        }
+        private async Task CreateDocumentStatuses()
+        {
+            if (db.DocumentStatus.FirstOrDefault(y => y.Status == "Принято") == null)
+            {
+                await db.DocumentStatus.AddAsync(new DocumentStatus("Принято"));
+
+                await db.SaveChangesAsync();
+            }
+            if (db.DocumentStatus.FirstOrDefault(y => y.Status == "Нуждается в доработке") == null)
+            {
+                await db.DocumentStatus.AddAsync(new DocumentStatus("Нуждается в доработке"));
+
+                await db.SaveChangesAsync();
+            }
+            if (db.DocumentStatus.FirstOrDefault(y => y.Status == "Не проверено") == null)
+            {
+                await db.DocumentStatus.AddAsync(new DocumentStatus("Не проверено"));
 
                 await db.SaveChangesAsync();
             }

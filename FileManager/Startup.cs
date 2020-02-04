@@ -25,6 +25,7 @@ using FileManager.Services.GetAccountDataService;
 using SmartBreadcrumbs.Extensions;
 using FileManager.Services.SmartBreadcrumbService;
 using FileManager.Services.FileManagerService;
+using FileManager.Services.DocumentManagerService;
 
 namespace FileManager
 {
@@ -50,6 +51,7 @@ namespace FileManager
             services.AddTransient<IGetAccountDataService, GetAccountDataService>();
             services.AddTransient<ISmartBreadcrumbService, SmartBreadcrumbService>();
             services.AddTransient<IFileManagerService, FileManagerService>();
+            services.AddTransient<IDocumentManagerService, DocumentManagerService>();
 
             services.AddBreadcrumbs(GetType().Assembly, options =>
             {

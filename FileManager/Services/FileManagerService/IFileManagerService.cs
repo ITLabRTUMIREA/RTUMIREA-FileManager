@@ -14,9 +14,7 @@ namespace FileManager.Services.FileManagerService
             Guid departmentId,
             Guid documentTitleId);
 
-        Task<DepartmentsDocument> GetDepartmentsDocument(Guid departmentId, Guid reportingYearDocumentTitleId);
 
-        Task<Guid> GetCurrentReportingYearDocumentTitleId(Guid yearId, Guid documentTitleId);
 
         Task<int> SaveDocumentPathAsync(Guid departmentsDocumentId, string FileName, string path);
     }

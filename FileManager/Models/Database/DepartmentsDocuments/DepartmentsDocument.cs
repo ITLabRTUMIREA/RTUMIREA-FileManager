@@ -14,6 +14,7 @@ namespace FileManager.Models.Database.DepartmentsDocuments
             Id = Guid.NewGuid();
             DepartmentId = departmentId;
             ReportingYearDocumentTitleId = reportingYearDocumentTitleId;
+            DocumentStatusHistories = new List<DocumentStatusHistory>();
         }
         public Guid Id { get; set; }
 
