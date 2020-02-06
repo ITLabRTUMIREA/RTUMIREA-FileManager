@@ -49,6 +49,13 @@
         </ul>
     </div>
 </div>
+<div>
+    <form method="post" asp-page-handler="GetSummaryOfUploadedFilesAndChecks"
+          asp-route-departmentsDocumentId="@Model.departmentsDocument.Id">
+        <p>Скачать сводку загрузок и проверок</p>
+        <button class="btn btn-primary">Скачать</button>
+    </form>
+</div>
 @if (Model.IsUserTheChecker)
 {
     <div>

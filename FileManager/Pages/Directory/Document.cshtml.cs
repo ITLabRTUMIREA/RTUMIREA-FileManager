@@ -7,10 +7,12 @@ using FileManager.Models;
 using FileManager.Models.Database.DepartmentsDocuments;
 using FileManager.Models.Database.DocumentStatus;
 using FileManager.Models.Database.ReportingYearDocumentTitles;
+using FileManager.Models.GetSummaryOfUploadedFilesAndChecks;
 using FileManager.Services.DocumentManagerService;
 using FileManager.Services.FileManagerService;
 using FileManager.Services.GetAccountDataService;
 using FileManager.Services.SmartBreadcrumbService;
+using GemBox.Document;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -136,6 +138,93 @@ namespace FileManager.Pages.Directory
 
                 }
                 return NotFound();
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while saving document");
+                return NotFound();
+            }
+        }
+        private static byte[] GetBytes(GemBox.Document.DocumentModel document, SaveOptions options)
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                document.Save(stream, options);
+                return stream.ToArray();
+            }
+        }
+        public async Task<IActionResult> OnPostGetSummaryOfUploadedFilesAndChecksAsync(Guid departmentsDocumentId)
+        {
+            try
+            {
+
+                List<SummaryOfUploadedFilesAndChecks> summary = new List<SummaryOfUploadedFilesAndChecks>();
+
+                var DocumentStatusHistories = db.DocumentStatusHistory.Where(dsh => dsh.DepartmentsDocumentId == departmentsDocumentId);
+
+                // Adding all statuses and time of their setting
+                foreach (var documentStatusHistory in DocumentStatusHistories)
+                {
+                    var status = await db.DocumentStatus.FirstOrDefaultAsync(s => s.Id == documentStatusHistory.DocumentStatusId);
+                    if (status != null)
+                    {
+                        summary.Add(new SummaryOfUploadedFilesAndChecks("Установлен статус " + status.Status, documentStatusHistory.SettingDateTime));
+                    }
+                }
+
+                var UploadedDocuments = db.DepartmentsDocumentsVersion.Where(dsh => dsh.DepartmentDocumentId == departmentsDocumentId);
+
+                // Adding all uploads and time of their upload
+                foreach (DepartmentsDocumentsVersion departmentsDocumentsVersion in UploadedDocuments)
+                {
+                    if (departmentsDocumentsVersion != null)
+                    {
+                        summary.Add(
+                            new SummaryOfUploadedFilesAndChecks(
+                                "Загружен документ " + departmentsDocumentsVersion.FileName,
+                                departmentsDocumentsVersion.UploadedDateTime));
+                    }
+                }
+
+
+                ComponentInfo.SetLicense("FREE-LIMITED-KEY");
+
+                GemBox.Document.DocumentModel document = new GemBox.Document.DocumentModel();
+                Section section = new Section(document);
+                document.Sections.Add(section);
+
+                var DepartmentDocument = (await db.DepartmentsDocument
+                    .Include(rydt => rydt.Department)
+                    .Include(dd => dd.ReportingYearDocumentTitle)
+                        .ThenInclude(rydt => rydt.DocumentTitle)
+                            .ThenInclude(dt => dt.DocumentType)
+                    .Include(dd => dd.ReportingYearDocumentTitle)
+                        .ThenInclude(dd => dd.ReportingYear)
+                    .FirstOrDefaultAsync(dd => dd.Id == departmentsDocumentId));
+
+                section.Blocks.Add(
+                    new Paragraph(document,
+                        new Run(document,
+                            "Сводка загрузок и проверок по файлу "
+                            + DepartmentDocument.ReportingYearDocumentTitle.ReportingYear.Number + "/"
+                            + DepartmentDocument.Department.Name + "/"
+                            + DepartmentDocument.ReportingYearDocumentTitle.DocumentTitle.DocumentType.Type + "/"
+                            + DepartmentDocument.ReportingYearDocumentTitle.DocumentTitle.Name)
+                        {
+                            CharacterFormat = { Bold = true, Size = 24 }
+                        }));
+                foreach (var item in summary.OrderBy(s => s.DateTime))
+                {
+                    section.Blocks.Add(
+                        new Paragraph(document,
+                            new Run(document, item.Info + " | " + item.DateTime)));
+                }
+
+
+                SaveOptions options = SaveOptions.DocxDefault;
+
+                return File(GetBytes(document, options), options.ContentType, "SummaryOfDownloadedFilesAndChecks.docx");
 
             }
             catch (Exception ex)
