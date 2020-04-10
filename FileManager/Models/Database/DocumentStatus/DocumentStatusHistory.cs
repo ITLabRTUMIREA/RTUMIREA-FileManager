@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FileManager.Models.Database.DepartmentsDocuments;
+using FileManager.Models.Database.UserDepartmentRoles;
 
 namespace FileManager.Models.Database.DocumentStatus
 {
@@ -31,6 +32,9 @@ namespace FileManager.Models.Database.DocumentStatus
 
         public Guid DepartmentsDocumentId { get; set; }
         public DepartmentsDocument DepartmentsDocument { get; set; }
+
+        public Guid UserId { get; set; }
+        public User User { get; set; }
 
 
     }

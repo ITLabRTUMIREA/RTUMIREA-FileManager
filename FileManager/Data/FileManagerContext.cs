@@ -111,6 +111,10 @@ namespace FileManager.Models
                 b.HasOne(dsh => dsh.DepartmentsDocument)
                     .WithMany(ds => ds.DocumentStatusHistories)
                     .HasForeignKey(dsh => dsh.DepartmentsDocumentId);
+
+                b.HasOne(dsh => dsh.User)
+                    .WithMany(ds => ds.DocumentStatusHistories)
+                    .HasForeignKey(dsh => dsh.UserId);
             });
         }
 
