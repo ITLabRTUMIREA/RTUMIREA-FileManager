@@ -12,10 +12,11 @@ namespace FileManager.Services.FileManagerService
         Task<int> UploadFileAsync(IFormFile uploadedFile,
             Guid yearId,
             Guid departmentId,
-            Guid documentTitleId);
+            Guid documentTitleId,
+            Guid userId);
 
 
 
-        Task<int> SaveDocumentPathAsync(Guid departmentsDocumentId, string FileName, string path);
+        Task<int> SaveDocumentPathAsync(Guid departmentsDocumentId, string FileName, string path, Guid userId);
     }
 }

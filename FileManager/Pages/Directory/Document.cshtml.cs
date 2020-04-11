@@ -99,6 +99,7 @@ namespace FileManager.Pages.Directory
                 UploadedDocuments = await db.DepartmentsDocumentsVersion
                     .Where(ddv => ddv.DepartmentDocumentId == departmentsDocument.Id)
                     .OrderByDescending(ddv => ddv.UploadedDateTime)
+                    .Include(ddv => ddv.User)
                     .ToListAsync();
 
                 ViewData["BreadcrumbNode"] = await _breadcrumbService.GetDocumentBreadCrumbNodeAsync(
@@ -120,7 +121,8 @@ namespace FileManager.Pages.Directory
             Guid yearId,
             Guid departmentId,
             Guid documentTypeId,
-            Guid documentTitleId)
+            Guid documentTitleId,
+            Guid userId)
         {
             try
             {
@@ -131,7 +133,8 @@ namespace FileManager.Pages.Directory
                             uploadedFile,
                             yearId,
                             departmentId,
-                            documentTitleId) > 0)
+                            documentTitleId,
+                            userId) > 0)
                     {
                         return RedirectToPage("Document", routeValues: new
                         {
@@ -167,7 +170,9 @@ namespace FileManager.Pages.Directory
 
                 List<SummaryOfUploadedFilesAndChecks> summary = new List<SummaryOfUploadedFilesAndChecks>();
 
-                var DocumentStatusHistories = db.DocumentStatusHistory.Where(dsh => dsh.DepartmentsDocumentId == departmentsDocumentId);
+                var DocumentStatusHistories = db.DocumentStatusHistory
+                    .Where(dsh => dsh.DepartmentsDocumentId == departmentsDocumentId)
+                    .Include(dsh => dsh.User);
 
                 // Adding all statuses and time of their setting
                 foreach (var documentStatusHistory in DocumentStatusHistories)
@@ -175,11 +180,15 @@ namespace FileManager.Pages.Directory
                     var status = await db.DocumentStatus.FirstOrDefaultAsync(s => s.Id == documentStatusHistory.DocumentStatusId);
                     if (status != null)
                     {
-                        summary.Add(new SummaryOfUploadedFilesAndChecks("Установлен статус " + status.Status, documentStatusHistory.SettingDateTime));
+                        summary.Add(new SummaryOfUploadedFilesAndChecks("Установлен статус " + status.Status,
+                            documentStatusHistory.SettingDateTime,
+                            documentStatusHistory.User.Email + " (" + documentStatusHistory.User.FistName + " " + documentStatusHistory.User.LastName + ")"));
                     }
                 }
 
-                var UploadedDocuments = db.DepartmentsDocumentsVersion.Where(dsh => dsh.DepartmentDocumentId == departmentsDocumentId);
+                var UploadedDocuments = db.DepartmentsDocumentsVersion
+                    .Where(dsh => dsh.DepartmentDocumentId == departmentsDocumentId)
+                    .Include(ddv => ddv.User);
 
                 // Adding all uploads and time of their upload
                 foreach (DepartmentsDocumentsVersion departmentsDocumentsVersion in UploadedDocuments)
@@ -189,7 +198,8 @@ namespace FileManager.Pages.Directory
                         summary.Add(
                             new SummaryOfUploadedFilesAndChecks(
                                 "Загружен документ " + departmentsDocumentsVersion.FileName,
-                                departmentsDocumentsVersion.UploadedDateTime));
+                                departmentsDocumentsVersion.UploadedDateTime,
+                                departmentsDocumentsVersion.User.Email + " ("+ departmentsDocumentsVersion.User.FistName + " " + departmentsDocumentsVersion.User.LastName +")"));
                     }
                 }
 
@@ -224,7 +234,7 @@ namespace FileManager.Pages.Directory
                 {
                     section.Blocks.Add(
                         new Paragraph(document,
-                            new Run(document, item.Info + " | " + item.DateTime)));
+                            new Run(document, item.Info + " | " + item.DateTime + " " + item.UploadedUser )));
                 }
 
 

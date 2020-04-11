@@ -91,6 +91,7 @@
       asp-route-yearId="@Model.selectedReportingYearId"
       asp-route-documentTypeId="@Model.selectedDocumentTypeId"
       asp-route-documentTitleId="@Model.selectedDocumentTitleId"
+       asp-route-userId="@Model.User.Id"
       enctype="multipart/form-data">
     <div class="input-group mb-3">
         <div class="custom-file">
@@ -116,6 +117,9 @@
                     Имя файла
                 </th>
                 <th>
+                    Загрузил
+                </th>
+                <th>
                     Скачать файл
                 </th>
             </tr>
@@ -123,19 +127,22 @@
         <tbody>
             @foreach (DepartmentsDocumentsVersion document in Model.UploadedDocuments)
             {
-                <tr>
-                    <td>
-                        @document.UploadedDateTime
-                    </td>
-                    <td>
-                        @document.FileName
-                    </td>
-                    <td>
-                        <a class="btn btn-info" asp-page-handler="DownloadDocument" asp-route-departmentsDocumentsVersionId="@document.Id">
-                            Скачать
-                        </a>
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    @document.UploadedDateTime
+                </td>
+                <td>
+                    @document.FileName
+                </td>
+                <td>
+                    @document.User.Email (@document.User.FistName  @document.User.LastName)
+                </td>
+                <td>
+                    <a class="btn btn-info" asp-page-handler="DownloadDocument" asp-route-departmentsDocumentsVersionId="@document.Id">
+                        Скачать
+                    </a>
+                </td>
+            </tr>
             }
         </tbody>
     </table>

@@ -62,9 +62,13 @@ namespace FileManager.Migrations
 
                     b.Property<DateTime>("UploadedDateTime");
 
+                    b.Property<Guid>("UserId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentDocumentId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("DepartmentsDocumentsVersion");
                 });
@@ -395,6 +399,11 @@ namespace FileManager.Migrations
                     b.HasOne("FileManager.Models.Database.DepartmentsDocuments.DepartmentsDocument", "DepartmentsDocument")
                         .WithMany("DepartmentsDocumentsVersions")
                         .HasForeignKey("DepartmentDocumentId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("FileManager.Models.Database.UserDepartmentRoles.User", "User")
+                        .WithMany("DepartmentsDocumentsVersions")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

@@ -35,7 +35,8 @@ namespace FileManager.Services.FileManagerService
         public async Task<int> UploadFileAsync(IFormFile uploadedFile,
             Guid yearId,
             Guid departmentId,
-            Guid documentTitleId)
+            Guid documentTitleId,
+            Guid userId)
         {
             if (uploadedFile != null)
             {
@@ -55,7 +56,7 @@ namespace FileManager.Services.FileManagerService
 
                     DepartmentsDocument departmentsDocument = await _documentManagerService.GetDepartmentsDocument(departmentId, reportingYearDocumentTitleId);
 
-                    return await SaveDocumentPathAsync(departmentsDocument.Id, uploadedFile.FileName, path);
+                    return await SaveDocumentPathAsync(departmentsDocument.Id, uploadedFile.FileName, path, userId);
                 }
             }
             return -1;
@@ -63,11 +64,11 @@ namespace FileManager.Services.FileManagerService
 
 
 
-        public async Task<int> SaveDocumentPathAsync(Guid departmentsDocumentId, string FileName, string path)
+        public async Task<int> SaveDocumentPathAsync(Guid departmentsDocumentId, string FileName, string path, Guid userId)
         {
 
             await db.DepartmentsDocumentsVersion
-                .AddAsync(new DepartmentsDocumentsVersion(departmentsDocumentId, FileName, path, DateTime.UtcNow));
+                .AddAsync(new DepartmentsDocumentsVersion(departmentsDocumentId, FileName, path, DateTime.UtcNow, userId));
 
             return await db.SaveChangesAsync();
         }

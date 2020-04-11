@@ -6,6 +6,7 @@ using FileManager.Models.Database.UserSystemRoles;
 using FileManager.Models.Database.UserDepartmentRoles;
 using Microsoft.AspNetCore.Identity;
 using FileManager.Models.Database.DocumentStatus;
+using FileManager.Models.Database.DepartmentsDocuments;
 
 namespace FileManager.Models.Database.UserDepartmentRoles
 {
@@ -19,5 +20,6 @@ namespace FileManager.Models.Database.UserDepartmentRoles
         public List<UserSystemRole> UserSystemRoles { get; set; }
 
         public List<DocumentStatusHistory> DocumentStatusHistories { get; set; }
+        public List<DepartmentsDocumentsVersion> DepartmentsDocumentsVersions { get; set; }
     }
 }

@@ -76,6 +76,10 @@ namespace FileManager.Models
                 b.HasOne(ddv => ddv.DepartmentsDocument)
                     .WithMany(dd => dd.DepartmentsDocumentsVersions)
                     .HasForeignKey(ddv => ddv.DepartmentDocumentId);
+
+                b.HasOne(ddv => ddv.User)
+    .WithMany(dd => dd.DepartmentsDocumentsVersions)
+    .HasForeignKey(ddv => ddv.UserId);
             });
         }
 
