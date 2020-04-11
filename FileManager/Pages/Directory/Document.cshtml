@@ -18,9 +18,9 @@
         </p>
         @if (@Model.DocumentStatusHistories.LastOrDefault().CommentEdits != null)
         {
-            <p>
-                Комментарий проверяющего: @Model.DocumentStatusHistories.LastOrDefault().CommentEdits
-            </p>
+<p>
+    Комментарий проверяющего @Model.DocumentStatusHistories.LastOrDefault().User.Email (@Model.DocumentStatusHistories.LastOrDefault().User.FistName @Model.DocumentStatusHistories.LastOrDefault().User.LastName): @Model.DocumentStatusHistories.LastOrDefault().CommentEdits
+</p>
         }
         else
         {
@@ -44,7 +44,7 @@
         <ul class="list-group">
             @foreach (DocumentStatusHistory status in Model.DocumentStatusHistories)
             {
-                <li class="list-group-item">Статус: @status.DocumentStatus.Status , Дата Статуса: @status.SettingDateTime</li>
+            <li class="list-group-item">Статус: @status.DocumentStatus.Status , дата статуса: @status.SettingDateTime, установил @Model.DocumentStatusHistories.LastOrDefault().User.Email (@Model.DocumentStatusHistories.LastOrDefault().User.FistName @Model.DocumentStatusHistories.LastOrDefault().User.LastName)</li>
             }
         </ul>
     </div>
@@ -64,7 +64,8 @@
               asp-route-departmentDocumentId="@Model.departmentsDocument.Id"
               asp-route-yearId="@Model.selectedReportingYearId"
               asp-route-documentTypeId="@Model.selectedDocumentTypeId"
-              asp-route-documentTitleId="@Model.selectedDocumentTitleId">
+              asp-route-documentTitleId="@Model.selectedDocumentTitleId"
+              asp-route-userId="@Model.User.Id">
             <p>Установление нового статуса</p>
             <select name="newStatusId" asp-for="@Model.NewDocumentStatus">
                 <option disabled>Выберите статус</option>

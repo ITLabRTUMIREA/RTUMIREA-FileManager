@@ -9,13 +9,14 @@ namespace FileManager.Models.Database.DocumentStatus
 {
     public class DocumentStatusHistory
     {
-        public DocumentStatusHistory(Guid newStatusId,string comment, Guid departamentDocumentId, DateTime settingDateTime)
+        public DocumentStatusHistory(Guid newStatusId,string comment, Guid departamentDocumentId, DateTime settingDateTime, Guid userId)
         { 
             Id = Guid.NewGuid();
             CommentEdits = comment;
             DocumentStatusId = newStatusId;
             DepartmentsDocumentId = departamentDocumentId;
             SettingDateTime = settingDateTime;
+            UserId = userId;
 
         }
         public DocumentStatusHistory()

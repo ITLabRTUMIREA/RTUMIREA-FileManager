@@ -19,6 +19,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using FileManager.Services.GetAccountDataService;
+using FileManager.Models.Database.UserDepartmentRoles;
 
 namespace FileManager.Pages.Directory
 {
@@ -34,6 +36,7 @@ namespace FileManager.Pages.Directory
         public DocumentTitle DocumentsTitle;
         public List<DepartmentsDocumentsVersion> UploadedDocuments;
         public List<DocumentStatusHistory> DocumentStatusHistories;
+        public User User;
         public bool IsUserTheChecker = false;
         public string actualDocumentStatus;
         public List<DocumentStatus> AllAvailabledocumentStatuses;
@@ -74,6 +77,8 @@ namespace FileManager.Pages.Directory
                 selectedDocumentTypeId = documentTypeId;
                 selectedDocumentTitleId = documentTitleId;
 
+                User = await _getAccountDataService.GetCurrentUser();
+
                 DocumentsTitle = await db.DocumentTitle.FirstOrDefaultAsync(dt => dt.Id.Equals(documentTitleId));
 
                 IsUserTheChecker = await _getAccountDataService.UserIsCheckerOnDepartment(departmentId);
@@ -88,6 +93,7 @@ namespace FileManager.Pages.Directory
                     .Include(dsh => dsh.DocumentStatus)
                     .Where(dd => dd.DepartmentsDocumentId == departmentsDocument.Id)
                     .OrderBy(dd => dd.SettingDateTime)
+                    .Include(dsh => dsh.User)
                     .ToListAsync();
 
                 UploadedDocuments = await db.DepartmentsDocumentsVersion
@@ -234,13 +240,13 @@ namespace FileManager.Pages.Directory
             }
         }
         public async Task<IActionResult> OnPostSetDocumentStatusAsync(Guid newStatusId, string comment, Guid departmentDocumentId,
-            Guid yearId, Guid departmentId, Guid documentTypeId, Guid documentTitleId)
+            Guid yearId, Guid departmentId, Guid documentTypeId, Guid documentTitleId, Guid userId)
         {
             try
             {
                 if (newStatusId != null)
                 {
-                    var newStatus = new DocumentStatusHistory(newStatusId, comment, departmentDocumentId, DateTime.Now);
+                    var newStatus = new DocumentStatusHistory(newStatusId, comment, departmentDocumentId, DateTime.Now, userId);
                     var UpdatedDepartamentDocument = (await db.DepartmentsDocument.FirstOrDefaultAsync(dd => dd.Id == departmentDocumentId));
                     UpdatedDepartamentDocument.DocumentStatusHistories.Add(newStatus);
 
