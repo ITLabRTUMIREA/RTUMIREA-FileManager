@@ -35,7 +35,7 @@ namespace FileManager.Services.DbInitializeService
         {
             await InitializeSystemAdmin();
 
-            await InitializeReportingYearsList();
+            //await InitializeReportingYearsList();
 
             await CreateDocumentStatuses();
         }
