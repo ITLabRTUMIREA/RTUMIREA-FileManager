@@ -17,7 +17,7 @@ namespace FileManager
     {
         public static async Task Main(string[] args)
         {
-            var host = CreateWebHostBuilder(args).Build();
+            var host = CreateWebHostBuilder(args).Build() ;
 
             using (var scope = host.Services.CreateScope())
             {

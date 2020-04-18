@@ -3,14 +3,18 @@
 }
 @using FileManager.Services.GetAccountDataService;
 @using FileManager.Models.Database.UserDepartmentRoles;
+@using FileManager.Services.DocumentManagerService;
 @inject IGetAccountDataService _getAccountDataService;
+@inject IDocumentManagerService _documentManagerService;
 @{
     bool IsSystemAdmin = _getAccountDataService.IsSystemAdmin();
     bool IsAnyDepartmentAdmin = await _getAccountDataService.UserIsAdminOnAnyDepartment();
     User CurrentUser = await _getAccountDataService.GetCurrentUser();
-    var countOfGoodDocs = _getAccountDataService.GetCountOfSetDocWithCertainStatus(CurrentUser.Id, "Принято");
-    var countOfWarningDocs = _getAccountDataService.GetCountOfSetDocWithCertainStatus(CurrentUser.Id, "Нуждается в доработке");
-    var countOfNotCheckedDocs = _getAccountDataService.GetCountOfSetDocWithCertainStatus(CurrentUser.Id, "Не проверено");
+
+    var countOfGoodDocs = await _documentManagerService.GetCountOfSetDocWithCertainStatus(CurrentUser.Id, "Принято");
+    var countOfWarningDocs = await _documentManagerService.GetCountOfSetDocWithCertainStatus(CurrentUser.Id, "Нуждается в доработке");
+    var countOfNotCheckedDocs = await _documentManagerService.GetCountOfSetDocWithCertainStatus(CurrentUser.Id, "Не проверено");
+
 }
 <div class="full-page">
     <div class="user-bar">
@@ -27,6 +31,9 @@
             </div>
             <div class="dropdown-menu">
                 <a class="dropdown-item" asp-page="/Account/UserInfo">Аккаунт</a>
+                <div class="dropdown-divider"></div>
+
+                <a class="dropdown-item" asp-page="/DocumentStatistics/Index">Статистика документов</a>
                 <div class="dropdown-divider"></div>
 
                 @if (IsSystemAdmin || IsAnyDepartmentAdmin)
