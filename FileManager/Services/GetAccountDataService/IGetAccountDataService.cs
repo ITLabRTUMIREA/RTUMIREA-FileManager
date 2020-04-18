@@ -21,5 +21,7 @@ namespace FileManager.Services.GetAccountDataService
 
         IQueryable<Department> SelectDepartmentsWhereUserHaveAnyRole(IQueryable<Department> departments);
         Task<bool> UserIsCheckerOnDepartment(Guid departmentId);
+
+        int GetCountOfSetDocWithCertainStatus(Guid userId, string status);
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FileManager.Models.Database.UserDepartmentRoles;
 
-namespace FileManager.Models.Database.DocumentStatus
+namespace FileManager.Models.Database.DocumentStatuses
 {
     public class RoleStatus
     {

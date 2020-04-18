@@ -1,7 +1,7 @@
 ﻿@page
 @model FileManager.Pages.Directory.DocumentModel
 @using FileManager.Models.Database.DepartmentsDocuments;
-@using FileManager.Models.Database.DocumentStatus;
+@using FileManager.Models.Database.DocumentStatuses;
 @{
     ViewData["Title"] = "Document";
 }
@@ -13,9 +13,9 @@
 <div>
     @if (Model.DocumentStatusHistories.LastOrDefault() != null)
     {
-        <p>
-            Статус @Model.DocumentStatusHistories.LastOrDefault().DocumentStatus.Status Дата статуса: @Model.DocumentStatusHistories.LastOrDefault().SettingDateTime
-        </p>
+    <p>
+        Статус @Model.DocumentStatusHistories.LastOrDefault().DocumentStatus.Status Дата статуса: @Model.DocumentStatusHistories.LastOrDefault().SettingDateTime
+    </p>
         @if (@Model.DocumentStatusHistories.LastOrDefault().CommentEdits != null)
         {
 <p>
@@ -65,7 +65,7 @@
               asp-route-yearId="@Model.selectedReportingYearId"
               asp-route-documentTypeId="@Model.selectedDocumentTypeId"
               asp-route-documentTitleId="@Model.selectedDocumentTitleId"
-              asp-route-userId="@Model.User.Id">
+              asp-route-userId="@Model.user.Id">
             <p>Установление нового статуса</p>
             <select name="newStatusId" asp-for="@Model.NewDocumentStatus">
                 <option disabled>Выберите статус</option>
@@ -92,7 +92,7 @@
       asp-route-documentTypeId="@Model.selectedDocumentTypeId"
       asp-route-documentTitleId="@Model.selectedDocumentTitleId"
       asp-route-departmentDocumentId="@Model.departmentsDocument.Id"
-       asp-route-userId="@Model.User.Id"
+       asp-route-userId="@Model.user.Id"
       enctype="multipart/form-data">
     <div class="input-group mb-3">
         <div class="custom-file">

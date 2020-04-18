@@ -8,6 +8,9 @@
     bool IsSystemAdmin = _getAccountDataService.IsSystemAdmin();
     bool IsAnyDepartmentAdmin = await _getAccountDataService.UserIsAdminOnAnyDepartment();
     User CurrentUser = await _getAccountDataService.GetCurrentUser();
+    var countOfGoodDocs = _getAccountDataService.GetCountOfSetDocWithCertainStatus(CurrentUser.Id, "Принято");
+    var countOfWarningDocs = _getAccountDataService.GetCountOfSetDocWithCertainStatus(CurrentUser.Id, "Нуждается в доработке");
+    var countOfNotCheckedDocs = _getAccountDataService.GetCountOfSetDocWithCertainStatus(CurrentUser.Id, "Не проверено");
 }
 <div class="full-page">
     <div class="user-bar">
@@ -17,9 +20,9 @@
                     @CurrentUser.UserName
                 </div>
                 <div class="documents-status">
-                    <div class="status-good">g</div>
-                    <div class="status-warning">w</div>
-                    <div class="status-bad">b</div>
+                    <div class="status-good">@countOfGoodDocs</div>
+                    <div class="status-warning">@countOfWarningDocs</div>
+                    <div class="status-not-checked">@countOfNotCheckedDocs</div>
                 </div>
             </div>
             <div class="dropdown-menu">

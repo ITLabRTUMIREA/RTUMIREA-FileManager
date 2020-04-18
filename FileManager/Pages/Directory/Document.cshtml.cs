@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FileManager.Models;
 using FileManager.Models.Database.DepartmentsDocuments;
-using FileManager.Models.Database.DocumentStatus;
+using FileManager.Models.Database.DocumentStatuses;
 using FileManager.Models.Database.ReportingYearDocumentTitles;
 using FileManager.Models.GetSummaryOfUploadedFilesAndChecks;
 using FileManager.Services.DocumentManagerService;
@@ -19,7 +19,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using FileManager.Services.GetAccountDataService;
 using FileManager.Models.Database.UserDepartmentRoles;
 
 namespace FileManager.Pages.Directory
@@ -36,7 +35,7 @@ namespace FileManager.Pages.Directory
         public DocumentTitle DocumentsTitle;
         public List<DepartmentsDocumentsVersion> UploadedDocuments;
         public List<DocumentStatusHistory> DocumentStatusHistories;
-        public User User;
+        public User user;
         public bool IsUserTheChecker = false;
         public string actualDocumentStatus;
         public List<DocumentStatus> AllAvailabledocumentStatuses;
@@ -77,7 +76,7 @@ namespace FileManager.Pages.Directory
                 selectedDocumentTypeId = documentTypeId;
                 selectedDocumentTitleId = documentTitleId;
 
-                User = await _getAccountDataService.GetCurrentUser();
+                user = await _getAccountDataService.GetCurrentUser();
 
                 DocumentsTitle = await db.DocumentTitle.FirstOrDefaultAsync(dt => dt.Id.Equals(documentTitleId));
 
@@ -137,6 +136,7 @@ namespace FileManager.Pages.Directory
                             documentTitleId,
                             userId) > 0)
                     {
+                        _logger.LogWarning("using danger code");
                         ////// !!! NOT STABLE CODE
                         var statusNotChecked = await db.DocumentStatus.FirstOrDefaultAsync(ds => ds.Status == "Не проверено");
                         ////// !!! NOT STABLE CODE
@@ -294,8 +294,9 @@ namespace FileManager.Pages.Directory
             var newStatus = new DocumentStatusHistory(newStatusId, comment, departmentDocumentId, DateTime.Now, userId);
             var UpdatedDepartamentDocument = (await db.DepartmentsDocument.FirstOrDefaultAsync(dd => dd.Id == departmentDocumentId));
             UpdatedDepartamentDocument.DocumentStatusHistories.Add(newStatus);
-
+            UpdatedDepartamentDocument.LastSetDocumentStatusId = newStatusId;
             db.DepartmentsDocument.Update(UpdatedDepartamentDocument);
+
 
             return await db.SaveChangesAsync();
         }

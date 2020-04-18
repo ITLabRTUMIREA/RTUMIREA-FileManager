@@ -38,6 +38,8 @@ namespace FileManager.Migrations
 
                     b.Property<Guid>("DepartmentId");
 
+                    b.Property<Guid>("LastSetDocumentStatusId");
+
                     b.Property<Guid>("ReportingYearDocumentTitleId");
 
                     b.HasKey("Id");
@@ -73,7 +75,7 @@ namespace FileManager.Migrations
                     b.ToTable("DepartmentsDocumentsVersion");
                 });
 
-            modelBuilder.Entity("FileManager.Models.Database.DocumentStatus.DocumentStatus", b =>
+            modelBuilder.Entity("FileManager.Models.Database.DocumentStatuses.DocumentStatus", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -85,7 +87,7 @@ namespace FileManager.Migrations
                     b.ToTable("DocumentStatus");
                 });
 
-            modelBuilder.Entity("FileManager.Models.Database.DocumentStatus.DocumentStatusHistory", b =>
+            modelBuilder.Entity("FileManager.Models.Database.DocumentStatuses.DocumentStatusHistory", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -111,7 +113,7 @@ namespace FileManager.Migrations
                     b.ToTable("DocumentStatusHistory");
                 });
 
-            modelBuilder.Entity("FileManager.Models.Database.DocumentStatus.RoleStatus", b =>
+            modelBuilder.Entity("FileManager.Models.Database.DocumentStatuses.RoleStatus", b =>
                 {
                     b.Property<Guid>("RoleId");
 
@@ -407,14 +409,14 @@ namespace FileManager.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("FileManager.Models.Database.DocumentStatus.DocumentStatusHistory", b =>
+            modelBuilder.Entity("FileManager.Models.Database.DocumentStatuses.DocumentStatusHistory", b =>
                 {
                     b.HasOne("FileManager.Models.Database.DepartmentsDocuments.DepartmentsDocument", "DepartmentsDocument")
                         .WithMany("DocumentStatusHistories")
                         .HasForeignKey("DepartmentsDocumentId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("FileManager.Models.Database.DocumentStatus.DocumentStatus", "DocumentStatus")
+                    b.HasOne("FileManager.Models.Database.DocumentStatuses.DocumentStatus", "DocumentStatus")
                         .WithMany("DocumentStatusHistories")
                         .HasForeignKey("DocumentStatusId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -425,9 +427,9 @@ namespace FileManager.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("FileManager.Models.Database.DocumentStatus.RoleStatus", b =>
+            modelBuilder.Entity("FileManager.Models.Database.DocumentStatuses.RoleStatus", b =>
                 {
-                    b.HasOne("FileManager.Models.Database.DocumentStatus.DocumentStatus", "DocumentStatus")
+                    b.HasOne("FileManager.Models.Database.DocumentStatuses.DocumentStatus", "DocumentStatus")
                         .WithMany("RoleStatuses")
                         .HasForeignKey("DocumentStatusId")
                         .OnDelete(DeleteBehavior.Cascade);

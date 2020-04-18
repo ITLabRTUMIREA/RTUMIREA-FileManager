@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using FileManager.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using FileManager.Models.Database.UserDepartmentRoles;
 using FileManager.Models.Database.DepartmentsDocuments;
 using FileManager.Models.Database.ReportingYearDocumentTitles;
-using FileManager.Models.Database.DocumentStatus;
+using FileManager.Models.Database.DocumentStatuses;
 using FileManager.Models.Database.UserSystemRoles;
 
 namespace FileManager.Models
