@@ -19,13 +19,13 @@
         @if (@Model.DocumentStatusHistories.LastOrDefault().CommentEdits != null)
         {
 <p>
-    Комментарий проверяющего @Model.DocumentStatusHistories.LastOrDefault().User.Email (@Model.DocumentStatusHistories.LastOrDefault().User.FistName @Model.DocumentStatusHistories.LastOrDefault().User.LastName): @Model.DocumentStatusHistories.LastOrDefault().CommentEdits
+    Комментарий @Model.DocumentStatusHistories.LastOrDefault().User.Email (@Model.DocumentStatusHistories.LastOrDefault().User.FistName @Model.DocumentStatusHistories.LastOrDefault().User.LastName): @Model.DocumentStatusHistories.LastOrDefault().CommentEdits
 </p>
         }
         else
         {
             <p>
-                Комментарий проверяющего: проверяющий не оставил комментарий
+                Комментарий: проверяющий не оставил комментарий
             </p>
         }
     }
@@ -91,6 +91,7 @@
       asp-route-yearId="@Model.selectedReportingYearId"
       asp-route-documentTypeId="@Model.selectedDocumentTypeId"
       asp-route-documentTitleId="@Model.selectedDocumentTitleId"
+      asp-route-departmentDocumentId="@Model.departmentsDocument.Id"
        asp-route-userId="@Model.User.Id"
       enctype="multipart/form-data">
     <div class="input-group mb-3">

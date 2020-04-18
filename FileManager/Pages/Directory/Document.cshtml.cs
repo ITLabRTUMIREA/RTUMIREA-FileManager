@@ -122,6 +122,7 @@ namespace FileManager.Pages.Directory
             Guid departmentId,
             Guid documentTypeId,
             Guid documentTitleId,
+           Guid departmentDocumentId,
             Guid userId)
         {
             try
@@ -136,13 +137,23 @@ namespace FileManager.Pages.Directory
                             documentTitleId,
                             userId) > 0)
                     {
-                        return RedirectToPage("Document", routeValues: new
+                        ////// !!! NOT STABLE CODE
+                        var statusNotChecked = await db.DocumentStatus.FirstOrDefaultAsync(ds => ds.Status == "Не проверено");
+                        ////// !!! NOT STABLE CODE
+
+                        if (statusNotChecked == null)
+                            return NotFound();
+
+                        if (await AddDocumentStatusAsync(statusNotChecked.Id, "Документ загружен", departmentDocumentId, userId) > 0)
                         {
-                            yearId,
-                            departmentId,
-                            documentTypeId,
-                            documentTitleId
-                        });
+                            return RedirectToPage("Document", routeValues: new
+                            {
+                                yearId,
+                                departmentId,
+                                documentTypeId,
+                                documentTitleId
+                            });
+                        }
                     }
 
                 }
@@ -199,7 +210,7 @@ namespace FileManager.Pages.Directory
                             new SummaryOfUploadedFilesAndChecks(
                                 "Загружен документ " + departmentsDocumentsVersion.FileName,
                                 departmentsDocumentsVersion.UploadedDateTime,
-                                departmentsDocumentsVersion.User.Email + " ("+ departmentsDocumentsVersion.User.FistName + " " + departmentsDocumentsVersion.User.LastName +")"));
+                                departmentsDocumentsVersion.User.Email + " (" + departmentsDocumentsVersion.User.FistName + " " + departmentsDocumentsVersion.User.LastName + ")"));
                     }
                 }
 
@@ -234,7 +245,7 @@ namespace FileManager.Pages.Directory
                 {
                     section.Blocks.Add(
                         new Paragraph(document,
-                            new Run(document, item.Info + " | " + item.DateTime + " " + item.UploadedUser )));
+                            new Run(document, item.Info + " | " + item.DateTime + " " + item.UploadedUser)));
                 }
 
 
@@ -256,13 +267,8 @@ namespace FileManager.Pages.Directory
             {
                 if (newStatusId != null)
                 {
-                    var newStatus = new DocumentStatusHistory(newStatusId, comment, departmentDocumentId, DateTime.Now, userId);
-                    var UpdatedDepartamentDocument = (await db.DepartmentsDocument.FirstOrDefaultAsync(dd => dd.Id == departmentDocumentId));
-                    UpdatedDepartamentDocument.DocumentStatusHistories.Add(newStatus);
 
-                    db.DepartmentsDocument.Update(UpdatedDepartamentDocument);
-
-                    if (await db.SaveChangesAsync() > 0)
+                    if (await AddDocumentStatusAsync(newStatusId, comment, departmentDocumentId, userId) > 0)
                     {
                         return RedirectToPage("Document", routeValues: new
                         {
@@ -283,7 +289,16 @@ namespace FileManager.Pages.Directory
                 return NotFound();
             }
         }
+        private async Task<int> AddDocumentStatusAsync(Guid newStatusId, string comment, Guid departmentDocumentId, Guid userId)
+        {
+            var newStatus = new DocumentStatusHistory(newStatusId, comment, departmentDocumentId, DateTime.Now, userId);
+            var UpdatedDepartamentDocument = (await db.DepartmentsDocument.FirstOrDefaultAsync(dd => dd.Id == departmentDocumentId));
+            UpdatedDepartamentDocument.DocumentStatusHistories.Add(newStatus);
 
+            db.DepartmentsDocument.Update(UpdatedDepartamentDocument);
+
+            return await db.SaveChangesAsync();
+        }
         public async Task<VirtualFileResult> OnGetDownloadDocumentAsync(Guid departmentsDocumentsVersionId)
         {
             DepartmentsDocumentsVersion departmentsDocumentsVersion = await db.DepartmentsDocumentsVersion
