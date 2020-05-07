@@ -8,15 +8,15 @@
 }
 
 .status-good {
-    background: linear-gradient(to right, #00af1f 0%, transparent 100%), linear-gradient(to right, transparent 0%, #00af1f 100%), linear-gradient(to bottom, #00af1f
-    0%, transparent 100%), linear-gradient(to bottom, transparent 0%, #00af1f 100%),
-        linear-gradient(to right, #00af1f 0%, #00af1f 100%), linear-gradient(to right, #00af1f 0%, #00af1f 100%);
+    padding: 5px;
+    background: linear-gradient(to right, #00af1f 0%, transparent 100%), linear-gradient(to right, transparent 0%, #00af1f 100%), linear-gradient(to bottom, #00af1f 0%, transparent 100%), linear-gradient(to bottom, transparent 0%, #00af1f 100%), linear-gradient(to right, #00af1f 0%, #00af1f 100%), linear-gradient(to right, #00af1f 0%, #00af1f 100%);
     background-size: 70% 3px, 70% 3px, 3px 70%, 3px 70%, 20% 20%, 20% 20%;
     background-position: 50% 0, 50% 100%, 0 50%, 100% 50%, 5% 5%, 95% 95%;
     background-repeat: no-repeat;
 }
 
 .status-warning {
+    padding: 5px;
     background: linear-gradient(to right, #e2d804 0%, transparent 100%), linear-gradient(to right, transparent 0%, #e2d804 100%), linear-gradient(to bottom, #e2d804 0%, transparent 100%), linear-gradient(to bottom, transparent 0%, #e2d804 100%), linear-gradient(to right, #e2d804 0%, #e2d804 100%), linear-gradient(to right, #e2d804 0%, #e2d804 100%);
     background-size: 70% 3px, 70% 3px, 3px 70%, 3px 70%, 20% 20%, 20% 20%;
     background-position: 50% 0, 50% 100%, 0 50%, 100% 50%, 5% 5%, 95% 95%;
@@ -24,6 +24,7 @@
 }
 
 .status-not-checked {
+    padding: 5px;
     background: linear-gradient(to right, #011004 0%, transparent 100%), linear-gradient(to right, transparent 0%, #011004 100%), linear-gradient(to bottom, #011004 0%, transparent 100%), linear-gradient(to bottom, transparent 0%, #011004 100%), linear-gradient(to right, #011004 0%, #011004 100%), linear-gradient(to right, #011004 0%, #011004 100%);
     background-size: 70% 3px, 70% 3px, 3px 70%, 3px 70%, 20% 20%, 20% 20%;
     background-position: 50% 0, 50% 100%, 0 50%, 100% 50%, 5% 5%, 95% 95%;
@@ -105,3 +106,155 @@
     justify-content: center;
     height: 80px;
 }
+
+.icon-size-100px {
+    height: 100px;
+}
+
+.grid-autofill-items-100px {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,150px);
+}
+
+.word-break-all {
+    word-break: break-all;
+}
+
+
+/*~~~~~~~~~~~~~~~~~~------------------~~~~~~~~~~~~~~~~~~~*/
+.breadcrumbs {
+    /* Clear floats */
+    overflow: hidden;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+    .breadcrumbs li {
+        float: left;
+        margin: 0 .5em 0 1em;
+    }
+
+.breadcrumb-active {
+    background: #007bff !important;
+    color: white !important;
+    text-shadow: none !important;
+}
+
+
+    .breadcrumb-active::before {
+        border-color: #ddd #ddd #ddd transparent !important;
+    }
+
+    .breadcrumb-active::before {
+        border-color: #007bff #007bff #007bff transparent !important;
+    }
+
+    .breadcrumb-active::after {
+        border-left-color: #007bff !important;
+    }
+
+.breadcrumbs a {
+    background: #ddd;
+    padding: .7em 1em;
+    float: left;
+    text-decoration: none;
+    color: #444;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+    position: relative;
+}
+
+    .breadcrumbs a:hover {
+        background: #007bff;
+        text-shadow:none;
+        color:white;
+    }
+
+    .breadcrumbs a::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        margin-top: -1.5em;
+        border-width: 1.5em 0 1.5em 1em;
+        border-style: solid;
+        border-color: #ddd #ddd #ddd transparent;
+        left: -1em;
+    }
+
+    .breadcrumbs a:hover::before {
+        border-color: #007bff #007bff #007bff transparent;
+    }
+
+    .breadcrumbs a::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        margin-top: -1.5em;
+        border-top: 1.5em solid transparent;
+        border-bottom: 1.5em solid transparent;
+        border-left: 1em solid #ddd;
+        right: -1em;
+    }
+
+    .breadcrumbs a:hover::after {
+        border-left-color: #007bff;
+    }
+
+.breadcrumbs .current,
+.breadcrumbs .current:hover {
+    font-weight: bold;
+    background: none;
+}
+
+    .breadcrumbs .current::after,
+    .breadcrumbs .current::before {
+        content: normal;
+    }
+/*~~~~~~~~~~~~~~~~~~------------------~~~~~~~~~~~~~~~~~~~*/
+
+/*~~~~~~~~~~~~~~~~~~------------------~~~~~~~~~~~~~~~~~~~*/
+.document-description-section {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+}
+
+    .document-description-section p {
+        width: 80%;
+        word-break: break-all;
+    }
+
+    .document-description-section h2 {
+        width: 70%;
+        word-break: break-all;
+    }
+
+.document-status-section {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    padding: 0 15px 0 15px;
+    grid-column-gap: 10px;
+    margin-bottom: 5px;
+}
+
+.set-status-section {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    grid-template-rows: auto;
+    grid-template-areas: "st bt" "ta bt";
+    grid-column-gap:10px;
+}
+
+    .set-status-section select {
+        grid-area: st;
+    }
+
+    .set-status-section textarea {
+        grid-area: ta;
+    }
+
+    .set-status-section button {
+        grid-area: bt;
+    }
+/*~~~~~~~~~~~~~~~~~~------------------~~~~~~~~~~~~~~~~~~~*/

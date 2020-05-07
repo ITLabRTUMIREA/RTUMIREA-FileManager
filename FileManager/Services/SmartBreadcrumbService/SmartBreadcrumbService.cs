@@ -21,10 +21,10 @@ namespace FileManager.Services.SmartBreadcrumbService
 
         public async Task<RazorPageBreadcrumbNode> GetReportingYearBreadCrumbNodeAsync(Guid yearId)
         {
+            var Year = (await db.ReportingYear
+                            .FirstOrDefaultAsync(y => y.Id.Equals(yearId))).Number.ToString();
             return new RazorPageBreadcrumbNode(ReflectionExtensions
-                .ExtractRazorPageKey(typeof(ReportingYearModel)),
-                         (await db.ReportingYear
-                            .FirstOrDefaultAsync(y => y.Id.Equals(yearId))).Number.ToString())
+                .ExtractRazorPageKey(typeof(ReportingYearModel)), Year)
             {
                 OverwriteTitleOnExactMatch = true,
                 RouteValues = new { yearId }

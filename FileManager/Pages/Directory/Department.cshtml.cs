@@ -56,22 +56,23 @@ namespace FileManager.Pages.Directory
                 // Show document types, which have any document Title connected to current year 
                 DocumentTypes = await db.DocumentType
                     .Include(dt => dt.DocumentTitles)
-                    .Where(dtype => dtype.DocumentTitles.Exists(dt => allTitlesInReportingYear.Exists(tit=>tit.DocumentTitleId == dt.Id)))
+                    .Where(dtype => dtype.DocumentTitles.Exists(dt => allTitlesInReportingYear.Exists(tit => tit.DocumentTitleId == dt.Id)))
                     .ToListAsync();
+                var CurrentBreadCrumb = await _breadcrumbService.GetDepartmentBreadCrumbNodeAsync(
+                    yearId,
+                    departmentId);
+                ViewData["BreadcrumbNode"] = CurrentBreadCrumb;
+                ViewData["Title"] = CurrentBreadCrumb.Title;
 
-            ViewData["BreadcrumbNode"] = await _breadcrumbService.GetDepartmentBreadCrumbNodeAsync(
-                yearId,
-                departmentId);
-
-            return Page();
-        }
+                return Page();
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error while getting department page");
                 return NotFound();
-    }
+            }
 
 
-}
+        }
     }
 }

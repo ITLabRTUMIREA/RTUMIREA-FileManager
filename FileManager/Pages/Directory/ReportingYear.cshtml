@@ -3,17 +3,24 @@
 @using FileManager.Models.Database.DepartmentsDocuments;
 @{
 }
-<div class="row">
+<div class="grid-autofill-items-100px">
     @foreach (Department department in Model.Departments)
     {
-        <div class="col-sm-1 mx-3">
+        <div>
             <a asp-page="/Directory/Department"
                asp-route-departmentId="@department.Id"
                asp-route-yearId="@Model.selectedReportingYearId">
+                <img class="icon-size-100px" src="~/images/folderIcon.svg" />
+                <p class="word-break-all">
 
-                @department.Name
+                    @department.Name
+                </p>
 
             </a>
         </div>
     }
 </div>
+@section Scripts
+{
+    <script src="@Url.Content("~/js/EditLastBreadcrumbAndAddStyling.js")"></script>
+}

@@ -1,24 +1,26 @@
 ﻿@page
 @model FileManager.Pages.Directory.DocumentTypeModel
 @using FileManager.Models.Database.ReportingYearDocumentTitles;
-@{
-    ViewData["Title"] = "DocumentType";
-}
 
-<div class="row">
+<div class="grid-autofill-items-100px">
     @foreach (DocumentTitle documentTitle in Model.DocumentsTitles)
     {
-        <div class="col-sm-1 mx-3">
+        <div>
             <a asp-page="/Directory/Document"
                asp-route-departmentId="@Model.selectedDepartmentId"
                asp-route-yearId="@Model.selectedReportingYearId"
                asp-route-documentTypeId="@Model.selectedDocumentTypeId"
                asp-route-documentTitleId="@documentTitle.Id">
-
-                @documentTitle.Name
+                <img class="icon-size-100px" src="~/images/wordIcon.svg" />
+                <p class="word-break-all">
+                    @documentTitle.Name
+                </p>
 
             </a>
         </div>
     }
 </div>
-
+@section Scripts
+{
+    <script src="@Url.Content("~/js/EditLastBreadcrumbAndAddStyling.js")"></script>
+}

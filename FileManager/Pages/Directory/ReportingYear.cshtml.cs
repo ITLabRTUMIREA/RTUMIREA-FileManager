@@ -51,7 +51,9 @@ namespace FileManager.Pages.Directory
                     Departments = await _getAccountDataService.SelectDepartmentsWhereUserHaveAnyRole(db.Department).ToListAsync();
                 }
 
-                ViewData["BreadcrumbNode"] = await _breadcrumbService.GetReportingYearBreadCrumbNodeAsync(yearId);
+                var CurrentBreadCrumb = await _breadcrumbService.GetReportingYearBreadCrumbNodeAsync(yearId);
+                ViewData["BreadcrumbNode"] = CurrentBreadCrumb;
+                ViewData["Title"] = CurrentBreadCrumb.Title;
 
                 return Page();
             }

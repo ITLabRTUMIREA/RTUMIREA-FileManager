@@ -2,16 +2,23 @@
 @model IndexModel
 @using FileManager.Models.Database.ReportingYearDocumentTitles;
 @{
-    ViewData["Title"] = "Home page";
     Layout = "Shared/_MainApplicationLayout";
 }
-<div class="row">
+<div class="grid-autofill-items-100px">
     @foreach (ReportingYear year in Model.ReportingYears)
     {
-        <div class="col-sm-1 mx-3">
+        <div>
             <a asp-page="/Directory/ReportingYear" asp-route-yearId="@year.Id">
-                @year.Number
+                <img class="icon-size-100px" src="~/images/folderIcon.svg" />
+                <p class="word-break-all">
+
+                    @year.Number
+                </p>
             </a>
         </div>
     }
 </div>
+@section Scripts
+{
+    <script src="@Url.Content("~/js/EditLastBreadcrumbAndAddStyling.js")"></script>
+}

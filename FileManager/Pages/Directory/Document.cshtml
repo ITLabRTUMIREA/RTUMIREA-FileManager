@@ -2,89 +2,98 @@
 @model FileManager.Pages.Directory.DocumentModel
 @using FileManager.Models.Database.DepartmentsDocuments;
 @using FileManager.Models.Database.DocumentStatuses;
-@{
-    ViewData["Title"] = "Document";
-}
-@section Scripts{
-    <script defer src="~/js/InputFileLabelService/InputFileLabelService.js"></script>
-}
 
-<h2>Document @Model.DocumentsTitle.Name</h2>
+
+<div class="document-description-section">
+    <h2>Документ: @Model.DocumentsTitle.Name</h2>
+    <p>
+        Описание: @Model.DocumentsTitle.Description
+    </p>
+</div>
+
 <div>
     @if (Model.DocumentStatusHistories.LastOrDefault() != null)
     {
-    <p>
-        Статус @Model.DocumentStatusHistories.LastOrDefault().DocumentStatus.Status Дата статуса: @Model.DocumentStatusHistories.LastOrDefault().SettingDateTime
-    </p>
-        @if (@Model.DocumentStatusHistories.LastOrDefault().CommentEdits != null)
-        {
-<p>
-    Комментарий @Model.DocumentStatusHistories.LastOrDefault().User.Email (@Model.DocumentStatusHistories.LastOrDefault().User.FistName @Model.DocumentStatusHistories.LastOrDefault().User.LastName): @Model.DocumentStatusHistories.LastOrDefault().CommentEdits
-</p>
-        }
-        else
-        {
-            <p>
-                Комментарий: проверяющий не оставил комментарий
-            </p>
-        }
+        <div id="currentStatusSection" class="alert text-center">
+            <h4 class="alert-heading">
+                Статус <span id="status">@Model.DocumentStatusHistories.LastOrDefault().DocumentStatus.Status</span> Дата статуса: @Model.DocumentStatusHistories.LastOrDefault().SettingDateTime
+            </h4>
+            @if (@Model.DocumentStatusHistories.LastOrDefault().CommentEdits != null)
+            {
+                <p>
+                    Комментарий @Model.DocumentStatusHistories.LastOrDefault().User.Email (@Model.DocumentStatusHistories.LastOrDefault().User.FistName @Model.DocumentStatusHistories.LastOrDefault().User.LastName): @Model.DocumentStatusHistories.LastOrDefault().CommentEdits
+                </p>
+            }
+            else
+            {
+                <p>
+                    Комментарий: проверяющий не оставил комментарий
+                </p>
+            }
+        </div>
     }
     else
     {
-        <p>
-            Cтатус еще не установлен
-        </p>
+        <div id="currentStatusSection" class="alert">
+            <h4 class="alert-heading">
+                Cтатус еще не установлен
+            </h4>
+        </div>
     }
 </div>
 <div>
-    <button class="btn btn-light" type="button" data-toggle="collapse" data-target="#allStatuses" aria-expanded="false" aria-controls="allStatuses">
-        Показать все статусы
-    </button>
+    <div class="document-status-section">
+
+        <button class="btn btn-light" type="button" data-toggle="collapse" data-target="#allStatuses" aria-expanded="false" aria-controls="allStatuses">
+            Показать все статусы
+        </button>
+        <div>
+            <form method="post" asp-page-handler="GetSummaryOfUploadedFilesAndChecks"
+                  asp-route-departmentsDocumentId="@Model.departmentsDocument.Id">
+                <button class="btn btn-primary w-100">Скачать сводку загрузок и проверок</button>
+            </form>
+        </div>
+    </div>
     <div class="collapse" id="allStatuses">
         <ul class="list-group">
             @foreach (DocumentStatusHistory status in Model.DocumentStatusHistories)
             {
-            <li class="list-group-item">Статус: @status.DocumentStatus.Status , дата статуса: @status.SettingDateTime, установил @Model.DocumentStatusHistories.LastOrDefault().User.Email (@Model.DocumentStatusHistories.LastOrDefault().User.FistName @Model.DocumentStatusHistories.LastOrDefault().User.LastName)</li>
+                <li class="list-group-item">Статус: @status.DocumentStatus.Status , дата статуса: @status.SettingDateTime, установил @Model.DocumentStatusHistories.LastOrDefault().User.Email (@Model.DocumentStatusHistories.LastOrDefault().User.FistName @Model.DocumentStatusHistories.LastOrDefault().User.LastName)</li>
             }
         </ul>
     </div>
 </div>
-<div>
-    <form method="post" asp-page-handler="GetSummaryOfUploadedFilesAndChecks"
-          asp-route-departmentsDocumentId="@Model.departmentsDocument.Id">
-        <p>Скачать сводку загрузок и проверок</p>
-        <button class="btn btn-primary">Скачать</button>
-    </form>
-</div>
+
 @if (Model.IsUserTheChecker)
 {
-    <div>
-        <form method="post" asp-page-handler="SetDocumentStatus"
-              asp-route-departmentId="@Model.selectedDepartmentId"
-              asp-route-departmentDocumentId="@Model.departmentsDocument.Id"
-              asp-route-yearId="@Model.selectedReportingYearId"
-              asp-route-documentTypeId="@Model.selectedDocumentTypeId"
-              asp-route-documentTitleId="@Model.selectedDocumentTitleId"
-              asp-route-userId="@Model.user.Id">
-            <p>Установление нового статуса</p>
-            <select name="newStatusId" asp-for="@Model.NewDocumentStatus">
-                <option disabled>Выберите статус</option>
-                @foreach (DocumentStatus status in Model.AllAvailabledocumentStatuses)
-                {
-                    <option value="@status.Id">@status.Status</option>
-                }
-            </select>
-            <textarea name="comment"></textarea>
-            <button class="btn btn-light">Установить статус</button>
-        </form>
+    <div class="mt-4 mb-4 card">
+        <div class="card-body">
 
+            <h4 class="card-title">Установление нового статуса</h4>
+            <form class="set-status-section" method="post" asp-page-handler="SetDocumentStatus"
+                  asp-route-departmentId="@Model.selectedDepartmentId"
+                  asp-route-departmentDocumentId="@Model.departmentsDocument.Id"
+                  asp-route-yearId="@Model.selectedReportingYearId"
+                  asp-route-documentTypeId="@Model.selectedDocumentTypeId"
+                  asp-route-documentTitleId="@Model.selectedDocumentTitleId"
+                  asp-route-userId="@Model.user.Id">
+                <select class="form-control" name="newStatusId" asp-for="@Model.NewDocumentStatus">
+                    <option disabled>Выберите статус</option>
+                    @foreach (DocumentStatus status in Model.AllAvailabledocumentStatuses)
+                    {
+                        <option value="@status.Id">@status.Status</option>
+                    }
+                </select>
+                <textarea class="form-control" name="comment" placeholder="Комментарий к статусу документа"></textarea>
+                <button class="btn btn-primary">Установить статус</button>
+            </form>
+
+        </div>
     </div>
 
 }
-<div class="form-group">
-    <label for="description">Описание документа</label>
-    <textarea class="form-control" name="description" id="description" rows="10" cols="150">@Model.DocumentsTitle.Description</textarea>
-</div>
+
+
 
 <form class="form-group mb-3" method="post" asp-page-handler="SaveFile"
       asp-route-departmentId="@Model.selectedDepartmentId"
@@ -92,7 +101,7 @@
       asp-route-documentTypeId="@Model.selectedDocumentTypeId"
       asp-route-documentTitleId="@Model.selectedDocumentTitleId"
       asp-route-departmentDocumentId="@Model.departmentsDocument.Id"
-       asp-route-userId="@Model.user.Id"
+      asp-route-userId="@Model.user.Id"
       enctype="multipart/form-data">
     <div class="input-group mb-3">
         <div class="custom-file">
@@ -128,24 +137,39 @@
         <tbody>
             @foreach (DepartmentsDocumentsVersion document in Model.UploadedDocuments)
             {
-            <tr>
-                <td>
-                    @document.UploadedDateTime
-                </td>
-                <td>
-                    @document.FileName
-                </td>
-                <td>
-                    @document.User.Email (@document.User.FistName  @document.User.LastName)
-                </td>
-                <td>
-                    <a class="btn btn-info" asp-page-handler="DownloadDocument" asp-route-departmentsDocumentsVersionId="@document.Id">
-                        Скачать
-                    </a>
-                </td>
-            </tr>
+                <tr>
+                    <td>
+                        @document.UploadedDateTime
+                    </td>
+                    <td>
+                        @document.FileName
+                    </td>
+                    <td>
+                        @document.User.Email (@document.User.FistName  @document.User.LastName)
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" asp-page-handler="DownloadDocument" asp-route-departmentsDocumentsVersionId="@document.Id">
+                            Скачать
+                        </a>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
 </div>
 
+@section Scripts{
+    <script defer src="~/js/InputFileLabelService/InputFileLabelService.js"></script>
+    <script src="@Url.Content("~/js/EditLastBreadcrumbAndAddStyling.js")"></script>
+    <script>
+        let status = document.getElementById("status").textContent;
+        let statusSection = document.getElementById("currentStatusSection");
+        if (status == "Принято") {
+            statusSection.classList.add("alert-success")
+        } else if (status == "Нуждается в доработке") {
+            statusSection.classList.add("alert-warning")
+        } else {
+            statusSection.classList.add("alert-dark")
+        }
+    </script>
+}

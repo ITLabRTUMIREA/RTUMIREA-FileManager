@@ -60,11 +60,12 @@ namespace FileManager.Pages.Directory
                         && allTitlesInReportingYear.Exists(ry => ry.DocumentTitleId == dt.Id)
                         )
                     .ToListAsync();
-
-                ViewData["BreadcrumbNode"] = await _breadcrumbService.GetDocumentTypeBreadCrumbNodeAsync(
+                var CurrentBreadCrumb = await _breadcrumbService.GetDocumentTypeBreadCrumbNodeAsync(
                     yearId,
                     departmentId,
                     documentTypeId);
+                ViewData["BreadcrumbNode"] = CurrentBreadCrumb;
+                ViewData["Title"] = CurrentBreadCrumb.Title;
 
                 return Page();
             }

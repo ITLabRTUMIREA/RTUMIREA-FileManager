@@ -57,10 +57,10 @@ namespace FileManager
             {
                 options.TagName = "nav";
                 options.TagClasses = "";
-                options.OlClasses = "breadcrumb";
-                options.LiClasses = "breadcrumb-item";
-                options.ActiveLiClasses = "breadcrumb-item active";
-                options.SeparatorElement = "<span class=\"oi ml-2 mr-2 oi-chevron-right\"></span>";
+                options.OlClasses = "breadcrumbs";
+                options.LiClasses = "";
+                options.ActiveLiClasses = "";
+                options.SeparatorElement = "<span></span>";
             });
 
             services.Configure<CookiePolicyOptions>(options =>

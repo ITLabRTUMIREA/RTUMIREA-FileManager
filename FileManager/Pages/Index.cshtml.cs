@@ -12,7 +12,7 @@ using SmartBreadcrumbs.Attributes;
 
 namespace FileManager.Pages
 {
-    [DefaultBreadcrumb("Index Page")]
+    [DefaultBreadcrumb("Главная")]
     public class IndexModel : PageModel
     {
         private readonly FileManagerContext db;
@@ -31,6 +31,7 @@ namespace FileManager.Pages
             else
             {
                 ReportingYears = db.ReportingYear.ToList();
+                ViewData["Title"] = "Главная";
 
                 return Page();
             }

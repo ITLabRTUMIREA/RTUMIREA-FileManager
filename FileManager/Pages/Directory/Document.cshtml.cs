@@ -100,12 +100,13 @@ namespace FileManager.Pages.Directory
                     .OrderByDescending(ddv => ddv.UploadedDateTime)
                     .Include(ddv => ddv.User)
                     .ToListAsync();
-
-                ViewData["BreadcrumbNode"] = await _breadcrumbService.GetDocumentBreadCrumbNodeAsync(
+                var CurrentBreadCrumb = await _breadcrumbService.GetDocumentBreadCrumbNodeAsync(
                     yearId,
                     departmentId,
                     documentTypeId,
                     documentTitleId);
+                ViewData["BreadcrumbNode"] = CurrentBreadCrumb;
+                ViewData["Title"] = CurrentBreadCrumb.Title;
 
                 return Page();
             }
