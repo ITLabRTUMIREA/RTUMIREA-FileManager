@@ -55,12 +55,28 @@
         </div>
     </div>
     <div class="collapse" id="allStatuses">
-        <ul class="list-group">
-            @foreach (DocumentStatusHistory status in Model.DocumentStatusHistories)
-            {
-                <li class="list-group-item">Статус: @status.DocumentStatus.Status , дата статуса: @status.SettingDateTime, установил @Model.DocumentStatusHistories.LastOrDefault().User.Email (@Model.DocumentStatusHistories.LastOrDefault().User.FistName @Model.DocumentStatusHistories.LastOrDefault().User.LastName)</li>
-            }
-        </ul>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Дата статуса</th>
+                    <th>Статус</th>
+                    <th>Кто установил</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (DocumentStatusHistory status in Model.DocumentStatusHistories)
+                {
+                    <tr>
+                        <td>@status.SettingDateTime</td>
+                        <td>@status.DocumentStatus.Status</td>
+                        <td>
+                            @Model.DocumentStatusHistories.LastOrDefault().User.Email
+                            (@Model.DocumentStatusHistories.LastOrDefault().User.FistName @Model.DocumentStatusHistories.LastOrDefault().User.LastName)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>
 

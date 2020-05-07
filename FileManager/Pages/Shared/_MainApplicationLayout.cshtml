@@ -24,9 +24,9 @@
                     @CurrentUser.UserName
                 </div>
                 <div class="documents-status">
-                    <div class="status-good">@countOfGoodDocs</div>
-                    <div class="status-warning">@countOfWarningDocs</div>
-                    <div class="status-not-checked">@countOfNotCheckedDocs</div>
+                    <div class="status-good" data-toggle="tooltip" data-placement="left" title="Количество принятых документов">@countOfGoodDocs</div>
+                    <div class="status-warning" data-toggle="tooltip" data-placement="left" title="Количество отправленных на доработку документов">@countOfWarningDocs</div>
+                    <div class="status-not-checked" data-toggle="tooltip" data-placement="left" title="Количество не проверенных документов">@countOfNotCheckedDocs</div>
                 </div>
             </div>
             <div class="dropdown-menu">
@@ -66,3 +66,11 @@
     </div>
 </div>
 @RenderSection("Scripts", required: false)
+@section Scripts{
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+
+}

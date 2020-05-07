@@ -243,7 +243,8 @@
     grid-template-columns: repeat(2,1fr);
     grid-template-rows: auto;
     grid-template-areas: "st bt" "ta bt";
-    grid-column-gap:10px;
+    grid-column-gap: 10px;
+    grid-row-gap: 5px;
 }
 
     .set-status-section select {
