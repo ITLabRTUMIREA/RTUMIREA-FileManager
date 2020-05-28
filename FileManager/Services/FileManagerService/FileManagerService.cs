@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace FileManager.Services.FileManagerService
@@ -31,6 +32,19 @@ namespace FileManager.Services.FileManagerService
             _logger = logger;
             _appEnvironment = appEnvironment;
             _documentManagerService = documentManagerService;
+
+            InitializeFilesDirectory();
+
+
+        }
+
+        public void InitializeFilesDirectory()
+        {
+            DirectoryInfo dirInfo = new DirectoryInfo(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),"Files"));
+            if (!dirInfo.Exists)
+            {
+                dirInfo.Create();
+            }
         }
         public async Task<int> UploadFileAsync(IFormFile uploadedFile,
             Guid yearId,
@@ -41,9 +55,9 @@ namespace FileManager.Services.FileManagerService
             if (uploadedFile != null)
             {
                 // путь к папке Files
-                string path = "/Files/" + uploadedFile.FileName;
+                string path = Path.Combine(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Files"), DateTime.Now.Ticks.ToString() + uploadedFile.FileName);
                 // сохраняем файл в папку Files в каталоге wwwroot
-                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+                using (var fileStream = new FileStream(path, FileMode.Create))
                 {
 
                     await uploadedFile.OpenReadStream().CopyToAsync(fileStream);

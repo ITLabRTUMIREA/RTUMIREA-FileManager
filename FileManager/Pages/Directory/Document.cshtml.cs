@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using FileManager.Models.Database.UserDepartmentRoles;
+using System.Reflection;
 
 namespace FileManager.Pages.Directory
 {
@@ -301,13 +302,13 @@ namespace FileManager.Pages.Directory
 
             return await db.SaveChangesAsync();
         }
-        public async Task<VirtualFileResult> OnGetDownloadDocumentAsync(Guid departmentsDocumentsVersionId)
+        public async Task<PhysicalFileResult> OnGetDownloadDocumentAsync(Guid departmentsDocumentsVersionId)
         {
             DepartmentsDocumentsVersion departmentsDocumentsVersion = await db.DepartmentsDocumentsVersion
                 .FirstOrDefaultAsync(ddv => ddv.Id == departmentsDocumentsVersionId);
-            var filepath = Path.Combine("~/Files", departmentsDocumentsVersion.FileName);
+            var filepath = departmentsDocumentsVersion.Path;
 
-            return File(filepath, "application/octet-stream", departmentsDocumentsVersion.FileName);
+            return PhysicalFile(filepath, "application/octet-stream", departmentsDocumentsVersion.FileName);
         }
     }
 }

@@ -35,6 +35,7 @@ namespace FileManager.Services.DbInitializeService
         {
             await InitializeSystemAdmin();
 
+            await CreateDefaultRoles();
             //await InitializeReportingYearsList();
 
             await CreateDocumentStatuses();
@@ -90,6 +91,22 @@ namespace FileManager.Services.DbInitializeService
             if (db.DocumentStatus.FirstOrDefault(y => y.Status == "Не проверено") == null)
             {
                 await db.DocumentStatus.AddAsync(new DocumentStatus("Не проверено"));
+
+                await db.SaveChangesAsync();
+            }
+        }
+        private async Task CreateDefaultRoles()
+        {
+            if (db.Role.FirstOrDefault(y => y.Name == "Admin") == null)
+            {
+                await db.Role.AddAsync(new Role("Admin"));
+
+                await db.SaveChangesAsync();
+            }
+            if (db.Role.FirstOrDefault(y => y.Name == "Checker") == null)
+            {
+
+                await db.Role.AddAsync(new Role("Checker"));
 
                 await db.SaveChangesAsync();
             }
