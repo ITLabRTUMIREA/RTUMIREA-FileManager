@@ -1,0 +1,12 @@
+﻿@page "{code?}"
+@model ErrorModel
+@{
+    ViewData["Title"] = "Error";
+    Layout = "_NonAuthorizedLayout";
+}
+    <div style="height:85vh" class="d-flex justify-content-center align-items-md-center flex-column">
+
+        <h1>Страница не найдена</h1>
+
+        <p><a asp-page="Index">Перейти на главную страницу</a></p>
+    </div>

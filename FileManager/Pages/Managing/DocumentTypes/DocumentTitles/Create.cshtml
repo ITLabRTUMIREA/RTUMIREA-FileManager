@@ -1,0 +1,22 @@
+﻿@page
+@model FileManager.Pages.Managing.DocumentTypes.DocumentTitles.CreateModel
+@{
+    ViewData["Title"] = "Create";
+}
+ 
+<div asp-validation-summary="All" class="text-danger"></div>
+<h2>Создание наименования документа для типа документа "@Model.selectedDocumentType.Type"</h2>
+<form method="post">
+    <div class="form-group">
+        <input hidden name="documentTypeId" value="@Model.selectedDocumentType.Id" />
+
+        <label for="name">Новое наименование</label>
+        <input required name="name" class="form-control" />     
+        
+        <label for="description">Описание документа</label>
+        <textarea required name="description" class="form-control" ></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Добавить</button>
+</form>
+
+<a asp-page="Index" asp-route-documentTypeId="@Model.selectedDocumentType.Id">Вернуться назад</a>

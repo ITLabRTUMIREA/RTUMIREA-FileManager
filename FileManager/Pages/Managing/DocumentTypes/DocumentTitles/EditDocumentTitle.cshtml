@@ -1,0 +1,26 @@
+﻿@page
+@model FileManager.Pages.Managing.DocumentTypes.DocumentTitles.EditDocumentTitleModel
+@{
+    ViewData["Title"] = "EditDocumentTitle";
+}
+
+<h2 class="text-center">EditDocumentTitle</h2>
+<form class="form-group" method="post" asp-route-titleId="@Model.selectedDocumentTitle.Id">
+    <div class="container">
+        <div class="row container mt-2">
+
+            <label class="row font-weight-bold" asp-for="@Model.selectedDocumentTitle.Name">Название документа</label>
+            <input class="row form-control" name="titleName" asp-for="@Model.selectedDocumentTitle.Name" value="@Model.selectedDocumentTitle.Name" />
+        </div>
+        <div class="row container mt-2">
+
+            <label class="row font-weight-bold" asp-for="@Model.selectedDocumentTitle.Description">Название документа</label>
+            <textarea class="form-control row" name="titleDescription" asp-for="@Model.selectedDocumentTitle.Description">@Model.selectedDocumentTitle.Description</textarea>
+        </div>
+        <div class="row mt-2">
+            <input class="btn btn-success" type="submit" value="Сохранить" />
+        </div>
+    </div>
+</form>
+
+

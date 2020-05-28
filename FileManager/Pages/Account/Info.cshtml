@@ -1,0 +1,14 @@
+﻿@page
+@model FileManager.Pages.Account.InfoModel
+@{
+    ViewData["Title"] = "Info";
+    Layout = "_NonAuthorizedLayout";
+}
+
+<h2>Информация</h2>
+<div>
+    @Model.Message
+</div>
+<div>
+    <a asp-page="/Account/SignIn">Перейти на страницу входа</a>
+</div>

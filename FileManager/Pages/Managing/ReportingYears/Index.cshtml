@@ -1,0 +1,27 @@
+﻿@page
+@model FileManager.Pages.Managing.ReportingYears.IndexModel
+@{
+    ViewData["Title"] = "Список отчетных периодов";
+}
+
+<h2>Список отчетных периодов</h2>
+<table class="table">
+    @foreach (var year in @Model.ReportingYears)
+    {
+
+        <tr>
+            <td>@year.Number</td>
+            <td>
+                <form asp-route-id="@year.Id" method="post">
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Удалить
+                    </button>
+                </form>
+            </td>
+        </tr>
+
+    }
+</table>
+<a asp-page="Create">Добавить отчетный год</a>
+<a asp-page="../../Index">Вернуться назад</a>
+

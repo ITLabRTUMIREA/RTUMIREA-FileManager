@@ -1,0 +1,85 @@
+﻿@page
+@model FileManager.Pages.DocumentStatistics.DocumentStatisticsModel
+@{
+    ViewData["Title"] = "DocumentStatistics";
+}
+<div class="container">
+    <h2>Статистика документов</h2>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="accepted-tab" data-toggle="tab" href="#accepted" role="tab" aria-controls="accepted" aria-selected="true">Статус: принято</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="needsToBeImproved-tab" data-toggle="tab" href="#needsToBeImproved" role="tab" aria-controls="needsToBeImproved" aria-selected="false">Статус: нуждается в доработке</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="notChecked-tab" data-toggle="tab" href="#notChecked" role="tab" aria-controls="notChecked" aria-selected="false">Статус: не проверено</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="accepted" role="tabpanel" aria-labelledby="accepted-tab">
+            <div class="list-group">
+                @if (Model.AcceptedDocs != null)
+                {
+                    @foreach (var doc in Model.AcceptedDocs)
+                    {
+                        <a asp-page="/Directory/Document"
+                           asp-route-departmentId="@doc.DepartmentId"
+                           asp-route-yearId="@doc.ReportingYearDocumentTitle.ReportingYearId"
+                           asp-route-documentTypeId="@doc.ReportingYearDocumentTitle.DocumentTitle.DocumentTypeId"
+                           asp-route-documentTitleId="@doc.ReportingYearDocumentTitle.DocumentTitleId"
+                           class="list-group-item list-group-item-action">
+                            @doc.ReportingYearDocumentTitle.ReportingYear.Number /
+                            @doc.Department.Name /
+                            @doc.ReportingYearDocumentTitle.DocumentTitle.DocumentType.Type /
+                            @doc.ReportingYearDocumentTitle.DocumentTitle.Name
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+        <div class="tab-pane fade" id="needsToBeImproved" role="tabpanel" aria-labelledby="needsToBeImproved-tab">
+            <div class="list-group">
+                @if (Model.WarningDocs != null)
+                {
+                    @foreach (var doc in Model.WarningDocs)
+                    {
+                        <a asp-page="/Directory/Document"
+                           asp-route-departmentId="@doc.DepartmentId"
+                           asp-route-yearId="@doc.ReportingYearDocumentTitle.ReportingYearId"
+                           asp-route-documentTypeId="@doc.ReportingYearDocumentTitle.DocumentTitle.DocumentTypeId"
+                           asp-route-documentTitleId="@doc.ReportingYearDocumentTitle.DocumentTitleId"
+                           class="list-group-item list-group-item-action">
+                            @doc.ReportingYearDocumentTitle.ReportingYear.Number /
+                            @doc.Department.Name /
+                            @doc.ReportingYearDocumentTitle.DocumentTitle.DocumentType.Type /
+                            @doc.ReportingYearDocumentTitle.DocumentTitle.Name
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+        <div class="tab-pane fade" id="notChecked" role="tabpanel" aria-labelledby="notChecked-tab">
+            <div class="list-group">
+                @if (Model.NotCheckedDocs != null)
+                {
+                    @foreach (var doc in Model.NotCheckedDocs)
+                    {
+                        <a asp-page="/Directory/Document"
+                           asp-route-departmentId="@doc.DepartmentId"
+                           asp-route-yearId="@doc.ReportingYearDocumentTitle.ReportingYearId"
+                           asp-route-documentTypeId="@doc.ReportingYearDocumentTitle.DocumentTitle.DocumentTypeId"
+                           asp-route-documentTitleId="@doc.ReportingYearDocumentTitle.DocumentTitleId"
+                           class="list-group-item list-group-item-action">
+                            @doc.ReportingYearDocumentTitle.ReportingYear.Number /
+                            @doc.Department.Name /
+                            @doc.ReportingYearDocumentTitle.DocumentTitle.DocumentType.Type /
+                            @doc.ReportingYearDocumentTitle.DocumentTitle.Name
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

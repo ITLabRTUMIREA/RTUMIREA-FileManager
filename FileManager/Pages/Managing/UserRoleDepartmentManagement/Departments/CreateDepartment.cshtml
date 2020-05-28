@@ -1,0 +1,18 @@
+﻿@page
+@model FileManager.Pages.Managing.UserRoleDepartmentManagement.Departments.CreateDepartmentModel
+@{
+    ViewData["Title"] = "Create";
+}
+ 
+<div asp-validation-summary="All" class="text-danger"></div>
+ 
+<form method="post">
+    <div class="form-group">
+        <label for="name">Новая кафедра</label>
+        <input name="name" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Добавить</button>
+</form>
+
+<a asp-page="DepartmentsList">Вернуться назад</a>
+

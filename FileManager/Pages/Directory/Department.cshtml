@@ -1,0 +1,24 @@
+﻿@page
+@model FileManager.Pages.Directory.DepartmentModel
+@using FileManager.Models.Database.ReportingYearDocumentTitles;
+<div class="grid-autofill-items-100px">
+    @foreach (DocumentType documentType in Model.DocumentTypes)
+    {
+        <div>
+            <a asp-page="/Directory/DocumentType"
+               asp-route-departmentId="@Model.selectedDepartmentId"
+               asp-route-yearId="@Model.selectedReportingYearId"
+               asp-route-documentTypeId="@documentType.Id">
+                <img class="icon-size-100px" src="~/images/folderIcon.svg" />
+                <p class="word-break-all">
+                    @documentType.Type
+                </p>
+
+            </a>
+        </div>
+    }
+</div>
+@section Scripts
+{
+    <script src="@Url.Content("~/js/EditLastBreadcrumbAndAddStyling.js")"></script>
+}

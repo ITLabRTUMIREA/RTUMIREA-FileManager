@@ -1,0 +1,53 @@
+﻿@page
+@model FileManager.Pages.SignUp.SignUpModel
+
+@{
+    ViewData["Title"] = "Регистрация";
+    Layout = "_NonAuthorizedLayout";
+}
+
+<h2>Регистрация</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="SignUpViewModel.Email" class="control-label"></label>
+                <input type="email" asp-for="SignUpViewModel.Email" class="form-control" />
+                <span asp-validation-for="SignUpViewModel.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SignUpViewModel.FistName" class="control-label"></label>
+                <input asp-for="SignUpViewModel.FistName" class="form-control" />
+                <span asp-validation-for="SignUpViewModel.FistName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SignUpViewModel.LastName" class="control-label"></label>
+                <input asp-for="SignUpViewModel.LastName" class="form-control" />
+                <span asp-validation-for="SignUpViewModel.LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SignUpViewModel.Password" class="control-label"></label>
+                <input type="password" asp-for="SignUpViewModel.Password" class="form-control" />
+                <span asp-validation-for="SignUpViewModel.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SignUpViewModel.ConfirmPassword" class="control-label"></label>
+                <input type="password" asp-for="SignUpViewModel.ConfirmPassword" class="form-control" />
+                <span asp-validation-for="SignUpViewModel.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Зарегистрироваться" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="/Account/SignIn">Войти в систему</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

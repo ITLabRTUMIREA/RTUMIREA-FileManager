@@ -1,0 +1,38 @@
+﻿@page
+@model FileManager.Pages.Managing.DocumentTypes.DocumentTitles.IndexModel
+@{
+    ViewData["Title"] = "Список наименований документов";
+}
+
+<h2>Список наименований документов в типе документа "@Model.selectedDocumentType.Type"</h2>
+<table class="table">
+    @foreach (var title in @Model.DocumentTitles)
+    {
+
+        <tr>
+            <td>@title.Name</td>
+            <td>
+                <a class="btn btn-sm btn-warning" 
+                   asp-route-titleId="@title.Id"
+                   asp-page="EditDocumentTitle">
+                    Изменить
+
+                </a>
+            </td>
+            <td>
+                <form asp-route-titleId="@title.Id"
+                      asp-route-documentTypeId="@Model.selectedDocumentType.Id"
+                      asp-page-handler="Delete"
+                      method="post">
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Удалить
+                    </button>
+                </form>
+            </td>
+        </tr>
+
+    }
+</table>
+<a asp-page="Create" asp-route-documentTypeId="@Model.selectedDocumentType.Id">Добавить наименование</a>
+<a asp-page="../Index">Вернуться назад</a>
+

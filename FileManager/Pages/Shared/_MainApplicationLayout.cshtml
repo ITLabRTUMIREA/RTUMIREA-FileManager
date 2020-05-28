@@ -1,0 +1,76 @@
+﻿@{
+    Layout = "Shared/_Layout";
+}
+@using FileManager.Services.GetAccountDataService;
+@using FileManager.Models.Database.UserDepartmentRoles;
+@using FileManager.Services.DocumentManagerService;
+@inject IGetAccountDataService _getAccountDataService;
+@inject IDocumentManagerService _documentManagerService;
+@{
+    bool IsSystemAdmin = _getAccountDataService.IsSystemAdmin();
+    bool IsAnyDepartmentAdmin = await _getAccountDataService.UserIsAdminOnAnyDepartment();
+    User CurrentUser = await _getAccountDataService.GetCurrentUser();
+
+    var countOfGoodDocs = await _documentManagerService.GetCountOfSetDocWithCertainStatus(CurrentUser.Id, "Принято");
+    var countOfWarningDocs = await _documentManagerService.GetCountOfSetDocWithCertainStatus(CurrentUser.Id, "Нуждается в доработке");
+    var countOfNotCheckedDocs = await _documentManagerService.GetCountOfSetDocWithCertainStatus(CurrentUser.Id, "Не проверено");
+
+}
+<div class="full-page">
+    <div class="user-bar">
+        <div class="btn-group user-group-btn">
+            <div class="user dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="user-data">
+                    @CurrentUser.UserName
+                </div>
+                <div class="documents-status">
+                    <div class="status-good" data-toggle="tooltip" data-placement="left" title="Количество принятых документов">@countOfGoodDocs</div>
+                    <div class="status-warning" data-toggle="tooltip" data-placement="left" title="Количество отправленных на доработку документов">@countOfWarningDocs</div>
+                    <div class="status-not-checked" data-toggle="tooltip" data-placement="left" title="Количество не проверенных документов">@countOfNotCheckedDocs</div>
+                </div>
+            </div>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" asp-page="/Account/UserInfo">Аккаунт</a>
+                <div class="dropdown-divider"></div>
+
+                <a class="dropdown-item" asp-page="/DocumentStatistics/Index">Статистика документов</a>
+                <div class="dropdown-divider"></div>
+
+                @if (IsSystemAdmin || IsAnyDepartmentAdmin)
+                {
+                    <a class="dropdown-item" asp-page="/Managing/UserRoleDepartmentManagement/UserDepartmentList">Изменение прав доступа</a>
+                    <div class="dropdown-divider"></div>
+
+                    @if (IsSystemAdmin)
+                    {
+                        <a class="dropdown-item" asp-page="/Managing/ReportingYears/Index">Управление отчетными годами</a>
+                        <div class="dropdown-divider"></div>
+
+                        <a class="dropdown-item" asp-page="/Managing/DocumentTypes/Index">Управление типами документов</a>
+                        <div class="dropdown-divider"></div>
+                    }
+                }
+
+                <a class="dropdown-item" asp-controller="LogOut" asp-action="Index">Выйти</a>
+            </div>
+        </div>
+    </div>
+    <div class="router-bar">
+        <div class="select-bar">
+
+            <breadcrumb></breadcrumb>
+        </div>
+    </div>
+    <div class="container-fluid p-4">
+        @RenderBody()
+    </div>
+</div>
+@RenderSection("Scripts", required: false)
+@section Scripts{
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+
+}
