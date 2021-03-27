@@ -8,10 +8,10 @@ RTUFileManager
         Система предназначена для структурно-организованного хранения документов. Имеется возможность отслеживания изменений и своевременного оповещения ответственных. При обработке доумента пользователи системы могут общаться и оставлять комментарии.
         Проект состоит из бэкенда, написанного на C# с использованием фреймфорка ASP .NET CORE. Для реализации фронтенда используется технология Razor Pages фреймворка ASP .NET CORE.
 # Images
-* ![](https://files.rtuitlab.ru/landing_src/document_system/1.png)
-* ![](https://files.rtuitlab.ru/landing_src/document_system/2.png)
-* ![](https://files.rtuitlab.ru/landing_src/document_system/3.png)
-* ![](https://files.rtuitlab.ru/landing_src/document_system/4.png)
+* ![](LANDING/1.png)
+* ![](LANDING/2.png)
+* ![](LANDING/3.png)
+* ![](LANDING/4.png)
 ---
 
 # Videos
